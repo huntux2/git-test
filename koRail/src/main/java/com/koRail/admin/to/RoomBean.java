@@ -8,7 +8,7 @@ public class RoomBean extends CommonBean {
 	private String opratCode;		/*운행코드*/
 	private String room;			/*호실*/
 	private String seatCo;			/*좌석수*/
-	private String prtclrRoomYN;	/*틱실여부 : Y, N*/
+	private String prtclrRoomYN;	/*특실여부 : Y, N*/
 	
 	public String getRoomCode() {
 		return roomCode;

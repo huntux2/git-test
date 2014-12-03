@@ -6,13 +6,18 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.koRail.admin.dao.DetailOpratDAO;
 import com.koRail.admin.dao.OpratDAO;
+import com.koRail.admin.dao.RoomDAO;
 import com.koRail.admin.dao.StatnDAO;
 import com.koRail.admin.dao.TrainDAO;
+import com.koRail.admin.to.DetailOpratBean;
 import com.koRail.admin.to.OpratBean;
+import com.koRail.admin.to.RoomBean;
 import com.koRail.admin.to.StatnBean;
 import com.koRail.admin.to.TrainBean;
 import com.koRail.common.to.CommonBean;
+import com.koRail.common.util.JSONParser;
 
 @Service(value="adminServie")
 public class AdminServieImpl implements AdminServie {
@@ -27,6 +32,14 @@ public class AdminServieImpl implements AdminServie {
 	/*운행일정 DAO*/
 	@Resource(name="opratDAO")
 	private OpratDAO opratDAO;
+	
+	/* 상세운행일정 DAO */
+	@Resource(name="detailOpratDAO")
+	private DetailOpratDAO detailopratDAO;
+	
+	/* 호실 DAO */
+	@Resource(name="roomDAO")
+	private RoomDAO roomDAO;
 	
 	/*************************************
 					역 관리
@@ -124,16 +137,84 @@ public class AdminServieImpl implements AdminServie {
 	
 	/*********************************
 	* 운행일정 등록, 수정, 삭제
+	* 상세운행 등록, 삭제
+	* 호실	 등록,삭제
 	* @param opratBean
 	* @param deleteCodeArray
 	********************************/
-	public void setOprat(OpratBean opratBean, String[] deleteCodeArray){
+	public void setOprat(OpratBean opratBean, String[] json, String[] deleteCodeArray){
 		if("inser".equals(opratBean.getState())){
 			System.out.println("i");
 		}else if("update".equals(opratBean.getState())){
 			opratDAO.updateOprat(opratBean);
-		}else{
+		}else if("delete".equals(opratBean.getState())){
 			System.out.println("d");
+		}else{
+			return;
+		}
+		
+		/* 상세운행, 호실 : 등록, 삭제 */
+		if(json == null){
+			return;
+		}else{
+			/* 상세운행일정 */
+			@SuppressWarnings("unchecked")
+			List<DetailOpratBean> detailOpratList = (List<DetailOpratBean>)JSONParser.getInstance().processJSONToBean(json[0], "detailOprat", "com.koRail.admin.to.DetailOpratBean");
+			/* 호실정보 */
+			@SuppressWarnings("unchecked")
+			List<RoomBean> roomList = (List<RoomBean>)JSONParser.getInstance().processJSONToBean(json[1], "room", "com.koRail.admin.to.RoomBean");
+			
+			/* 상세운행정보: insert, delete */
+			for(DetailOpratBean detailOpratBean : detailOpratList){
+				if("insert".equals(detailOpratBean.getState())){
+					/* 운행일정 코드 설정 */
+					detailOpratBean.setOpratCode(opratBean.getOpratCode());
+					/* 등록자 설정 */
+					detailOpratBean.setRegister(opratBean.getupdUsr());
+					
+					/* 이전역, 다음역 거리 재설정 (parmType: number km -> resetTyp: number) */
+					String[] prvDistnc = detailOpratBean.getPrvDistnc().split(" ");
+					detailOpratBean.setPrvDistnc(prvDistnc[0].trim());
+					
+					String[] nxtDistnc = detailOpratBean.getNxtDistnc().split(" ");
+					detailOpratBean.setNxtDistnc(nxtDistnc[0].trim());
+					
+					/* 상세운행 등록 */
+					detailopratDAO.insertDetailOprat(detailOpratBean);
+				}else if("delete".equals(detailOpratBean.getState())){
+					/* 상세운행 삭제 */
+					detailopratDAO.deleteDetailOprat(detailOpratBean.getDetailOpratCode());
+				}
+			}
+			
+			/* 호실정보: insert, delete */
+			for(RoomBean roomBean : roomList){
+				if("insert".equals(roomBean.getState())){
+					/* 운행일정 코드 설정 */
+					roomBean.setOpratCode(opratBean.getOpratCode());
+					
+					/* 호실 재설정 (parmType: number 호실 -> resetTyp: number) */
+					String[] room = roomBean.getRoom().split(" ");
+					roomBean.setRoom(room[0].trim());
+					
+					/* 좌석 재설정 (parmType: number 석 -> resetTyp: number) */
+					String[] seatCo = roomBean.getSeatCo().split(" ");
+					roomBean.setSeatCo(seatCo[0].trim());
+					
+					/* 특실여부 값 변경 */
+					if(roomBean.getPrtclrRoomYN().equals("Yes")){
+						roomBean.setPrtclrRoomYN("Y");
+					}else if(roomBean.getPrtclrRoomYN().equals("No")){
+						roomBean.setPrtclrRoomYN("N");
+					}
+					
+					/* 호실 등록 */
+					roomDAO.insertRoom(roomBean);
+				}else if("delete".equals(roomBean.getState())){
+					/* 호실 삭제 */
+					roomDAO.deleteRoom(roomBean.getRoomCode());
+				}
+			}
 		}
 	}
 }

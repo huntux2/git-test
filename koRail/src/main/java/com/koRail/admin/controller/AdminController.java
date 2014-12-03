@@ -222,6 +222,7 @@ public class AdminController extends CommonController {
 		
 		model.addAttribute("oprat", opratList.get(0));
 		model.addAttribute("detailOpratList", opratList.get(0).getDetailOpratList());
+		model.addAttribute("roomList", opratList.get(0).getRoomList());
 		
 		return "admin/oprat/opratUpdateForm";
 	}
@@ -234,9 +235,9 @@ public class AdminController extends CommonController {
 	 **************************************/
 	@RequestMapping(value="opratProcess.do")
 	public String processOprat(@ModelAttribute OpratBean opratBean,
+			@RequestParam(value="json", required=false ) String[] json,
 			@RequestParam(value="deleteCodeArray", required=false) String[] deleteCodeArray){
-		
-		adminServie.setOprat(opratBean, deleteCodeArray);
+		adminServie.setOprat(opratBean, json, deleteCodeArray);
 		System.out.println("\n\n\n\n\n");
 		
 		System.out.println("1 :"+opratBean.getTrainCode());

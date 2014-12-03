@@ -57,8 +57,10 @@ public interface AdminServie {
 	
 	/*********************************
 	 * 운행일정 등록, 수정, 삭제
+	 * 상세운행 등록, 삭제
+	 * 호실	 등록,삭제
 	 * @param opratBean
 	 * @param deleteCodeArray
 	 ********************************/
-	public void setOprat(OpratBean opratBean, String[] deleteCodeArray);
+	public void setOprat(OpratBean opratBean, String[] json, String[] deleteCodeArray);
 }

@@ -21,12 +21,13 @@ public class JSONParser {
 	
 	/*************************************
 	 * json을 bean으로 변환
+	 * json의 형식 : {Name:[Array]}
 	 * @param json
 	 * @param getJSONName
 	 * @param beanFullName
 	 * @return
 	 ************************************/
-	public List<Object> processJSONToBean(String json, String getJSONName, String beanFullName) {
+	public List<?> processJSONToBean(String json, String getJSONName, String beanFullName) {
 		try{
 			/* 입력받은 클레스명(페키지 포함) */
 			Class<?> className = Class.forName(beanFullName);
@@ -37,12 +38,12 @@ public class JSONParser {
 			/* JSONArray의 정보들 */
 			Iterator<?> iterator = jsonArray.iterator();
 			 /*JSONArray의 값이 존재한다면 반복문 실행*/
-			 while (iterator.hasNext()) {
-				 /* JSON값들을 Bean으로 변환 후 beanList에 추가 */
-				 beanList.add(JSONObject.toBean((JSONObject)iterator.next(), className));
-			 }
-			 
-			 /*while (iterator.hasNext()) {
+			while (iterator.hasNext()) {
+				/* JSON값들을 Bean으로 변환 후 beanList에 추가 */
+				beanList.add(JSONObject.toBean((JSONObject)iterator.next(), className));
+			}
+
+			/*while (iterator.hasNext()) {
 				JSONObject key = (JSONObject)iterator.next();
 				
 				for(Object val :  key.keySet()){
@@ -58,7 +59,7 @@ public class JSONParser {
 				}
 			}*/
 
-			 return beanList;
+			return beanList;
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;

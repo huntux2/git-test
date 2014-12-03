@@ -11,8 +11,9 @@
 <html>
 	<head>
 		<script type="text/javascript">
-   			var viewState = false;				/*viewState와 같은 역활이며 상세운행정보에 대한 상태이다*/
+   			var viewState = false;		 		/*viewState와 같은 역활이며 상세운행정보에 대한 상태이다*/
    			var viewState2 = false;				/*viewState와 같은 역활이며 호실정보에 대한 상태이다*/
+   			var detailOpratArray = new Array();	/* 상세운행일정 */
    			var roomArray = new Array();		/*호시렁보*/
    			
 	   		$(document).ready(function(){
@@ -53,7 +54,7 @@
 	   			
 	   			/*상세운행일정*/
 	   			if(mode == "detailOprat" || allInit){
-	   				viewState2 = false;
+	   				viewState = false;
 	   				
 	   				/*그리드 초기화*/
 					$("#grid").html("<table id='gridBody'></table><div id='footer'></div>");
@@ -61,13 +62,14 @@
 					$("#gridBody").jqGrid({
 						datatype: "LOCAL",
 		   				caption:"상세운행일정 정보",
-		   				width: 695,
+		   				width: 845,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer',
-		   				colNames:["출발역", "출발시각", "도착역", "도착시각", "이전역", "이전역 거리", "다음역", "다음역 거리"],
+		   				colNames:["state", "출발역", "출발시각", "도착역", "도착시각", "이전역", "이전역 거리", "다음역", "다음역 거리"],
 		          		colModel : [
+							{ name : "state", hidden:true},
 							{ name : 'startStatnValue', width: 70, align:"center", sortable:false,
 								cellattr: function(rowId, value, rowObject, colModel, arrData) {
 									return ' colspan=8';
@@ -84,12 +86,12 @@
 					}); /*jqGrid end*/
 					
 					/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-					$("#gridBody").jqGrid('addRowData', 1, {startStatnValue:"운행일정을 선택하십시오."});
+					$("#gridBody").jqGrid('addRowData', 1, {state:"normal", startStatnValue:"운행일정을 선택하십시오."});
 	   			} /* 상세운행정보 end */
 	   			
 	   			/* 호실정보 */
 	   			if(mode == "room" || allInit){
-	   				viewState3 = false;
+	   				viewState2 = false;
 		   				
 	   				/*그리드 초기화*/
 					$("#grid2").html("<table id='gridBody2'></table><div id='footer2'></div>");
@@ -97,13 +99,14 @@
 					$("#gridBody2").jqGrid({
 						datatype: "LOCAL",
 		   				caption:"호실정보",
-		   				width: 320,
+		   				width: 550,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer2',
-		   				colNames:["호실", "좌석수", "특실여부"],
+		   				colNames:["state", "호실", "좌석수", "특실여부"],
 		          		colModel : [
+							{ name : "state", hidden:true},
 							{ name : "room", width: 70, align:"center", sortable:false,
 								cellattr: function(rowId, value, rowObject, colModel, arrData) {
 									return ' colspan=3';
@@ -115,41 +118,60 @@
 					}); /*jqGrid end*/
 					
 					/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-					$("#gridBody2").jqGrid('addRowData', 1, {room:"운행일정을 선택하십시오."});
+					$("#gridBody2").jqGrid('addRowData', 1, {state:"normal", room:"운행일정을 선택하십시오."});
 		   		} /* 호실정보 */
 
-		   		/* 최기데이터 설정 */
+		   		/* 초기데이터 설정 */
 		   		if(dataSet){
-		   			var detailOpratArray = new Array();
+		   			/* detailOprat */
+		   			if("${detailOpratList.size()}" > 0){
+		   				for(var i = 0; i < "${detailOpratList.size()}"; i++){
+		   					detailOpratArray.push({
+			   					state:$($("#detailOprat"+(i+1)+" :hidden").get(0)).val()+"",
+			   					detailOpratCode:$($("#detailOprat"+(i+1)+" :hidden").get(1)).val()+"",
+			   					startStatnCode:$($("#detailOprat"+(i+1)+" :hidden").get(2)).val()+"",
+			   					startStatnValue:$($("#detailOprat"+(i+1)+" :hidden").get(3)).val()+"",
+			   					startTm:$($("#detailOprat"+(i+1)+" :hidden").get(4)).val()+"",
+			   					arvlStatnCode:$($("#detailOprat"+(i+1)+" :hidden").get(5)).val()+"",
+			   					arvlStatnValue:$($("#detailOprat"+(i+1)+" :hidden").get(6)).val()+"",
+			   					arvlTm:$($("#detailOprat"+(i+1)+" :hidden").get(7)).val()+"",
+			   					prvStatnCode:$($("#detailOprat"+(i+1)+" :hidden").get(8)).val()+"",
+			   					prvStatnValue:$($("#detailOprat"+(i+1)+" :hidden").get(9)).val()+"",
+			   					prvDistnc:$($("#detailOprat"+(i+1)+" :hidden").get(10)).val()+" km",
+			   					nxtStatnCode:$($("#detailOprat"+(i+1)+" :hidden").get(11)).val()+"",
+			   					nxtStatnValue:$($("#detailOprat"+(i+1)+" :hidden").get(12)).val()+"",
+			   					nxtDistnc:$($("#detailOprat"+(i+1)+" :hidden").get(13)).val()+" km"
+			   				});
+			   			}
+			   			
+			   			setGrid("detailOprat"); /* 그리드 설정 */
+			   			
+			   			/* 행 추가 */
+			   			for(var i = 0; i < detailOpratArray.length; i++){
+			   				$("#gridBody").jqGrid('addRowData', i, detailOpratArray[i]);
+			   			}
+		   			} /* detailOprat end */
 		   			
-		   			for(var i = 0; i < "${detailOpratList.size()}"; i++){
-		   				detailOpratArray.push({
-		   					state:$($("#do"+(i+1)+" :hidden").get(0)).val()+"",
-		   					detailOpratCode:$($("#do"+(i+1)+" :hidden").get(1)).val()+"",
-		   					opratCode:$($("#do"+(i+1)+" :hidden").get(2)).val()+"",
-		   					startStatnCode:$($("#do"+(i+1)+" :hidden").get(3)).val()+"",
-		   					startStatnValue:$($("#do"+(i+1)+" :hidden").get(4)).val()+"",
-		   					startTm:$($("#do"+(i+1)+" :hidden").get(5)).val()+"",
-		   					arvlStatnCode:$($("#do"+(i+1)+" :hidden").get(6)).val()+"",
-		   					arvlStatnValue:$($("#do"+(i+1)+" :hidden").get(7)).val()+"",
-		   					arvlTm:$($("#do"+(i+1)+" :hidden").get(8)).val()+"",
-		   					prvStatnCode:$($("#do"+(i+1)+" :hidden").get(9)).val()+"",
-		   					prvStatnValue:$($("#do"+(i+1)+" :hidden").get(10)).val()+"",
-		   					prvDistnc:$($("#do"+(i+1)+" :hidden").get(11)).val()+"",
-		   					nxtStatnCode:$($("#do"+(i+1)+" :hidden").get(12)).val()+"",
-		   					nxtStatnValue:$($("#do"+(i+1)+" :hidden").get(13)).val()+"",
-		   					nxtDistnc:$($("#do"+(i+1)+" :hidden").get(14)).val()+""
-		   				});
-		   			}
-		   			
-		   			setGrid("detailOprat");
-		   			
-		   			for(var value in detailOpratArray){
-		   				$("#gridBody").jqGrid('addRowData', value, detailOpratArray[value]);
-		   			}
-		   			
-		   			//setGrid("room");
-		   		}
+		   			/* room */
+		   			if("${roomList.size()}" > 0){
+		   				for(var i = 0; i < "${roomList.size()}"; i++){
+		   					roomArray.push({
+			   					state:$($("#room"+(i+1)+" :hidden").get(0)).val()+"",
+			   					roomCode:$($("#room"+(i+1)+" :hidden").get(1)).val()+"",
+			   					room:$($("#room"+(i+1)+" :hidden").get(2)).val()+" 호실",
+			   					seatCo:$($("#room"+(i+1)+" :hidden").get(3)).val()+" 석",
+			   					prtclrRoomYN:$($("#room"+(i+1)+" :hidden").get(4)).val()+""
+			   				});
+			   			}
+			   			
+		   				setGrid("room"); /* 그리드 설정 */
+			   			
+		   				/* 행 추가 */
+			   			for(var value in roomArray){
+			   				$("#gridBody2").jqGrid('addRowData', value, roomArray[value]);
+			   			}
+		   			} /* romm end */
+		   		} /* 초기데이터 설정 end */
 	   		} /* doGridInit end */
 	   		
 	   		/*그리드 생성 그리드의 존재여부확인 후 존재할 경우 실행하지 않는다*/
@@ -166,19 +188,18 @@
 						datatype: "LOCAL",
 		   				caption:"상세운행일정 정보",
 		   				multiselect: true,
-		   				width: 695,
+		   				width: 845,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer',
 		   				colNames:[
-		   					"state", "opratCode", "startStatnCode", "출발역", "출발시각", 
+		   					"state", "startStatnCode", "출발역", "출발시각", 
 							"arvlStatnCode", "도착역", "도착시각", "prvStatnCode", "이전역",
 							"이전역 거리", "nxtStatnCode", "다음역", "다음역 거리"
 						],
 		          		colModel : [
 							{ name : 'state', hidden:true},
-							{ name : 'opratCode', hidden:true},
 							{ name : 'startStatnCode', hidden:true},
 							{ name : 'startStatnValue', width: 70, align:"center", sortable:false},
 							{ name : 'startTm', width: 120, align:"center", sortable:false},
@@ -205,13 +226,15 @@
 					$("#gridBody2").jqGrid({
 						datatype: "LOCAL",
 		   				caption:"호실정보",
-		   				width: 320,
+		   				multiselect: true,
+		   				width: 550,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer2',
-		   				colNames:["호실", "좌석수", "특실여부"],
+		   				colNames:["state", "호실", "좌석수", "특실여부"],
 		          		colModel : [
+							{ name : "state", hidden:true},
 							{ name : "room", width: 70, align:"center", sortable:false},
 							{ name : "seatCo", width: 70, align:"center", sortable:false},
 							{ name : "prtclrRoomYN", width: 30, align:"center", formatter:"checkbox", sortable:false}
@@ -632,13 +655,13 @@
 							var arvlTm = $("#arvlYear").val()+"-"+$("#arvlMonth").val()+"-"+$("#arvlDate").val()+" "+$("#arvlHh24").val()+":"+$("#arvlMi").val()+"";
 							
 							/* 미입력 확인 */
-							//for(var i = 0; i < input.size(); i++){
+							for(var i = 0; i < input.size(); i++){
 								/* 상세운행일정 등록의 입력 값이 하나라도 비어있다면 */
-								/* if($(input.get(i)).val() == ""){
+								if($(input.get(i)).val() == ""){
 									alert("모든 항목은 필수입력 사항입니다.");
 									return;
 								}
-							} */
+							}
 							
 							/* 초기 그리드 일 때 */
 							if(!viewState){
@@ -649,7 +672,6 @@
 							$("#gridBody").jqGrid('addRowData', $("#gridBody").getGridParam("records"),
 								{
 									state:"insert",
-									opratCode:"${oprat.opratCode}",
 									startStatnCode:$(input.get(0)).val(),
 									startStatnValue:$(input.get(1)).val(),
 									startTm:startTm, 
@@ -673,41 +695,149 @@
 					} /* btuuon end */
    				}); /* dialog end */
    			}
+
+   			/* 호실 다이알로그 */
+   			function setRoomDialog(){
+   				/* 초기화 */
+   				$("#room").val("");
+   				$("#seatCo").val("");
+   				$("#prtclrRoomYN").val("N");
+   				$("#prtclrRoomYN").prop("checked", false);
+   				
+   				/*다이알로그*/
+   				$("#roomDialog").dialog({
+   					modal: true,
+   					width: 350,
+					buttons: {
+						"등록": function() {
+							var room = $("#room").val().replace(" ");
+							var seatCo = $("#seatCo").val().replace(" ");
+							
+							/* 미입력 처리 */
+							if(room == "" || seatCo == ""){
+								alert("호실과 좌석수는 필수입력 사항입니다.");
+							}
+							/* row 추가 */
+							else{
+								/* 초기 그리드 일 때 */
+								if(!viewState2){
+									setGrid("room");
+								}
+								
+								if($("#prtclrRoomYN").is(":checked")){
+									$("#prtclrRoomYN").val("Y");
+								}
+								
+								$("#gridBody2").jqGrid('addRowData', $("#gridBody2").getGridParam("records"),
+									{
+										state:"insert",
+										room:room+" 호실",
+										seatCo:seatCo+" 석",
+										prtclrRoomYN:$("#prtclrRoomYN").val()+""
+									}
+								);
+								
+								$(this).dialog("close");
+							}
+						},
+						"취소": function() {
+							$(this).dialog("close");
+						}
+					} /* btuuon end */
+   				}); /* dialog end */
+   			} /* setRoomDialog end */
 	   		
    			/**********************************************
    								etc
    			**********************************************/
    								
-   			/*상세운행일정 삭제*/
-   			function deleteDetailOprat(){
-				/*체크박스로 선택된 행의 ID들*/
-   				var rowIds = $("#gridBody").getGridParam('selarrrow');
-   				/*삭제할 역 코드 배열*/
-				var deleteCodeArray = new Array();
-				
-				/*select check*/
-				if(rowIds == ""){
-					alert("삭제할 역을 선택해야 합나디다.");
-					return;
-				}else{
-					if(confirm("선택한 항목을 삭제하시겠습니까?")){
-						/*deleteCodeArray에 역 코드 삽입*/
-						for(var i = 0; i < rowIds.length; i++){
-							deleteCodeArray.push($("#gridBody").getRowData(rowIds[i]).state);
-						}
-						alert(JSON.stringify(deleteCodeArray));
-					}
-				}
-   			}
+   			function deleteRow(type){
+   				/* 상세운행정보 */
+   				if(type == "detailOprat"){
+					/*체크박스로 선택된 행의 ID들*/
+					var rowIds = $("#gridBody").getGridParam('selarrrow');
+					var rowSize = rowIds.length;
+	
+					/*select check*/
+					if(rowIds == ""){
+						alert("삭제할 역을 선택해야 합나디다.");
+						return;
+					}else{
+						if(confirm("선택한 항목을 삭제하시겠습니까?")){
+							for(var i = rowSize; i > 0; i--){
+								if($("#gridBody").getRowData(rowIds[i-1]).state == "insert"){
+									$("#gridBody").delRowData(rowIds[i-1]);
+								}else{
+									detailOpratArray[rowIds[i-1]].state = "delete";
+									$("#gridBody").delRowData(rowIds[i-1]);
+								}
+							} /* for end */
+							
+							if(rowIds == ""){
+								doGridInit("detailOprat");
+							}
+						} /* if end */
+					} /* else end */
+   				} /* 상세운행정보 end */
+   				
+   				/* 호실정보 */
+   				else{
+   					/*체크박스로 선택된 행의 ID들*/
+					var rowIds = $("#gridBody2").getGridParam('selarrrow');
+					var rowSize = rowIds.length;
+	
+					/*select check*/
+					if(rowIds == ""){
+						alert("삭제할 호실을 선택해야 합나디다.");
+						return;
+					}else{
+						if(confirm("선택한 항목을 삭제하시겠습니까?")){
+							for(var i = rowSize; i > 0; i--){
+								if($("#gridBody2").getRowData(rowIds[i-1]).state == "insert"){
+									$("#gridBody2").delRowData(rowIds[i-1]);
+								}else{
+									roomArray[rowIds[i-1]].state = "delete";
+									$("#gridBody2").delRowData(rowIds[i-1]);
+								}
+							} /* for end */
+							
+							if(rowIds == ""){
+								doGridInit("room");
+							}
+						} /* if end */
+					} /* else end */
+   				} /* 운행정보 end */
+   			} /* deleteRow end */
    			
 	   		/* 수정 */
 	   		function doUpdate(){
-	   			alert($("#gridBody").getRowData(0).state);
+	   			var array1 = $("#gridBody").getRowData();  /* 상세운행정보 */
+	   			var array2 = $("#gridBody2").getRowData(); /* 호실정보 */
+	   			var jsonArray = new Array();
 	   			
-	   			/* 상세운행정보의 JSON 변환 */
-	   			var detailOpratJSON = JSON.stringify($("#gridBody").getRowData());
-	   			alert(detailOpratJSON);
-	   			//$("#updateForm").submit();
+				/* 그리드정보에 delete정보 적용 */
+	   			for(var v in detailOpratArray){
+	   				/* 상세운행일정 */
+	   				if(detailOpratArray[v].state == "delete"){
+	   					array1.push(detailOpratArray[v]);
+	   				}
+	   			}
+	   			for(var v in roomArray){
+	   				/* 호실정보 */
+	   				if(roomArray[v].state == "delete"){
+	   					array2.push(roomArray[v]);
+	   				}
+	   			}
+	   			
+	   			/* JSON 변환 후 jsonArray 저장 */
+	   			jsonArray[0] = JSON.stringify({"detailOprat":array1});
+	   			jsonArray[1] = JSON.stringify({"room":array2});
+	   			
+	   			/* json에 값 설정 */
+	   			$("#json1").val(jsonArray[0]);
+	   			$("#json2").val(jsonArray[1]);
+	   			
+	   			$("#updateForm").submit();
 	   		}
 		</script>
    	</head>
@@ -738,6 +868,9 @@
    				<input type="hidden" name="updUsr" value="${name}">
    				<!-- 수정할 운행일정 코드 -->
    				<input name="opratCode" type="hidden" value="${oprat.opratCode}">
+				<!-- JSON type -->
+				<input id="json1" name="json" type="hidden">
+				<input id="json2" name="json" type="hidden">
 				
 				<table class="d-table" style="width: 650px;">
 					<colgroup>
@@ -830,21 +963,19 @@
 		
 		<!-- 상세운행정보 -->
 		<div>
-			<div class="button-group" style="width: 700px;">
+			<div class="button-group" style="width: 845px;">
 				<button type="button" onclick="setDetailOpratDialog();">추가</button>
-				<button type="button" onclick="deleteDetailOprat();">삭제</button>
+				<button type="button" onclick="deleteRow('detailOprat');">삭제</button>
 			</div>
-			<div id="grid" style="margin: 0 auto; margin-top: 5px; width: 695px;">
+			<div id="grid" style="margin: 0 auto; margin-top: 5px; width: 845px;">
 	   			<table id="gridBody"></table>
 		   		<div id="footer"></div>
 	   		</div>
-	   		
+	   		<!-- data -->
    			<c:forEach var="value" items="${detailOpratList}" varStatus="state">
-		   		<div id="do${state.count}">
-	   				${state.count}
+		   		<div id="detailOprat${state.count}">
 	   				<input type="hidden" value="${value.state}">
 	   				<input type="hidden" value="${value.detailOpratCode}">
-		   			<input type="hidden" value="${value.opratCode}">
 					<input type="hidden" value="${value.startStatnCode}">
 		   			<input type="hidden" value="${value.startStatnValue}">
 		   			<input type="hidden" value="${value.startTm}">
@@ -862,14 +993,26 @@
 	   	</div>
 		
 		<!-- 호실정보 -->
-		<div class="button-group" style="width: 700px;">
-			<button>추가</button>
-			<button>삭제</button>
-		</div>
-		<div id="grid2" style="margin: 0 auto; margin-top: 5px; width: 320px;">
-   			<table id="gridBody2"></table>
-	   		<div id="footer2"></div>
-   		</div>
+		<div>
+			<div class="button-group" style="width: 550px;">
+				<button type="button" onclick="setRoomDialog();">추가</button>
+				<button type="button" onclick="deleteRow('room');">삭제</button>
+			</div>
+			<div id="grid2" style="margin: 0 auto; margin-top: 5px; width: 550px;">
+	  			<table id="gridBody2"></table>
+	   			<div id="footer2"></div>
+	  		</div>
+	  		<!-- data -->
+   			<c:forEach var="value" items="${roomList}" varStatus="state">
+		   		<div id="room${state.count}">
+	   				<input type="hidden" value="${value.state}">
+	   				<input type="hidden" value="${value.roomCode}">
+					<input type="hidden" value="${value.room}">
+		   			<input type="hidden" value="${value.seatCo}">
+		   			<input type="hidden" value="${value.prtclrRoomYN}">
+		   		</div>
+   			</c:forEach>
+	  	</div>
    		
    		<!-- 날짜 다이알로그 -->
    		<div id="dateTimeDialog" title="날짜" style="display: none;">
@@ -1109,7 +1252,7 @@
 						<td>이전역</td>
 						<td colspan="2">
 							<input id="prvStatnCode" type="hidden">
-							<input id="prvStatnValue" type="text" style="width: 95px;">
+							<input id="prvStatnValue" type="text" style="width: 95px;" disabled="disabled">
 							<button type="button" onclick="setStatnDialog('dialog' ,'prv');" style="height: 23px; margin-top: 5px; margin-bottom: 5px;">검색</button>
 						</td>
 						<td>이전역 거리</td>
@@ -1122,7 +1265,7 @@
 						<td>다음역</td>
 						<td colspan="2">
 							<input id="nxtStatnCode" type="hidden">
-							<input id="nxtStatnValue" type="text" style="width: 95px;">
+							<input id="nxtStatnValue" type="text" style="width: 95px;" disabled="disabled">
 							<button type="button" onclick="setStatnDialog('dialog' ,'nxt');" style="height: 23px; margin-top: 5px; margin-bottom: 5px;">검색</button>
 						</td>
 						
@@ -1135,6 +1278,33 @@
 				</tbody>
 			</table>
 		</div> <!-- detailOpratDialog -->
+		
+		<div id="roomDialog" title="호실정보 등록" style="display: none;">
+			<table class="d-table" style="width:100%; margin: 0 auto; border-collapse: collapse;">
+				<tbody>
+					<tr>
+						<td>호실</td>
+						<td style="width: 60px;">
+							<input id="room" type="text" width="100%">
+						</td>
+						<td>호실</td>
+					</tr>
+					<tr>
+						<td>조석수</td>
+						<td style="width: 60px;">
+							<input id="seatCo" type="text" width="100%">
+						</td>
+						<td>석</td>
+					</tr>
+					<tr>
+						<td>특실여부</td>
+						<td colspan="2">
+							<input id="prtclrRoomYN" type="checkbox">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
    		
    		<!-- 그리드에서 선택한 row에 대한 임시저장 값 -->
 		<div>
