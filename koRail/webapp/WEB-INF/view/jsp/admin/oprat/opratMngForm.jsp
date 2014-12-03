@@ -57,7 +57,7 @@
 	   				$("#gridBody").jqGrid({
 						datatype: "LOCAL",
 		   				caption:"운행일정 정보",
-		   				width: 395,
+		   				width: 500,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
@@ -89,7 +89,7 @@
 					$("#gridBody2").jqGrid({
 						datatype: "LOCAL",
 		   				caption:"상세운행일정 정보",
-		   				width: 695,
+		   				width: 845,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
@@ -124,7 +124,7 @@
 					$("#gridBody3").jqGrid({
 						datatype: "LOCAL",
 		   				caption:"호실정보",
-		   				width: 320,
+		   				width: 550,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
@@ -160,7 +160,7 @@
 						datatype: "LOCAL",
 		   				multiselect: true,
 		   				caption:"운행일정 정보",
-		   				width: 395,
+		   				width: 500,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
@@ -202,7 +202,7 @@
 					$("#gridBody2").jqGrid({
 						datatype: "LOCAL",
 		   				caption:"상세운행일정 정보",
-		   				width: 695,
+		   				width: 845,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
@@ -231,7 +231,7 @@
 					$("#gridBody3").jqGrid({
 						datatype: "LOCAL",
 		   				caption:"호실정보",
-		   				width: 320,
+		   				width: 550,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
@@ -502,8 +502,7 @@
 						
 						/*삭제할 정보를 name(deleteCodeArray)의 값에 설정*/
 						$("input[name=deleteCodeArray]").val(deleteCodeArray);
-						alert($("input[name=deleteCodeArray]").val());
-						//$("#deleteForm").submit();
+						$("#deleteForm").submit();
 					}
 				}
    			}
@@ -573,7 +572,7 @@
    			</table>
    		</div>
    		<!-- 리스트 -->
-   		<div id="grid" style="margin: 0 auto; margin-top: 15px; width: 395px;">
+   		<div id="grid" style="margin: 0 auto; margin-top: 15px; width: 500px;">
    			<table id="gridBody"></table>
 	   		<div id="footer"></div>
    		</div>
@@ -640,13 +639,13 @@
 		</div>
 		
 		<!-- 상세운행정보 -->
-		<div id="grid2" style="margin: 0 auto; margin-top: 15px; width: 695px;">
+		<div id="grid2" style="margin: 0 auto; margin-top: 15px; width: 845px;">
    			<table id="gridBody2"></table>
 	   		<div id="footer2"></div>
    		</div>
    		
    		<!-- 호실정보 -->
-		<div id="grid3" style="margin: 0 auto; margin-top: 15px; width: 320px;">
+		<div id="grid3" style="margin: 0 auto; margin-top: 15px; width: 550px;">
    			<table id="gridBody3"></table>
 	   		<div id="footer3"></div>
    		</div>
@@ -662,10 +661,10 @@
    		
 		<!-- 삭제 -->
 		<div>
-			<form id="deleteForm" action="/admin/statnProcess.do" method="post">
+			<form id="deleteForm" action="/admin/opratProcess.do" method="post">
 				<!-- 삭제로 상태설정 -->
    				<input type="hidden" name="state" value="delete">
-				<!-- 삭제할 역 코드들 -->
+				<!-- 삭제할 운행 코드들 -->
    				<input type="hidden" name="deleteCodeArray">
 			</form>
 		</div>

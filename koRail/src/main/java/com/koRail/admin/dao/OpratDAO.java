@@ -20,17 +20,20 @@ public interface OpratDAO {
 	 ***************************************/
 	public List<OpratBean> selectAllOpratList(CommonBean commonBean);
 
-	/***************************
+	/******************************
 	 * 운행일정 등록
 	 * @param opratBean
-	 **************************/
-	public void insertOprat(OpratBean opratBean);
+	 * @return
+	 *****************************/
+	
+	public int insertOprat(OpratBean opratBean);
 	
 	/**************************
 	 * 운행일정 수정
 	 * @param opratBean
+	 * @return
 	 **************************/
-	public void updateOprat(OpratBean opratBean);
+	public int updateOprat(OpratBean opratBean);
 	
 	/**************************
 	 * 운행일정 삭제

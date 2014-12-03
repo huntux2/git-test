@@ -66,7 +66,7 @@
 									)
 				FROM DETAIL_OPRAT
 			),
-            #opratCode#,
+            (SELECT	MAX(OPRAT_CODE)	FROM OPRAT),
             #startStatnCode#,
            	#arvlStatnCode#,
             TO_DATE(#startTm#, 'YYYY-MM-DD HH24:MI'),
@@ -83,5 +83,10 @@
   	<!-- 상세운행정보 삭제 -->
   	<delete id="deleteDetailOprat" parameterClass="String">
   	    DELETE FROM DETAIL_OPRAT WHERE DETAIL_OPRAT_CODE = #detailOpratCode#
+  	</delete>
+  	
+  	<!-- 운행일정정보에 대한 모든 상세운행정보 삭제 -->
+  	<delete id="deleteDetailOpratAll" parameterClass="String">
+  	    DELETE FROM DETAIL_OPRAT WHERE OPRAT_CODE = #opratCode#
   	</delete>
 </sqlMap>

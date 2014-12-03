@@ -76,6 +76,6 @@
   	
   	<!-- 열차 삭제 -->
   	<delete id="deleteTrain" parameterClass="String">
-  	    DELETE FROM TRAIN WHERE TRAIN_CODE = #strainCode#
+  	    DELETE FROM TRAIN WHERE TRAIN_CODE = #trainCode#
   	</delete>
 </sqlMap>

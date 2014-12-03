@@ -28,4 +28,13 @@ public class DetailOpratDAOImpl implements DetailOpratDAO {
 	public void deleteDetailOprat(String detailOpratCode) {
 		sqlMapClientTemplate.delete("DetailOprat.deleteDetailOprat", detailOpratCode);
 	}
+
+	/**************************************
+	 * 운행에 대한 모든 상세운행정보 삭제
+	 * @param opratCode
+	 **************************************/
+	@Override
+	public void deleteDetailOpratAll(String opratCode) {
+		sqlMapClientTemplate.delete("DetailOprat.deleteDetailOpratAll", opratCode);
+	}
 }

@@ -34,24 +34,33 @@ public class OpratDAOImple implements OpratDAO {
 		return (List<OpratBean>)sqlMapClientTemplate.queryForList("Oprat.selectAllOprat", commonBean);
 	}
 
+	/***************************
+	 * 운행일정 등록
+	 * @param opratBean
+	 * @return
+	 **************************/
 	@Override
-	public void insertOprat(OpratBean opratBean) {
-		// TODO Auto-generated method stub
-
+	public int insertOprat(OpratBean opratBean) {
+		return sqlMapClientTemplate.update("Oprat.insertOprat", opratBean);
 	}
 
 	/**************************
 	 * 운행일정 수정
 	 * @param opratBean
+	 * @return
 	 **************************/
 	@Override
-	public void updateOprat(OpratBean opratBean) {
-		sqlMapClientTemplate.update("Oprat.updateOprat", opratBean);
+	public int updateOprat(OpratBean opratBean) {
+		return sqlMapClientTemplate.update("Oprat.updateOprat", opratBean);
 	}
 
+	/**************************
+	 * 운행일정 삭제
+	 * @param opratCode
+	 * @return
+	 ************************/
 	@Override
 	public void deleteOprat(String opratCode) {
-		// TODO Auto-generated method stub
-
+		sqlMapClientTemplate.update("Oprat.deleteOprat", opratCode);
 	}
 }

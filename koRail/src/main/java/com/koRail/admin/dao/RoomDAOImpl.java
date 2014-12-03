@@ -30,4 +30,12 @@ public class RoomDAOImpl implements RoomDAO {
 		sqlMapClientTemplate.delete("Room.deleteRoom", roomCode);
 	}
 
+	/*****************************
+	 * 운행에 대한 모든 호실 삭제
+	 * @param opratCode
+	 ****************************/
+	@Override
+	public void deleteRoomAll(String opratCode) {
+		sqlMapClientTemplate.delete("Room.deleteRoomAll", opratCode);
+	}
 }

@@ -210,6 +210,12 @@ public class AdminController extends CommonController {
 		return "admin/oprat/opratAddForm";
 	}
 	
+	/******************************************
+	 * 상세운행 수정화면
+	 * @param model
+	 * @param commonBean
+	 * @return
+	 ******************************************/
 	@RequestMapping(value="opratUpdate.html")
 	public String findOpratUpdateForm(Model model, @ModelAttribute CommonBean commonBean){
 		/*메뉴*/
@@ -227,30 +233,20 @@ public class AdminController extends CommonController {
 		return "admin/oprat/opratUpdateForm";
 	}
 	
-	/*************************************
+	/************************************
 	 * 운행일정 등록, 수정, 삭제
+	 * 상세운행 등록, 삭제
+	 * 호실	 등록,삭제
 	 * @param opratBean
+	 * @param json
 	 * @param deleteCodeArray
 	 * @return
-	 **************************************/
+	 ************************************/
 	@RequestMapping(value="opratProcess.do")
 	public String processOprat(@ModelAttribute OpratBean opratBean,
 			@RequestParam(value="json", required=false ) String[] json,
 			@RequestParam(value="deleteCodeArray", required=false) String[] deleteCodeArray){
 		adminServie.setOprat(opratBean, json, deleteCodeArray);
-		System.out.println("\n\n\n\n\n");
-		
-		System.out.println("1 :"+opratBean.getTrainCode());
-		System.out.println("2 :"+opratBean.getStartStatnCode());
-		System.out.println("3 :"+opratBean.getStartTm());
-		System.out.println("4 :"+opratBean.getArvlStatnCode());
-		System.out.println("5 :"+opratBean.getArvlTm());
-		System.out.println("6 :"+opratBean.getRouteCode());
-		System.out.println("7 :"+opratBean.getDistnc());
-		System.out.println("8 :"+opratBean.getFare());
-		System.out.println("9 :"+opratBean.getupdUsr());
-		
-		System.out.println("\n\n\n\n\n");
 		return "redirect:opratMng.html";
 	}
 	

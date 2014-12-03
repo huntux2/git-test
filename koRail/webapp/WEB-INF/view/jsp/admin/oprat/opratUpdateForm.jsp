@@ -86,7 +86,7 @@
 					}); /*jqGrid end*/
 					
 					/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-					$("#gridBody").jqGrid('addRowData', 1, {state:"normal", startStatnValue:"운행일정을 선택하십시오."});
+					$("#gridBody").jqGrid('addRowData', 0, {state:"non", startStatnValue:"운행일정을 선택하십시오."});
 	   			} /* 상세운행정보 end */
 	   			
 	   			/* 호실정보 */
@@ -118,7 +118,7 @@
 					}); /*jqGrid end*/
 					
 					/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-					$("#gridBody2").jqGrid('addRowData', 1, {state:"normal", room:"운행일정을 선택하십시오."});
+					$("#gridBody2").jqGrid('addRowData', 0, {state:"non", room:"운행일정을 선택하십시오."});
 		   		} /* 호실정보 */
 
 		   		/* 초기데이터 설정 */
@@ -520,7 +520,7 @@
    			}
 	   		
 	   		/*날짜 다이알로그 */
-   			function setDateTime(obj){
+   			function setDateTimeDialog(obj){
 				var year = ""; /* 년 */
    				var month = ""; /* 월 */
    				var dd = ""; /* 일 */
@@ -533,10 +533,11 @@
    				$("#year").append('<option value="'+new Date().getFullYear()+'">'+new Date().getFullYear()+'</option>');
    				$("#year").append('<option value="'+(new Date().getFullYear()+1)+'">'+(new Date().getFullYear()+1)+'</option>');
    				
-   				if($(obj).val() != ""){
-   					/* 년과 월에 대한 날짜 */
-   					var dateSize = new Date($("#year").val(), $("#month").val(), "");
-   					
+   				if($(obj).val() == ""){
+   					/* 현재년도 설정 */
+   	   				$("#year").children("option[value='"+new Date().getFullYear()+"']").attr("selected", "selected");
+   					setDateTime();
+   				}else{
    					/* $(obj).val() 형식 : YYYY-MM-DD HH24:MI */
    					var date = $(obj).val().split("-"); /* 날짜 */
    					var time = date[2].split(":");		/* 시간 */
@@ -550,16 +551,7 @@
    					
    					mi = time[1];
    	   				
-   	   				/* HTML 초기화 */
-   	   				$("#date").html("");
-   	   				   				
-   	   				for(var i = 1; i <= dateSize.getDate(); i++){
-   	   					if(i < 10){
-   	   	   					$("#date").append('<option value="0'+i+'">0'+i+'</option>');   						
-   	   					}else{
-   	 	  					$("#date").append('<option value="'+i+'">'+i+'</option>');
-   	   					}
-   	   				}
+   	   				setDateTime();
    					
    					/* 자동선택 */
    	   				$("#year").children("option[value='"+year+"']").attr("selected", "selected");
@@ -589,6 +581,23 @@
 					} /* btuuon end */
    				}); /* dialog end */
    			} /*날짜 end */
+   			
+   			/* 날짜 설정 */
+   			function setDateTime(){
+   				/* 년과 월에 대한 날짜 */
+				var dateSize = new Date($("#year").val(), $("#month").val(), "");
+   	   				
+   				/* HTML 초기화 */
+   				$("#date").html("");
+   	   				   				
+   				for(var i = 1; i <= dateSize.getDate(); i++){
+   					if(i < 10){
+   	   					$("#date").append('<option value="0'+i+'">0'+i+'</option>');   						
+   					}else{
+ 	  					$("#date").append('<option value="'+i+'">'+i+'</option>');
+   					}
+   				}
+   			}
    			
    			/* 상세운행일정 다이알로그 */
    			function setDetailOpratDialog(){
@@ -750,7 +759,8 @@
    			/**********************************************
    								etc
    			**********************************************/
-   								
+   			
+   			/* 상세운행일정, 호실 삭제 */
    			function deleteRow(type){
    				/* 상세운행정보 */
    				if(type == "detailOprat"){
@@ -760,7 +770,7 @@
 	
 					/*select check*/
 					if(rowIds == ""){
-						alert("삭제할 역을 선택해야 합나디다.");
+						alert("선택된 항목이 없습니다.");
 						return;
 					}else{
 						if(confirm("선택한 항목을 삭제하시겠습니까?")){
@@ -788,7 +798,7 @@
 	
 					/*select check*/
 					if(rowIds == ""){
-						alert("삭제할 호실을 선택해야 합나디다.");
+						alert("선택된 항목이 없습니다.");
 						return;
 					}else{
 						if(confirm("선택한 항목을 삭제하시겠습니까?")){
@@ -806,39 +816,65 @@
 							}
 						} /* if end */
 					} /* else end */
-   				} /* 운행정보 end */
+   				} /* 호실정보 end */
    			} /* deleteRow end */
    			
 	   		/* 수정 */
 	   		function doUpdate(){
-	   			var array1 = $("#gridBody").getRowData();  /* 상세운행정보 */
-	   			var array2 = $("#gridBody2").getRowData(); /* 호실정보 */
-	   			var jsonArray = new Array();
-	   			
-				/* 그리드정보에 delete정보 적용 */
-	   			for(var v in detailOpratArray){
-	   				/* 상세운행일정 */
-	   				if(detailOpratArray[v].state == "delete"){
-	   					array1.push(detailOpratArray[v]);
+	   			/* 미입력 검사 */
+				for(var i = 0; i < $("#updateForm tbody input").size(); i++){
+					if($($("#updateForm tbody input").get(i)).val() == ""){
+						alert("모든 필드는 필수입력 사항입니다.");
+						return;
+					}
+				}
+   				
+   				/* 그리드 데이터 확인 */
+				if($("#gridBody").getRowData(0).state == "non"){
+					alert("상세운행일정은 하나 이상 등록되어야 합니다.");
+					return;
+				}else if($("#gridBody2").getRowData(0).state == "non"){
+					alert("호실정보는 하나 이상 등록되어야 합니다.");
+					return;
+				}else{
+	   				var array1 = $("#gridBody").getRowData();  /* 상세운행정보 */
+		   			var array2 = $("#gridBody2").getRowData(); /* 호실정보 */
+		   			var jsonArray = new Array();
+		   			
+					/* 그리드정보에 delete정보 적용 */
+		   			for(var v in detailOpratArray){
+		   				/* 상세운행일정 */
+		   				if(detailOpratArray[v].state == "delete"){
+		   					array1.push(detailOpratArray[v]);
+		   				}
+		   			}
+		   			for(var v in roomArray){
+		   				/* 호실정보 */
+		   				if(roomArray[v].state == "delete"){
+		   					array2.push(roomArray[v]);
+		   				}
+		   			}
+		   			
+		   			/* JSON 변환 후 jsonArray 저장 */
+		   			jsonArray[0] = JSON.stringify({"detailOprat":array1});
+		   			jsonArray[1] = JSON.stringify({"room":array2});
+		   			
+		   			/* json에 값 설정 */
+		   			$("#json1").val(jsonArray[0]);
+		   			$("#json2").val(jsonArray[1]);
+		   			
+		   			if(confirm("이 운행정보를 수정하시겠습니까?")){
+		   				$("#updateForm").submit();
 	   				}
-	   			}
-	   			for(var v in roomArray){
-	   				/* 호실정보 */
-	   				if(roomArray[v].state == "delete"){
-	   					array2.push(roomArray[v]);
-	   				}
-	   			}
-	   			
-	   			/* JSON 변환 후 jsonArray 저장 */
-	   			jsonArray[0] = JSON.stringify({"detailOprat":array1});
-	   			jsonArray[1] = JSON.stringify({"room":array2});
-	   			
-	   			/* json에 값 설정 */
-	   			$("#json1").val(jsonArray[0]);
-	   			$("#json2").val(jsonArray[1]);
-	   			
-	   			$("#updateForm").submit();
-	   		}
+	   			} /* else end */
+	   		}  /* doUpdate end */
+   			
+   			/* 취소 */
+   			function doCancel(){
+   				if(confirm("현제 작성중인 작업을 취소하시겠습니까?")){
+   					location.href = "/admin/opratMng.html";
+   				}
+   			}
 		</script>
    	</head>
    	<body>
@@ -857,6 +893,14 @@
 			* 열차종류는 선택한 열차번호에 따라 자동 입력됩니다.
 			<br>
 			* 거리는 소숫점 첫째자리까지 입력가능합니다.
+			<br>
+			* 상세운행일정 정보는 목록의 오른쪽 위의 추가, 삭제 버튼을 이용하여 추가, 삭제가 가능합니다.
+			<br>
+			* 호실정보는 목록의 오른쪽 위의 추가, 삭제 버튼을 이용하여 추가, 삭제가 가능합니다.
+			<br>
+			* 모든 작업이 완료되었다면 수정 버튼을 이용하여 입력한 정보를 수정 할 수 있습니다.
+			<br>
+			* 진행중인 작업을 취소버튼을 이용해 취소 할 수 있습니다.
    		</div>
    		
    		<!-- 운행일정 -->
@@ -872,7 +916,7 @@
 				<input id="json1" name="json" type="hidden">
 				<input id="json2" name="json" type="hidden">
 				
-				<table class="d-table" style="width: 650px;">
+				<table class="d-table">
 					<colgroup>
 						<col width="20%">
 						<col width="15%">
@@ -883,7 +927,7 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<td colspan="6" style="text-align: center;">
+							<td colspan="6" style="text-align: center; border: none;" class="t-radius">
 								<strong>운행일정</strong>
 							</td>
 						</tr>
@@ -917,7 +961,7 @@
 							</td>
 							<td>출발시각</td>
 							<td colspan="2">
-								<input name="startTm" onclick="setDateTime(this);" readonly="readonly" style="width: 95%;" type="text" value="${oprat.startTm}">
+								<input name="startTm" onclick="setDateTimeDialog(this);" readonly="readonly" style="width: 95%;" type="text" value="${oprat.startTm}">
 							</td>
 						</tr>
 						<tr>
@@ -931,7 +975,7 @@
 							</td>
 							<td>도착시각</td>
 							<td colspan="2">
-								<input name="arvlTm" onclick="setDateTime(this);" readonly="readonly" style="width: 95%;" type="text" value="${oprat.arvlTm}">
+								<input name="arvlTm" onclick="setDateTimeDialog(this);" readonly="readonly" style="width: 95%;" type="text" value="${oprat.arvlTm}">
 							</td>
 						</tr>
 						<tr>
@@ -950,11 +994,11 @@
 							<td>km</td>
 						</tr>
 						<tr>
-							<td>요금</td>
+							<td style="border: none;" class="b-l-radius">요금</td>
 							<td colspan="4" style="text-align: right;">
 								<input name="fare" type="text" value="${oprat.fare}">
 							</td>
-							<td>원</td>
+							<td class="b-r-radius" style="border: none;">원</td>
 						</tr>
 					</tbody>
 				</table>
@@ -962,7 +1006,7 @@
 		</div>
 		
 		<!-- 상세운행정보 -->
-		<div>
+		<div style="margin-top: 30px;">
 			<div class="button-group" style="width: 845px;">
 				<button type="button" onclick="setDetailOpratDialog();">추가</button>
 				<button type="button" onclick="deleteRow('detailOprat');">삭제</button>
@@ -993,7 +1037,7 @@
 	   	</div>
 		
 		<!-- 호실정보 -->
-		<div>
+		<div style="margin-top: 30px;">
 			<div class="button-group" style="width: 550px;">
 				<button type="button" onclick="setRoomDialog();">추가</button>
 				<button type="button" onclick="deleteRow('room');">삭제</button>
@@ -1021,13 +1065,13 @@
 					<!-- 날짜 선택 -->
 					<tr>
 						<td>
-							<select id="year" onchange="setDate();" style="width: 65px;">
+							<select id="year" onchange="setDateTime();" style="width: 65px;">
    								<!-- script -->
    							</select>
 						</td>
 						<td>년</td>
 						<td>
-							<select id="month" onchange="setDate();" style="width: 55px;">
+							<select id="month" onchange="setDateTime();" style="width: 55px;">
    								<c:forEach var="month" begin="1" end="12">
    									<c:if test="${month < 10}">
 		   								<option value="0${month}">0${month}</option>
@@ -1078,7 +1122,7 @@
 		
 		<!-- trainDialog -->
 		<div id="trainDialog" title="열차검색" style="display: none;">
-   			<table style=" margin: 0 auto; border-collapse: collapse;">
+			<table style=" margin: 0 auto; border-collapse: collapse;">
 				<tbody>
 					<tr>
 						<td style="border: 1px solid #FFFFFF; padding: 5px; font-weight: bolder;">열차번호</td>
@@ -1133,13 +1177,13 @@
 					<tr>
 						<td>출발시각</td>
 						<td>
-							<select id="startYear" onchange="setDate();" style="width: 65px;">
+							<select id="startYear" onchange="setDateTime();" style="width: 65px;">
    								<!-- script -->
    							</select>
 							<label style="width: 20px;">년</label>
 						</td>
 						<td>
-							<select id="startMonth" onchange="setDate();" style="width: 55px;">
+							<select id="startMonth" onchange="setDateTime();" style="width: 55px;">
    								<c:forEach var="month" begin="1" end="12">
    									<c:if test="${month < 10}">
 		   								<option value="0${month}">0${month}</option>
@@ -1196,13 +1240,13 @@
 					<tr>
 						<td>도착시각</td>
 						<td>
-							<select id="arvlYear" onchange="setDate();" style="width: 65px;">
+							<select id="arvlYear" onchange="setDateTime();" style="width: 65px;">
    								<!-- script -->
    							</select>
 							<label style="width: 20px;">년</label>
 						</td>
 						<td>
-							<select id="arvlMonth" onchange="setDate();" style="width: 55px;">
+							<select id="arvlMonth" onchange="setDateTime();" style="width: 55px;">
    								<c:forEach var="month" begin="1" end="12">
    									<c:if test="${month < 10}">
 		   								<option value="0${month}">0${month}</option>
@@ -1315,8 +1359,8 @@
    		
    		<!-- 수정/취소 버튼 -->
    		<div class="button-group" style="width: 847px; margin-top: 30px; text-align: center;">
-   			<button id="updateBtn" onclick="doUpdate();">수정</button>
-			<button>취소</button>
+   			<button type="button" onclick="doUpdate();">수정</button>
+			<button type="button" onclick="doCancel();">취소</button>
    		</div>
 	</body>
 </html>
