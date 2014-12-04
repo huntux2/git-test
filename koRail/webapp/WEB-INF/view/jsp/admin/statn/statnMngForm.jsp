@@ -33,11 +33,22 @@
 					}
 				});
 	   			
-	   			/*그리드 초기상태*/
+				/*그리드 초기화*/
+	   			doGridInit();
+	   		});
+	   		
+	   		/*그리드 초기화*/
+   			function doGridInit(){
+   				viewState = false;
+   				
+   				/*그리드 초기화*/
+				$("#grid").html("<table id='gridBody'></table><div id='footer'></div>");
+   				
+   				/*그리드 초기상태*/
 				$("#gridBody").jqGrid({
 					datatype: "LOCAL",
 	   				caption:"역 정보",
-	   				width: 695,
+	   				width: 845,
 	   				height: 230,
 	   				scroll: 1,
 	   				rowNum : 'max',
@@ -63,8 +74,8 @@
 				}); /*jqGrid end*/
 				/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
 				$("#gridBody").jqGrid('addRowData', 1, {update:"조회조건을 선택/입력하여 조회를 하십시오."});
-	   		});
-	   		
+   			}
+   			
 	   		/*리스트*/
 			function findStatnList(mode){
 				var vUrl = ""; /*url*/
@@ -118,7 +129,7 @@
 										datatype: "LOCAL",
 						   				multiselect: true,
 						   				caption:"역 정보",
-						   				width: 695,
+						   				width: 845,
 						   				height: 230,
 						   				scroll: 1,
 						   				rowNum : 'max',
@@ -189,7 +200,23 @@
 							}
 							/*conForm 생성(확인 : 등록, 취소 : 상태유지)*/
 							else if(confirm("이 역 정보를 등록하시겠습니까?")){
-								$("#addForm").submit();
+								$.ajax({
+									type:"POST",
+									url: "/admin/statnProcess.do?state=insert&areaCode="
+											+encodeURIComponent(area.val())+"&statnNm="
+											+encodeURIComponent(statnNm.val())+"&register="
+											+encodeURIComponent("${name}"),
+									Type:"JSON",
+									success : function(data) {
+										if(data.errorCode == 0){
+											/* 재검색 */
+											findStatnList(data.searchMode);
+											alert("등록이 완료되었습니다.");
+										}else{
+											alert("등록실패");
+										}
+									}
+								}); /* ajax end */
 								
 								$(this).dialog("close");
 							}
@@ -223,10 +250,25 @@
 							}
 							/*conForm 생성(확인 : 등록, 취소 : 상태유지)*/
 							else if(confirm("이 역 정보를 등록하시겠습니까?")){
-								/*역코드 설정*/
-								$("input[name='statnCode']").val(statnCode);
+								$.ajax({
+									type:"POST",
+									url: "/admin/statnProcess.do?state=update&statnCode="
+											+encodeURIComponent(statnCode)+"&areaCode="
+											+encodeURIComponent(area.val())+"&statnNm="
+											+encodeURIComponent(statnNm.val())+"&updUsr="
+											+encodeURIComponent("${name}"),
+									Type:"JSON",
+									success : function(data) {
+										if(data.errorCode == 0){
+											/* 재검색 */
+											findStatnList(data.searchMode);
+											alert("수정이 완료되었습니다.");
+										}else{
+											alert("수정실패");
+										}
+									}
+								}); /* ajax end */
 								
-								$("#updateForm").submit();
 								$(this).dialog("close");
 							}
 						},
@@ -258,7 +300,34 @@
 						/*삭제할 정보를 name(deleteCodeArray)의 값에 설정*/
 						$("input[name=deleteCodeArray]").val(deleteCodeArray);
 						
-						$("#deleteForm").submit();
+						$.ajax({
+							type:"POST",
+							url: "/admin/statnProcess.do?state=delete&deleteCodeArray="
+									+$("input[name=deleteCodeArray]").val(),
+							Type:"JSON",
+							success : function(data) {
+								/* 선택된 row들 */
+								var rowIds = $("#gridBody").getGridParam('selarrrow');
+								
+								if(data.errorCode == 0){
+									/* 그리드에서 ROW 삭제 */
+									for(var i = rowIds.length; i > 0; i--){
+										$("#gridBody").delRowData(rowIds[i-1]);
+									}
+									
+									/*그리드 초기화*/
+						   			doGridInit();
+									alert("삭제가 완료되었습니다.");
+								}else{
+									/* 삭제되지 않은 ROW를 보여줌 */
+									for(var i = 0; i < rowIds.length; i++){
+										if($("#gridBody").getRowData(rowIds[i]).statnCode == data.errorMsg){
+											alert(data.errorMsg+": "+$("#gridBody").getRowData(rowIds[i]).statnNm+"은 현재 사용중인 역 입니다.");
+										}
+									}
+								}
+							} /* success end */
+						}); /* ajax end */
 					}
 				}
    			}
@@ -328,98 +397,80 @@
    			</table>
    		</div>
    		<!-- 리스트 -->
-   		<div id="grid" style="margin: 0 auto; margin-top: 15px; width: 695px;">
+   		<div id="grid" style="margin: 0 auto; margin-top: 15px; width: 845px;">
    			<table id="gridBody"></table>
 	   		<div id="footer"></div>
    		</div>
    		<!-- 등록 다이알로그 -->
    		<div id="addDialog" title="역 등록" style="display: none;">
-   			<form id="addForm" action="/admin/statnProcess.do" method="post">
-   				<!-- 등록으로 상태설정 -->
-   				<input type="hidden" name="state" value="insert">
-   				<!-- 등록자 설정 (등록자는 현재 로그인한 회원명으로 등록된다.) -->
-   				<input type="hidden" name="register" value="${name}">   				
-				
-				<table style="margin: 0 auto;">
-					<tbody>
-						<!-- 지역 선택 -->
-						<tr>
-							<td>
-								<strong>지역</strong>
-							</td>
-							<td>
-								<select id="addAreaSelect" name="areaCode" style="width: 167px;">
-	   								<option value="선택">선택</option>
-	   								<c:forEach var="value" items="${commonCodeList}">
-		   								<option value="${value.cmmnCode}">${value.cmmnCodeValue}</option>
-	   								</c:forEach>
-	   							</select>
-							</td>
-						</tr>
-						
-						<!-- 역 명 입력-->
-						<tr>
-							<td>
-								<strong>역 명</strong>
-							</td>
-							<td>
-								<input id="addStatnNmText" name="statnNm" type="text" style="width: 163px;">
-							</td>
-						</tr>
-					</tbody> <!-- tbody end -->
-				</table> <!-- table end -->
-			</form> <!-- addForm end -->
+   			<table style="margin: 0 auto;">
+				<tbody>
+					<!-- 지역 선택 -->
+					<tr>
+						<td>
+							<strong>지역</strong>
+						</td>
+						<td>
+							<select id="addAreaSelect" name="areaCode" style="width: 167px;">
+	  								<option value="선택">선택</option>
+	  								<c:forEach var="value" items="${commonCodeList}">
+	   								<option value="${value.cmmnCode}">${value.cmmnCodeValue}</option>
+	  								</c:forEach>
+	  							</select>
+						</td>
+					</tr>
+					
+					<!-- 역 명 입력-->
+					<tr>
+						<td>
+							<strong>역 명</strong>
+						</td>
+						<td>
+							<input id="addStatnNmText" name="statnNm" type="text" style="width: 163px;">
+						</td>
+					</tr>
+				</tbody> <!-- tbody end -->
+			</table> <!-- table end -->
 		</div> <!-- addDialog -->
 		
    		<!-- 수정 다이알로그 -->
    		<div id="updateDialog" title="역 수정" style="display: none;">
-   			<form id="updateForm" action="/admin/statnProcess.do" method="post">
-   				<!-- 수정으로 상태설정 -->
-   				<input type="hidden" name="state" value="update">
-   				<!-- 수정자 설정 (수정자는 현재 로그인한 회원명으로 등록된다.) -->
-   				<input type="hidden" name="updUser" value="${name}">
-   				<!-- 수정할 역 코드 -->
-   				<input type="hidden" name="statnCode">   				
-				
-				<table style="margin: 0 auto;">
-					<tbody>
-						<!-- 지역 선택 -->
-						<tr>
-							<td>
-								<strong>지역</strong>
-							</td>
-							<td>
-								<select id="updateAreaSelect" name="areaCode" style="width: 167px;">
-	   								<option value="선택">선택</option>
-	   								<c:forEach var="value" items="${commonCodeList}">
-		   								<option value="${value.cmmnCode}">${value.cmmnCodeValue}</option>
-	   								</c:forEach>
-	   							</select>
-							</td>
-						</tr>
-						
-						<!-- 역 명 입력-->
-						<tr>
-							<td>
-								<strong>역 명</strong>
-							</td>
-							<td>
-								<input id="updateStatnNmText" name="statnNm" type="text" style="width: 163px;">
-							</td>
-						</tr>
-					</tbody> <!-- tbody end -->
-				</table> <!-- table end -->
-			</form> <!-- updateForm end -->
+   			<table style="margin: 0 auto;">
+				<tbody>
+					<!-- 지역 선택 -->
+					<tr>
+						<td>
+							<strong>지역</strong>
+						</td>
+						<td>
+							<select id="updateAreaSelect" name="areaCode" style="width: 167px;">
+   								<option value="선택">선택</option>
+   								<c:forEach var="value" items="${commonCodeList}">
+	   								<option value="${value.cmmnCode}">${value.cmmnCodeValue}</option>
+   								</c:forEach>
+   							</select>
+						</td>
+					</tr>
+					
+					<!-- 역 명 입력-->
+					<tr>
+						<td>
+							<strong>역 명</strong>
+						</td>
+						<td>
+							<input id="updateStatnNmText" name="statnNm" type="text" style="width: 163px;">
+						</td>
+					</tr>
+				</tbody> <!-- tbody end -->
+			</table> <!-- table end -->
 		</div> <!-- updateDialog -->
 		
 		<!-- 삭제 -->
 		<div>
-			<form id="deleteForm" action="/admin/statnProcess.do" method="post">
-				<!-- 삭제로 상태설정 -->
-   				<input type="hidden" name="state" value="delete">
-				<!-- 삭제할 역 코드들 -->
-   				<input type="hidden" name="deleteCodeArray">
-			</form>
+			<!-- 삭제로 상태설정 -->
+  				<input type="hidden" name="state" value="delete">
+			<!-- 삭제할 역 코드들 -->
+  				<input type="hidden" name="deleteCodeArray">
 		</div>
 	</body>
 </html>

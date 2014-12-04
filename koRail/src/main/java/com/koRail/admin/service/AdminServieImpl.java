@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.koRail.admin.dao.DetailOpratDAO;
@@ -16,6 +17,7 @@ import com.koRail.admin.to.OpratBean;
 import com.koRail.admin.to.RoomBean;
 import com.koRail.admin.to.StatnBean;
 import com.koRail.admin.to.TrainBean;
+import com.koRail.common.exception.DataDeleteException;
 import com.koRail.common.to.CommonBean;
 import com.koRail.common.util.JSONParser;
 
@@ -49,9 +51,10 @@ public class AdminServieImpl implements AdminServie {
 	 * 역 조회
 	 * @param commonBean
 	 * @return
+	 * @exception
 	 ******************************/
 	@Override
-	public List<StatnBean> getStatnList(CommonBean commonBean) {
+	public List<StatnBean> getStatnList(CommonBean commonBean){
 		return statnDAO.selectStatnList(commonBean);
 	}
 
@@ -59,9 +62,10 @@ public class AdminServieImpl implements AdminServie {
 	 * 역 등록, 수정, 삭제
 	 * @param statnBean
 	 * @param deleteCodeArray
+	 * @throws DataDeleteException
 	 *****************************/
 	@Override
-	public void setStatn(StatnBean statnBean, String[] deleteCodeArray) {
+	public void setStatn(StatnBean statnBean, String[] deleteCodeArray) throws DataDeleteException{
 		/*등록*/
 		if("insert".equals(statnBean.getState())){
 			statnDAO.insertStatn(statnBean);
@@ -71,10 +75,19 @@ public class AdminServieImpl implements AdminServie {
 			statnDAO.updateStatn(statnBean);
 		}
 		/*삭제*/
-		else{
-			for(String statnCode : deleteCodeArray){
-				statnDAO.deleteStatn(statnCode);
+		else if("delete".equals(statnBean.getState()) && deleteCodeArray != null){
+			String code = null; /* exception이 발생할 경우 발생한 코드 */
+			
+			try{
+				for(String statnCode : deleteCodeArray){
+					code = statnCode;
+					statnDAO.deleteStatn(statnCode);
+				}
+			}catch(DataAccessException e){
+				throw new DataDeleteException(code);
 			}
+		}else{
+			return;
 		}
 	}
 	
@@ -96,9 +109,10 @@ public class AdminServieImpl implements AdminServie {
 	 * 열차 등록, 수정, 삭제
 	 * @param trainBean
 	 * @param deleteCodeArray
+	 * @throws DataDeleteException
 	 *******************************/
 	@Override
-	public void setTrain(TrainBean trainBean, String[] deleteCodeArray) {
+	public void setTrain(TrainBean trainBean, String[] deleteCodeArray) throws DataDeleteException{
 		/*등록*/
 		if("insert".equals(trainBean.getState())){
 			trainDAO.insertTrain(trainBean);
@@ -108,10 +122,19 @@ public class AdminServieImpl implements AdminServie {
 			trainDAO.updateTrain(trainBean);
 		}
 		/*삭제*/
-		else{
-			for(String trainCode : deleteCodeArray){
-				trainDAO.deleteTrain(trainCode);
+		else if("delete".equals(trainBean.getState())){
+			String code = null; /* exception이 발생할 경우 발생한 코드 */
+			
+			try{
+				for(String trainCode : deleteCodeArray){
+					code = trainCode;
+					trainDAO.deleteTrain(trainCode);
+				}
+			}catch(DataAccessException e){
+				throw new DataDeleteException(code);
 			}
+		}else{
+			return;
 		}
 	}
 	
@@ -141,8 +164,9 @@ public class AdminServieImpl implements AdminServie {
 	* 호실	 등록,삭제
 	* @param opratBean
 	* @param deleteCodeArray
+	* @throws DataDeleteException
 	********************************/
-	public void setOprat(OpratBean opratBean, String[] json, String[] deleteCodeArray){
+	public void setOprat(OpratBean opratBean, String[] json, String[] deleteCodeArray) throws DataDeleteException {
 		int rows = 0; /* insert, update, delete가 발생한 row 수 */
 		
 		if("insert".equals(opratBean.getState())){
@@ -150,13 +174,13 @@ public class AdminServieImpl implements AdminServie {
 		}else if("update".equals(opratBean.getState())){
 			rows = opratDAO.updateOprat(opratBean);
 		}else if("delete".equals(opratBean.getState()) && deleteCodeArray != null){
-			for(int i = 0 ; i < deleteCodeArray.length; i++){
+			for(String opratCode : deleteCodeArray){
 				/* 운행에 대한 모든 상세운행 삭제 */
-				detailopratDAO.deleteDetailOpratAll(deleteCodeArray[i]);
+				detailopratDAO.deleteDetailOpratAll(opratCode);
 				/* 운행에 대한 모든 호실 삭제 */
-				roomDAO.deleteRoomAll(deleteCodeArray[i]);
+				roomDAO.deleteRoomAll(opratCode);
 				/* 운행 삭제 */
-				opratDAO.deleteOprat(deleteCodeArray[i]);
+				opratDAO.deleteOprat(opratCode);
 			}
 		}else{
 			return;

@@ -3,11 +3,13 @@ package com.koRail.admin.dao;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.ibatis.SqlMapClientTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.koRail.admin.to.StatnBean;
 import com.koRail.admin.to.TrainBean;
+import com.koRail.common.exception.DataDeleteException;
 import com.koRail.common.to.CommonBean;
 
 @Repository(value="trainDAO")

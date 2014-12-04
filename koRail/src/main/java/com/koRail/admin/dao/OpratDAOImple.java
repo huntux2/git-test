@@ -61,6 +61,6 @@ public class OpratDAOImple implements OpratDAO {
 	 ************************/
 	@Override
 	public void deleteOprat(String opratCode) {
-		sqlMapClientTemplate.update("Oprat.deleteOprat", opratCode);
+		sqlMapClientTemplate.update("Oprat.deleteOprat", opratCode);			
 	}
 }

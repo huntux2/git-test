@@ -16,6 +16,7 @@ import com.koRail.admin.to.OpratBean;
 import com.koRail.admin.to.StatnBean;
 import com.koRail.admin.to.TrainBean;
 import com.koRail.common.controller.CommonController;
+import com.koRail.common.exception.DataDeleteException;
 import com.koRail.common.service.CommonService;
 import com.koRail.common.to.CommonBean;
 
@@ -78,18 +79,33 @@ public class AdminController extends CommonController {
 		return "jsonView";
 	}
 	
-	/*****************************************
+	/******************************************
 	 * 역 등록, 수정, 삭제
+	 * @param model
 	 * @param statnBean
 	 * @param deleteCodeArray
 	 * @return
-	 *****************************************/
+	 ******************************************/
 	@RequestMapping(value="statnProcess.do")
-	public String processStatn(@ModelAttribute StatnBean statnBean,
+	public String processStatn(Model model, @ModelAttribute StatnBean statnBean,
 			@RequestParam(value="deleteCodeArray", required=false) String[] deleteCodeArray){
-		adminServie.setStatn(statnBean, deleteCodeArray);
+		try{
+			adminServie.setStatn(statnBean, deleteCodeArray);
+			model.addAttribute("errorCode", 0);
+			model.addAttribute("errorMsg", null);
+			
+			/* 검색한 방법 */
+			if(statnBean.getSrcText() == null){
+				model.addAttribute("searchMode", "area");				
+			}else{
+				model.addAttribute("searchMode", "statnNm");
+			}
+		}catch(DataDeleteException e){
+			model.addAttribute("errorCode", 1);
+			model.addAttribute("errorMsg", e.getMessage());
+		}
 		
-		return "redirect:statnMng.html";
+		return "jsonView";
 	}
 	
 	/**********************************************
@@ -137,18 +153,33 @@ public class AdminController extends CommonController {
 		return "jsonView";
 	}
 	
-	/****************************************
+	/**************************************
 	 * 열차 등록, 수정, 삭제
+	 * @param model
 	 * @param trainBean
 	 * @param deleteCodeArray
 	 * @return
-	 ***************************************/
+	 *************************************/
 	@RequestMapping(value="trainProcess.do")
-	public String processTrain(@ModelAttribute TrainBean trainBean,
+	public String processTrain(Model model, @ModelAttribute TrainBean trainBean,
 			@RequestParam(value="deleteCodeArray", required=false) String[] deleteCodeArray){
-		adminServie.setTrain(trainBean, deleteCodeArray);
+		try{
+			adminServie.setTrain(trainBean, deleteCodeArray);
+			model.addAttribute("errorCode", 0);
+			model.addAttribute("errorMsg", null);
+			
+			/* 검색한 방법 */
+			if(trainBean.getSrcText() == null){
+				model.addAttribute("searchMode", "knd");				
+			}else{
+				model.addAttribute("searchMode", "trainNo");
+			}
+		}catch(DataDeleteException e){
+			model.addAttribute("errorCode", 1);
+			model.addAttribute("errorMsg", e.getMessage());
+		}
 		
-		return "redirect:trainMng.html";
+		return "jsonView";
 	}
 	
 	/**********************************************
@@ -233,21 +264,27 @@ public class AdminController extends CommonController {
 		return "admin/oprat/opratUpdateForm";
 	}
 	
-	/************************************
+	/******************************************
 	 * 운행일정 등록, 수정, 삭제
 	 * 상세운행 등록, 삭제
 	 * 호실	 등록,삭제
+	 * @param model
 	 * @param opratBean
 	 * @param json
 	 * @param deleteCodeArray
 	 * @return
-	 ************************************/
+	 ******************************************/
 	@RequestMapping(value="opratProcess.do")
-	public String processOprat(@ModelAttribute OpratBean opratBean,
+	public String processOprat(Model model, @ModelAttribute OpratBean opratBean,
 			@RequestParam(value="json", required=false ) String[] json,
 			@RequestParam(value="deleteCodeArray", required=false) String[] deleteCodeArray){
-		adminServie.setOprat(opratBean, json, deleteCodeArray);
-		return "redirect:opratMng.html";
+		try{	
+			adminServie.setOprat(opratBean, json, deleteCodeArray);
+			return "redirect:opratMng.html";
+		}catch(DataDeleteException e){
+			model.addAttribute("errorMsg", e.getMessage());
+			return "jsonView";
+		}
 	}
 	
 	@RequestMapping(value="memberMng.html")
