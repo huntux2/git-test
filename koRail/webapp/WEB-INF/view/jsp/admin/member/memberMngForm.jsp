@@ -289,39 +289,26 @@
    			<table class="search-group">
    				<tbody>
    					<tr>
-   						<!-- 지역으로 검색 -->
-   						<td style="width: 50px; height: 25px; text-align: center;">
-   							<strong>지역</strong>
-   						</td>
-   						<td style="width: 100px; padding-left: 0px;">
+   						<!-- 검색 -->
+   						<td style="width: 100px; padding-left: 15px;">
    							<select id="areaSelect" style="width: 100%; height: 25px">
-   								<option value="선택">선택</option>
-   								<c:forEach var="value" items="${commonCodeList}">
-	   								<option value="${value.cmmnCode}">${value.cmmnCodeValue}</option>
-   								</c:forEach>
+   								<option value="id">아이디</option>
+   								<option value="name">성명</option>
    							</select>
+   						</td>
+   						<td style="width: 120px;">
+   							<input type="text" style="width: 95%; height: 19px;">
    						</td>
    						<td style="width: 75px;">
    							<button id="areaBtn" type="button" onclick="findStatnList('area');" style="width: 100%; height: 25px;">조회</button>
    						</td>
    						
-   						<!-- 역 명으로 검색 -->
-   						<td style="width: 50px; padding-left: 32px; text-align: center;">
-   							<strong>역 명</strong>
-   						</td>
-   						<td style="width: 120px;">
-   							<input id="statnNmText" type="text" style="width: 100%; height: 19px;">
-   						</td>
-   						<td style="width: 75px;">
-   							<button id="statnNmBtn" type="button" onclick="findStatnList('statnNm');" style="width: 100%; height: 25px;">조회</button>	
-   						</td>
-   						
    						<!-- 등록버튼, 삭제버튼 -->
    						<td style="width: 75px; padding-left: 30px;">
-   							<button id="addBtn" type="button" class="btn" style="width: 100%; height: 25px;">등록</button>
+   							<button id="addBtn" type="button" class="btn" style="width: 95%; height: 25px;">등록</button>
    						</td>
    						<td style="width: 75px; padding-right: 10px;">
-   							<button id="deleteBtn" type="button" class="btn" style="width: 100%; height: 25px;">삭제</button>
+   							<button id="deleteBtn" type="button" class="btn" style="width: 95%; height: 25px;">삭제</button>
    						</td>
    					</tr>
    				</tbody>

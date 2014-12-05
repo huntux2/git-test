@@ -502,7 +502,40 @@
 						
 						/*삭제할 정보를 name(deleteCodeArray)의 값에 설정*/
 						$("input[name=deleteCodeArray]").val(deleteCodeArray);
-						$("#deleteForm").submit();
+						
+						$.ajax({
+							type:"POST",
+							url: "/admin/opratProcess.do?state=delete&deleteCodeArray="
+									+$("input[name=deleteCodeArray]").val(),
+							Type:"JSON",
+							success : function(data) {
+								/* 선택된 row들 */
+								var rowIds = $("#gridBody").getGridParam('selarrrow');
+								
+								if(data.errorCode == 0){
+									/* 그리드에서 ROW 삭제 */
+									for(var i = rowIds.length; i > 0; i--){
+										$("#gridBody").delRowData(rowIds[i-1]);
+									}
+										
+									/*그리드 초기화 또는 재 조회*/
+									if(data.errorMsg == null){
+										findOpratList(data.searchMode);
+									}else{
+							   			doGridInit();
+									}
+									
+									alert("삭제가 완료되었습니다.");
+								}else{
+									/* 삭제되지 않은 ROW를 보여줌 */
+									for(var i = 0; i < rowIds.length; i++){
+										if($("#gridBody").getRowData(rowIds[i]).trainCode == data.errorMsg){
+											alert(data.errorMsg+": "+$("#gridBody").getRowData(rowIds[i]).trainNo+"는 현재 사용중인 열차입니다.");
+										}
+									}
+								}
+							} /* success end */
+						}); /* ajax end */
 					}
 				}
    			}
@@ -546,7 +579,7 @@
    							</select>
    						</td>
    						<td style="width: 75px;">
-   							<button id="trainKndBtn" type="button" onclick="findOpratList('knd');" style="width: 100%; height: 25px;">조회</button>
+   							<button id="trainKndBtn" type="button" onclick="findOpratList('knd');" style="width: 95%; height: 25px;">조회</button>
    						</td>
    						
    						<!-- 열차번호로 검색 -->
@@ -554,7 +587,7 @@
 							<strong>열차번호</strong>
 						</td>
    						<td style="width: 120px;">
-   							<input id="trainNoText" type="text" style="width: 100%; height: 19px;">
+   							<input id="trainNoText" type="text" style="width: 95%; height: 19px;">
    						</td>
    						<td style="width: 75px;">
    							<button id="trainNoBtn" type="button" onclick="findOpratList('trainNo');" style="width: 100%; height: 25px;">조회</button>	
@@ -562,10 +595,10 @@
    						
    						<!-- 등록버튼, 삭제버튼 -->
    						<td style="width: 75px; padding-left: 30px;">
-   							<button id="addBtn" type="button" class="btn" style="width: 100%; height: 25px;">등록</button>
+   							<button id="addBtn" type="button" class="btn" style="width: 95%; height: 25px;">등록</button>
    						</td>
    						<td style="width: 75px; padding-right: 10px;">
-   							<button id="deleteBtn" type="button" class="btn" style="width: 100%; height: 25px;">삭제</button>
+   							<button id="deleteBtn" type="button" class="btn" style="width: 95%; height: 25px;">삭제</button>
    						</td>
    					</tr>
    				</tbody>

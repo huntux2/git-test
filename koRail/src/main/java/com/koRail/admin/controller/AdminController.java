@@ -280,8 +280,24 @@ public class AdminController extends CommonController {
 			@RequestParam(value="deleteCodeArray", required=false) String[] deleteCodeArray){
 		try{	
 			adminServie.setOprat(opratBean, json, deleteCodeArray);
-			return "redirect:opratMng.html";
+			
+			/* 방식확인 */
+			if("delete".equals(opratBean.getState())){
+				model.addAttribute("errorCode", 0);
+				model.addAttribute("errorMsg", null);
+				
+				/* 검색한 방법 */
+				if(opratBean.getSrcText() == null){
+					model.addAttribute("searchMode", "knd");				
+				}else{
+					model.addAttribute("searchMode", "trainNo");
+				}
+				return "jsonView";
+			}else{
+				return "redirect:opratMng.html";				
+			}
 		}catch(DataDeleteException e){
+			model.addAttribute("errorCode", 1);
 			model.addAttribute("errorMsg", e.getMessage());
 			return "jsonView";
 		}

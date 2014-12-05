@@ -315,8 +315,13 @@
 										$("#gridBody").delRowData(rowIds[i-1]);
 									}
 									
-									/*그리드 초기화*/
-						   			doGridInit();
+									/*그리드 초기화 또는 재 조회*/
+									if(data.errorMsg == null){
+										findStatnList(data.searchMode);
+									}else{
+							   			doGridInit();
+									}
+									
 									alert("삭제가 완료되었습니다.");
 								}else{
 									/* 삭제되지 않은 ROW를 보여줌 */
@@ -371,7 +376,7 @@
    							</select>
    						</td>
    						<td style="width: 75px;">
-   							<button id="areaBtn" type="button" onclick="findStatnList('area');" style="width: 100%; height: 25px;">조회</button>
+   							<button id="areaBtn" type="button" onclick="findStatnList('area');" style="width: 95%; height: 25px;">조회</button>
    						</td>
    						
    						<!-- 역 명으로 검색 -->
@@ -382,15 +387,15 @@
    							<input id="statnNmText" type="text" style="width: 100%; height: 19px;">
    						</td>
    						<td style="width: 75px;">
-   							<button id="statnNmBtn" type="button" onclick="findStatnList('statnNm');" style="width: 100%; height: 25px;">조회</button>	
+   							<button id="statnNmBtn" type="button" onclick="findStatnList('statnNm');" style="width: 95%; height: 25px; margin-left: 5px;">조회</button>	
    						</td>
    						
    						<!-- 등록버튼, 삭제버튼 -->
    						<td style="width: 75px; padding-left: 30px;">
-   							<button id="addBtn" type="button" class="btn" style="width: 100%; height: 25px;">등록</button>
+   							<button id="addBtn" type="button" class="btn" style="width: 95%; height: 25px;">등록</button>
    						</td>
    						<td style="width: 75px; padding-right: 10px;">
-   							<button id="deleteBtn" type="button" class="btn" style="width: 100%; height: 25px;">삭제</button>
+   							<button id="deleteBtn" type="button" class="btn" style="width: 95%; height: 25px;">삭제</button>
    						</td>
    					</tr>
    				</tbody>
