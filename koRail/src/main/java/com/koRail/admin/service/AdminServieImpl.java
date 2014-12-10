@@ -17,8 +17,10 @@ import com.koRail.admin.to.OpratBean;
 import com.koRail.admin.to.RoomBean;
 import com.koRail.admin.to.StatnBean;
 import com.koRail.admin.to.TrainBean;
+import com.koRail.common.dao.MemberDAO;
 import com.koRail.common.exception.DataDeleteException;
 import com.koRail.common.to.CommonBean;
+import com.koRail.common.to.MemberBean;
 import com.koRail.common.util.JSONParser;
 
 @Service(value="adminServie")
@@ -42,6 +44,9 @@ public class AdminServieImpl implements AdminServie {
 	/* 호실 DAO */
 	@Resource(name="roomDAO")
 	private RoomDAO roomDAO;
+	
+	@Resource(name="memberDAO")
+	private MemberDAO memberDAO;
 	
 	/*************************************
 					역 관리
@@ -247,6 +252,38 @@ public class AdminServieImpl implements AdminServie {
 					}
 				}
 			}
+		}
+	}
+	
+	/*****************************************
+						회원
+	*****************************************/
+	
+	/******************************
+	* 회원조회
+	* @param memberBean
+	* @return
+	******************************/
+	@Override
+	public List<MemberBean> getMemberList(MemberBean memberBean){
+		return memberDAO.selectMemberList(memberBean);
+	}
+
+	/*******************************
+	 * 회원 삭제
+	 * @param deleteCodeArray
+	 * @throws DataDeleteException
+	 *******************************/
+	@Override
+	public void setMember(String[] deleteCodeArray) throws DataDeleteException{
+		String id = null;
+		try{
+			for(String value : deleteCodeArray){
+				id = value;
+				memberDAO.deleteMember(value);
+			}
+		}catch(DataAccessException e){
+			throw new DataDeleteException(id);
 		}
 	}
 }

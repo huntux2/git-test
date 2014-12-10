@@ -19,6 +19,7 @@ import com.koRail.common.controller.CommonController;
 import com.koRail.common.exception.DataDeleteException;
 import com.koRail.common.service.CommonService;
 import com.koRail.common.to.CommonBean;
+import com.koRail.common.to.MemberBean;
 
 @Controller(value="adminController")
 @RequestMapping(value="/admin/")
@@ -93,13 +94,6 @@ public class AdminController extends CommonController {
 			adminServie.setStatn(statnBean, deleteCodeArray);
 			model.addAttribute("errorCode", 0);
 			model.addAttribute("errorMsg", null);
-			
-			/* 검색한 방법 */
-			if(statnBean.getSrcText() == null){
-				model.addAttribute("searchMode", "area");				
-			}else{
-				model.addAttribute("searchMode", "statnNm");
-			}
 		}catch(DataDeleteException e){
 			model.addAttribute("errorCode", 1);
 			model.addAttribute("errorMsg", e.getMessage());
@@ -167,13 +161,6 @@ public class AdminController extends CommonController {
 			adminServie.setTrain(trainBean, deleteCodeArray);
 			model.addAttribute("errorCode", 0);
 			model.addAttribute("errorMsg", null);
-			
-			/* 검색한 방법 */
-			if(trainBean.getSrcText() == null){
-				model.addAttribute("searchMode", "knd");				
-			}else{
-				model.addAttribute("searchMode", "trainNo");
-			}
 		}catch(DataDeleteException e){
 			model.addAttribute("errorCode", 1);
 			model.addAttribute("errorMsg", e.getMessage());
@@ -267,7 +254,7 @@ public class AdminController extends CommonController {
 	/******************************************
 	 * 운행일정 등록, 수정, 삭제
 	 * 상세운행 등록, 삭제
-	 * 호실	 등록,삭제
+	 * 호실 등록,삭제
 	 * @param model
 	 * @param opratBean
 	 * @param json
@@ -286,12 +273,6 @@ public class AdminController extends CommonController {
 				model.addAttribute("errorCode", 0);
 				model.addAttribute("errorMsg", null);
 				
-				/* 검색한 방법 */
-				if(opratBean.getSrcText() == null){
-					model.addAttribute("searchMode", "knd");				
-				}else{
-					model.addAttribute("searchMode", "trainNo");
-				}
 				return "jsonView";
 			}else{
 				return "redirect:opratMng.html";				
@@ -303,8 +284,59 @@ public class AdminController extends CommonController {
 		}
 	}
 	
+	/******************************************************
+							회원관리
+	 ******************************************************/
+	
+	/************************************
+	 * 회원관리 화면
+	 * @param model
+	 * @return
+	 ************************************/
 	@RequestMapping(value="memberMng.html")
-	public String findMemberMngForm(){
+	public String findMemberMngForm(Model model){
+		/*메뉴*/
+		super.getMenuTree(model, "memberMngForm");
+		
 		return "admin/member/memberMngForm";
 	}
+	
+	/******************************
+	 * 회원 조회
+	 * @param model
+	 * @param memberBean
+	 * @return
+	 *******************************/
+	@RequestMapping(value="memberList.do")
+	public String findMemberList(Model model, @ModelAttribute MemberBean memberBean){
+		List<MemberBean> memberList = adminServie.getMemberList(memberBean);
+		
+		model.addAttribute("memberList", memberList);
+		model.addAttribute("memberListSize", memberList.size());
+		
+		return "jsonView";
+	}
+	
+	/*************************
+	 * 회원 삭제
+	 * @param model
+	 * @param deleteCodeArray
+	 * @return
+	 **************************/
+	@RequestMapping(value="processMember.do")
+	public String processMember(Model model,
+			@RequestParam(value="deleteCodeArray") String[] deleteCodeArray){
+		try{
+			adminServie.setMember(deleteCodeArray);
+		
+			model.addAttribute("errorCode", 0);
+			model.addAttribute("errorMsg", null);
+		}catch(DataDeleteException e){
+			model.addAttribute("errorCode", 1);
+			model.addAttribute("errorMsg", e.getMessage());
+		}
+			
+		return "jsonView";
+	}
+	
 }

@@ -54,6 +54,8 @@
 	   			if(mode == "oprat" || allInit){
 	   				viewState = false;
 	   				
+	   				$("#grid").html("<table id='gridBody'></table><div id='footer'></div>");
+	   				
 	   				$("#gridBody").jqGrid({
 						datatype: "LOCAL",
 		   				caption:"운행일정 정보",
@@ -291,6 +293,8 @@
 						alert("조회조건을 선택해야 합나디다.");
 						return;
 					}else{
+						/* 삭제할 시 제검색 유형 설정 */
+		   				$("#deleteType").val("knd");
 						vUrl = "/admin/opratList.do?srcType="+trainKnd;
 					}
 				}
@@ -300,6 +304,8 @@
 						alert("조회조건을 입력해야 합나디다.");
 						return;
 					}else{
+						/* 삭제할 시 제검색 유형 설정 */
+		   				$("#deleteType").val("normal");
 						vUrl = "/admin/opratList.do?srcText="+encodeURIComponent(trainNo);
 					}
 				}
@@ -520,9 +526,27 @@
 										
 									/*그리드 초기화 또는 재 조회*/
 									if(data.errorMsg == null){
-										findOpratList(data.searchMode);
-									}else{
-							   			doGridInit();
+										if($("#gridBody").getGridParam("records") == 0){
+											doGridInit("all");
+											
+											$("#trainNo").html("--");
+											$("#trainKnd").html("--");
+											$("#startStatn").html("--");
+											$("#startTm").html("--");
+											$("#arvlStatn").html("--");
+											$("#arvlTm").html("--");
+											$("#route").html("--");
+											$("#distnc").html("--");
+											$("#fare").html("--");
+											$("#register").html("--");
+											$("#rgsde").html("--");
+											$("#updUsr").html("--");
+											$("#updde").html("--");
+											
+											$("#opratCode").val("");
+										}else{
+											findOpratList($("#deleteType").val());
+										}
 									}
 									
 									alert("삭제가 완료되었습니다.");
@@ -598,6 +622,8 @@
    							<button id="addBtn" type="button" class="btn" style="width: 95%; height: 25px;">등록</button>
    						</td>
    						<td style="width: 75px; padding-right: 10px;">
+   							<!-- 삭제할 시 제검색 유형 설정 -->
+   							<input id="deleteType" type="hidden">
    							<button id="deleteBtn" type="button" class="btn" style="width: 95%; height: 25px;">삭제</button>
    						</td>
    					</tr>

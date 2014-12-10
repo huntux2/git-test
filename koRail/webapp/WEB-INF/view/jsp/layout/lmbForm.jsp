@@ -19,7 +19,7 @@
    	</head>
    	<body>
    		<div style="margin-bottom: 10px;">
-   			<img id="lmbImg" style="width: 165px; height: 120px; border: 1px solid black; border-radius: 7px;">
+   			<img id="lmbImg" style="width: 165px; height: 140px; border: 1px solid black; border-radius: 7px;">
    		</div>
    	
    		<nav class="lmb">

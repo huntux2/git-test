@@ -9,6 +9,8 @@ public class CommonBean {
 	
 	private String srcType;			 /*검색유형*/
 	private String srcText;		 	 /*검색어*/
+	private String srcDate1;		/* 검색날짜 1(시작날짜) */
+	private String srcDate2;		/* 검색날짜 2(끝 날짜) */
 		
 	private String state = "normal"; /*상태 : normal, insert, update, delete*/
 	
@@ -104,5 +106,17 @@ public class CommonBean {
 	}
 	public void setFormType(String formType) {
 		this.formType = formType;
+	}
+	public String getSrcDate1() {
+		return srcDate1;
+	}
+	public void setSrcDate1(String srcDate1) {
+		this.srcDate1 = srcDate1;
+	}
+	public String getSrcDate2() {
+		return srcDate2;
+	}
+	public void setSrcDate2(String srcDate2) {
+		this.srcDate2 = srcDate2;
 	}
 }

@@ -90,6 +90,8 @@
 						alert("조회조건을 선택해야 합나디다.");
 						return;
 					}else{
+						/* 삭제할 시 제검색 유형 설정 */
+		   				$("#deleteType").val("knd");
 						vUrl = "/admin/trainList.do?srcType="+trainKnd;
 					}
 				}
@@ -99,6 +101,8 @@
 						alert("조회조건을 입력해야 합나디다.");
 						return;
 					}else{
+						/* 삭제할 시 제검색 유형 설정 */
+		   				$("#deleteType").val("trinNo");
 						vUrl = "/admin/trainList.do?srcText="+encodeURIComponent(trainNo);
 					}
 				}
@@ -158,7 +162,7 @@
 								$.each(data.trainList, function(k,v){
 									$("#gridBody").jqGrid('addRowData', k+1,
 										{
-										update:"<button type='button'"
+											update:"<button type='button'"
 													+"style='margin-top: 2px;"
 													+"margin-bottom: 3px;'"
 													+"onclick=updateTrain('"+v.trainCode+"','"+v.trainKndCode+"','"+v.trainNo+"')>수정</button>",
@@ -210,7 +214,10 @@
 									success : function(data) {
 										if(data.errorCode == 0){
 											/* 재검색 */
-											findTrainList(data.searchMode);
+											if($("#deleteType").val() != ""){
+												findTrainList($("#deleteType").val());
+											}
+											
 											alert("등록이 완료되었습니다.");
 										}else{
 											alert("등록실패");
@@ -258,7 +265,9 @@
 									success : function(data) {
 										if(data.errorCode == 0){
 											/* 재검색 */
-											findTrainList(data.searchMode);
+											if($("#deleteType").val() != ""){
+												findTrainList($("#deleteType").val());
+											}
 											alert("수정이 완료되었습니다.");
 										}else{
 											alert("수정실패");
@@ -314,9 +323,11 @@
 									
 									/*그리드 초기화 또는 재 조회*/
 									if(data.errorMsg == null){
-										findTrainList(data.searchMode);
-									}else{
-							   			doGridInit();
+										if($("#gridBody").getGridParam("records") == 0){
+											doGridInit();
+										}else{
+											findTrainList($("#deleteType").val());
+										}
 									}
 									
 									alert("삭제가 완료되었습니다.");
@@ -392,6 +403,8 @@
    							<button id="addBtn" type="button" class="btn" style="width: 95%; height: 25px;">등록</button>
    						</td>
    						<td style="width: 75px; padding-right: 10px;">
+   							<!-- 삭제할 시 제검색 유형 설정 -->
+   							<input id="deleteType" type="hidden">
    							<button id="deleteBtn" type="button" class="btn" style="width: 95%; height: 25px;">삭제</button>
    						</td>
    					</tr>

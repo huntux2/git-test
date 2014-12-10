@@ -90,6 +90,10 @@ public class MenuTree {
 				list.add(menu.get("opratMng"));
 				list.add(menu.get("opratUpdate"));
 				break;
+			case "memberMngForm":
+				list.add(menu.get("mng"));
+				list.add(menu.get("memberMng"));
+				break;
 		}
 		
 		return list;

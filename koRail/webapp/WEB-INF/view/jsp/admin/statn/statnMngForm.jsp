@@ -90,6 +90,8 @@
 						alert("조회조건을 선택해야 합나디다.");
 						return;
 					}else{
+						/* 삭제할 시 제검색 유형 설정 */
+		   				$("#deleteType").val("area");
 						vUrl = "/admin/statnList.do?srcType="+area;
 					}
 				}
@@ -99,6 +101,8 @@
 						alert("조회조건을 입력해야 합나디다.");
 						return;
 					}else{
+						/* 삭제할 시 제검색 유형 설정 */
+		   				$("#deleteType").val("statnNm");
 						vUrl = "/admin/statnList.do?srcText="+encodeURIComponent(statnNm);
 					}
 				}
@@ -158,7 +162,7 @@
 								$.each(data.statnList, function(k,v){
 									$("#gridBody").jqGrid('addRowData', k+1,
 										{
-										update:"<button type='button'"
+											update:"<button type='button'"
 													+"style='margin-top: 2px;"
 													+"margin-bottom: 3px;'"
 													+"onclick=updateStatn('"+v.statnCode+"','"+v.areaCode+"','"+v.statnNm+"')>수정</button>",
@@ -210,7 +214,10 @@
 									success : function(data) {
 										if(data.errorCode == 0){
 											/* 재검색 */
-											findStatnList(data.searchMode);
+											if($("#deleteType").val() != ""){
+												findStatnList($("#deleteType").val());
+											}
+											
 											alert("등록이 완료되었습니다.");
 										}else{
 											alert("등록실패");
@@ -261,7 +268,10 @@
 									success : function(data) {
 										if(data.errorCode == 0){
 											/* 재검색 */
-											findStatnList(data.searchMode);
+											if($("#deleteType").val() != ""){
+												findStatnList($("#deleteType").val());
+											}
+											
 											alert("수정이 완료되었습니다.");
 										}else{
 											alert("수정실패");
@@ -317,9 +327,11 @@
 									
 									/*그리드 초기화 또는 재 조회*/
 									if(data.errorMsg == null){
-										findStatnList(data.searchMode);
-									}else{
-							   			doGridInit();
+										if($("#gridBody").getGridParam("records") == 0){
+											doGridInit();
+										}else{
+											findStatnList($("#deleteType").val());
+										}
 									}
 									
 									alert("삭제가 완료되었습니다.");
@@ -333,9 +345,9 @@
 								}
 							} /* success end */
 						}); /* ajax end */
-					}
-				}
-   			}
+					} /* if end */
+				} /* else end */
+   			} /* deleteStatn end */
 		</script>
    	</head>
    	<body>
@@ -395,6 +407,8 @@
    							<button id="addBtn" type="button" class="btn" style="width: 95%; height: 25px;">등록</button>
    						</td>
    						<td style="width: 75px; padding-right: 10px;">
+   							<!-- 삭제할 시 제검색 유형 설정 -->
+   							<input id="deleteType" type="hidden">
    							<button id="deleteBtn" type="button" class="btn" style="width: 95%; height: 25px;">삭제</button>
    						</td>
    					</tr>
@@ -417,11 +431,11 @@
 						</td>
 						<td>
 							<select id="addAreaSelect" name="areaCode" style="width: 167px;">
-	  								<option value="선택">선택</option>
-	  								<c:forEach var="value" items="${commonCodeList}">
-	   								<option value="${value.cmmnCode}">${value.cmmnCodeValue}</option>
-	  								</c:forEach>
-	  							</select>
+  								<option value="선택">선택</option>
+  								<c:forEach var="value" items="${commonCodeList}">
+   								<option value="${value.cmmnCode}">${value.cmmnCodeValue}</option>
+  								</c:forEach>
+  							</select>
 						</td>
 					</tr>
 					

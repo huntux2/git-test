@@ -6,6 +6,10 @@ import java.util.Map;
 import com.koRail.common.to.CommonBean;
 
 public interface CommonService {
+	/******************************************
+	 					로그인
+	 ******************************************/
+	
 	/*****************************************
 	 * 로그인
 	 * @param type : 로그인 유형 - 일반 / 관리자
@@ -15,10 +19,14 @@ public interface CommonService {
 	 ******************************************/
 	public Map<String, String> doLogin(String type, String id, String pw);
 
+	/********************************************
+	 					공통
+	 *******************************************/
+	
 	/******************************************
 	 * 공통코드 조회
 	 * @param commonBean
 	 * @return
 	 ******************************************/
-	public List<CommonBean> getCommonCodeList(CommonBean commonBean) ;
+	public List<CommonBean> getCommonCodeList(CommonBean commonBean);
 }

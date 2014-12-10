@@ -7,6 +7,7 @@ import com.koRail.admin.to.StatnBean;
 import com.koRail.admin.to.TrainBean;
 import com.koRail.common.exception.DataDeleteException;
 import com.koRail.common.to.CommonBean;
+import com.koRail.common.to.MemberBean;
 
 public interface AdminServie {
 	/*************************************
@@ -68,4 +69,22 @@ public interface AdminServie {
 	 * @throws DataDeleteException
 	 ************************************/
 	public void setOprat(OpratBean opratBean, String[] json, String[] deleteCodeArray) throws DataDeleteException;
+
+	/*****************************************
+						회원
+	*****************************************/
+	
+	/******************************
+	* 회원조회
+	* @param memberBean
+	* @return
+	******************************/
+	public List<MemberBean> getMemberList(MemberBean memberBean);
+
+	/*******************************
+	 * 회원 삭제
+	 * @param deleteCodeArray
+	 * @throws DataDeleteException
+	 *******************************/
+	public void setMember(String[] deleteCodeArray) throws DataDeleteException;
 }
