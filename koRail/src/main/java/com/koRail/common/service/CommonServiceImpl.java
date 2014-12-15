@@ -8,7 +8,9 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.koRail.common.dao.AddrDAO;
 import com.koRail.common.dao.CommonDAO;
+import com.koRail.common.to.AddrBean;
 import com.koRail.common.to.CommonBean;
 
 /**************************************************************
@@ -20,6 +22,9 @@ public class CommonServiceImpl implements CommonService {
 	
 	@Resource(name="commonDAO")
 	private CommonDAO commonDAO;
+	
+	@Resource(name="addrDAO")
+	private AddrDAO addrDAO;
 
 	/****************************************
 	 * 로그인
@@ -65,5 +70,18 @@ public class CommonServiceImpl implements CommonService {
 	@Override
 	public List<CommonBean> getCommonCodeList(CommonBean commonBean) {
 		return commonDAO.selectCommonCode(commonBean);
+	}
+	
+	/*****************************************
+						주소
+	*****************************************/
+	
+	/**************************
+	* 주소조회
+	* @param umd
+	* @return
+	**************************/
+	public List<AddrBean> getAddrList(String umd){
+		return addrDAO.selectAddrList(umd);
 	}
 }

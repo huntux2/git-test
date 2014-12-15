@@ -16,6 +16,16 @@
 		<result property="rgsde" column="RGSDE"/>
 		<result property="updde" column="UPDDE"/>
 	</resultMap>
+	
+	<!-- ID 중복확인 -->
+	<procedure id="selectMemberId" parameterClass="java.util.Map">
+		{ CALL PK_CMMN.SP_ID_CHECK(
+			#id,mode=IN#,
+			#rtId,mode=OUT,jdbcType=VARCHAR#,
+			#rtCode,mode=OUT,jdbcType=VARCHAR#,
+			#rtMsg,mode=OUT,jdbcType=VARCHAR#
+		) }
+	</procedure>
 
 	<!-- 공통 SQL -->
 	<sql id="memberTmp">

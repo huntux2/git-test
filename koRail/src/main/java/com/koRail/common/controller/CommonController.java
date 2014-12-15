@@ -1,5 +1,6 @@
 package com.koRail.common.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.koRail.common.service.CommonService;
+import com.koRail.common.to.AddrBean;
 import com.koRail.common.to.CommonBean;
 import com.koRail.common.util.MenuTree;
 
@@ -164,6 +166,26 @@ public class CommonController {
 	@RequestMapping(value="commonCodeList.do")
 	public String findCommonCode(Model model, @ModelAttribute CommonBean commonBean){
 		model.addAttribute("commonCode", commonService.getCommonCodeList(commonBean));
+		return "jsonView";
+	}
+	
+	/**************************************************************
+	 							주소
+	 **************************************************************/
+	
+	/******************************
+	 * 주소검색
+	 * @param model
+	 * @param umd
+	 * @return
+	 ******************************/
+	@RequestMapping(value="addrList.do")
+	public String findAddrList(Model model, @RequestParam(value="umd") String umd){
+		List<AddrBean> addrList = commonService.getAddrList(umd);
+		
+		model.addAttribute("addrList", addrList);
+		model.addAttribute("addrListSize", addrList.size());
+		
 		return "jsonView";
 	}
 }

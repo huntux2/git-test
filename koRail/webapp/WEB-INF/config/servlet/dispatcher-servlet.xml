@@ -30,6 +30,9 @@
 			<mvc:mapping path="/admin/**"/>
 			<mvc:mapping path="/member/**"/>
 			<mvc:mapping path="/logout.do"/>
+			<mvc:exclude-mapping path="/member/memberAdd.html"/>
+			<mvc:exclude-mapping path="/member/memberAdd.do"/>
+			<mvc:exclude-mapping path="/member/idCheck.do"/>
         	<bean id="loginCheckInterceptor" class="com.koRail.common.interceptor.LoginCheckInterceptor" />
         </mvc:interceptor>
 	</mvc:interceptors>

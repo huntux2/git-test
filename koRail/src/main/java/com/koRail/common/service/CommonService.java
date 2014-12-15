@@ -3,6 +3,7 @@ package com.koRail.common.service;
 import java.util.List;
 import java.util.Map;
 
+import com.koRail.common.to.AddrBean;
 import com.koRail.common.to.CommonBean;
 
 public interface CommonService {
@@ -29,4 +30,15 @@ public interface CommonService {
 	 * @return
 	 ******************************************/
 	public List<CommonBean> getCommonCodeList(CommonBean commonBean);
+	
+	/*****************************************
+					주소
+	 *****************************************/
+	
+	/**************************
+	 * 주소조회
+	 * @param umd
+	 * @return
+	 **************************/
+	public List<AddrBean> getAddrList(String umd);
 }

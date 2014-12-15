@@ -185,3 +185,10 @@
 .date-time-table td {
 	border-collapse: collapse;
 }
+
+/* test color */
+.true-text{
+	color: #B2CCFF;
+}
+.false-text{
+	color: #FFA7A7;

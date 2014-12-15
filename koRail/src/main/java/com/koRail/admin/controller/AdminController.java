@@ -323,7 +323,7 @@ public class AdminController extends CommonController {
 	 * @param deleteCodeArray
 	 * @return
 	 **************************/
-	@RequestMapping(value="processMember.do")
+	@RequestMapping(value="memberProcess.do")
 	public String processMember(Model model,
 			@RequestParam(value="deleteCodeArray") String[] deleteCodeArray){
 		try{

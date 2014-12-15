@@ -39,7 +39,7 @@
     	<div id="buttonGroup" style="text-align: right;">
     		<c:choose>
     			<c:when test="${id == null}">
-    				<button style="width: 95px; height: 28px;" type="button" onclick="findForm('/member/addMember.html')">회원가입</button>
+    				<button style="width: 95px; height: 28px;" type="button" onclick="findForm('/member/memberAdd.html')">회원가입</button>
     				<button style="width: 95px; height: 28px;" type="button" onclick="findForm('/login.html')">로그인</button>    		
     			</c:when>
 	    		<c:otherwise>
@@ -63,7 +63,7 @@
 		    					<strong>관리자</strong>
 		    					<ul id="menu" style="display: none; position: fixed;">
 									<li>현황</li>
-									<li onclick="findForm('/admin/statnMng.html?seCode=AREA')">관리</li>
+									<li onclick="findForm('/admin/statnMng.html')">관리</li>
 								</ul>
 		    				</td>
 		    			</c:if>

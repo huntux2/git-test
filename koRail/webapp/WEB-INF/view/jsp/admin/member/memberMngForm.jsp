@@ -308,7 +308,7 @@
 						
 						$.ajax({
 							type:"POST",
-							url: "/admin/processMember.do?deleteCodeArray="
+							url: "/admin/memberProcess.do?deleteCodeArray="
 									+$("input[name=deleteCodeArray]").val(),
 							Type:"JSON",
 							success : function(data) {
