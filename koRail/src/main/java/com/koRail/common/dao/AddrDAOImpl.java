@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.koRail.common.to.AddrBean;
 
+@SuppressWarnings("deprecation")
 @Repository(value="addrDAO")
 public class AddrDAOImpl implements AddrDAO {
 	@Autowired
@@ -18,8 +19,9 @@ public class AddrDAOImpl implements AddrDAO {
 	 * @param umd
 	 * @return
 	 *************************/
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<AddrBean> selectAddrList(String umd){
-		return (List<AddrBean>)sqlMapClientTemplate.queryForList("Addr.selectAddrList", umd);
+		return sqlMapClientTemplate.queryForList("Addr.selectAddrList", umd);
 	}
 }

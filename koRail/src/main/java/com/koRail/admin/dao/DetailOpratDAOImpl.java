@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.koRail.admin.to.DetailOpratBean;
 
+@SuppressWarnings("deprecation")
 @Repository(value="detailOpratDAO")
 public class DetailOpratDAOImpl implements DetailOpratDAO {
 	@Autowired

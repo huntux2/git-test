@@ -13,6 +13,7 @@ import com.koRail.common.to.CommonBean;
 * @Method name
 * insert* : 등록, select* : 조회, update* : 수정, delete* : 삭제
 **************************************************************/
+@SuppressWarnings("deprecation")
 @Repository(value="commonDAO")
 public class CommonDAOImpl implements CommonDAO {
 	@Autowired
@@ -32,8 +33,9 @@ public class CommonDAOImpl implements CommonDAO {
 	 * @param commonBean
 	 * @return
 	 ********************************/
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<CommonBean> selectCommonCode(CommonBean commonBean) {
-		return (List<CommonBean>)sqlMapClientTemplate.queryForList("Common.selectCmmnCode", commonBean);
+		return sqlMapClientTemplate.queryForList("Common.selectCmmnCode", commonBean);
 	}
 }

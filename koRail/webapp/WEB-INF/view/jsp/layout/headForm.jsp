@@ -12,9 +12,11 @@
 		<!-- IE 최신버전 이용 -->
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		
+		<link href="/res/favicon.ico" rel="shortcut icon"/>
+		
 		<!-- css -->
 		<link href="/res/css/koRail.css" rel="stylesheet">
-				
+		
 		<!-- jquery -->
 		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 		

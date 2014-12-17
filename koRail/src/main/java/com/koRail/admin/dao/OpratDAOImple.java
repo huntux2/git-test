@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.koRail.admin.to.OpratBean;
 import com.koRail.common.to.CommonBean;
 
+@SuppressWarnings("deprecation")
 @Repository(value="opratDAO")
 public class OpratDAOImple implements OpratDAO {
 	@Autowired
@@ -19,9 +20,10 @@ public class OpratDAOImple implements OpratDAO {
 	 * @param commonBean
 	 * @return
 	 *******************************/
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<OpratBean> selectOpratList(CommonBean commonBean) {
-		return (List<OpratBean>)sqlMapClientTemplate.queryForList("Oprat.selectOprat", commonBean);
+		return sqlMapClientTemplate.queryForList("Oprat.selectOprat", commonBean);
 	}
 	
 	/*****************************************
@@ -29,9 +31,10 @@ public class OpratDAOImple implements OpratDAO {
 	 * @param commonBean
 	 * @return
 	 ******************************************/
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<OpratBean> selectAllOpratList(CommonBean commonBean) {
-		return (List<OpratBean>)sqlMapClientTemplate.queryForList("Oprat.selectAllOprat", commonBean);
+		return sqlMapClientTemplate.queryForList("Oprat.selectAllOprat", commonBean);
 	}
 
 	/***************************

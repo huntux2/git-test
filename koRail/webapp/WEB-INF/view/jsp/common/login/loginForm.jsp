@@ -57,8 +57,10 @@
 		</script>
 	</head>
 	<body>
-		<div style="width: 320px; margin: 0 auto; border-style: solid; border-color: #054D7D; padding: 10px;">
-			<strong>로그인</strong>
+		<div style="width: 320px; margin: 0 auto; border-style: solid; border-color: #515151; padding: 10px; border-radius: 7px">
+			<div style="font-size: 35px;">
+	   			<strong>로그인</strong>
+	   		</div>
 			
 			<form id="loginForm" action="/login.do" method="post" style="margin-top: 20px;">
 				<table style="padding-bottom: 12px; padding-left: 12px; padding-top: 0px;">
@@ -92,9 +94,9 @@
 						</tr>
 						<tr id="etcMenu">
 							<td colspan="3" style="text-align: center;">
-								<a href="/member/aadUser.html">회원가입</a>
+								<a href="/member/memberAdd.html">회원가입</a>
 								&nbsp;
-								<a href="/member/aadUser.html">아이디/비밀번호 찾기</a>
+								<a href="javaScript:alert('준비중 입니다.');">아이디/비밀번호 찾기</a>
 							</td>
 						</tr>
 					</tbody>

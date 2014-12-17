@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.koRail.common.to.MemberBean;
 
+@SuppressWarnings("deprecation")
 @Repository(value="memberDAO")
 public class MemberDAOImpl implements MemberDAO {
 
@@ -29,9 +30,10 @@ public class MemberDAOImpl implements MemberDAO {
 	 * @param memberBean
 	 * @return
 	 *********************************/
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<MemberBean> selectMemberList(MemberBean memberBean) {
-		return (List<MemberBean>)sqlMapClientTemplate.queryForList("Member.selectMember", memberBean);
+		return sqlMapClientTemplate.queryForList("Member.selectMember", memberBean);
 	}
 	
 	/*********************************
@@ -50,7 +52,7 @@ public class MemberDAOImpl implements MemberDAO {
 	 *********************************/
 	@Override
 	public void insertMember(MemberBean memberBean){
-		System.out.println("insert");
+		sqlMapClientTemplate.insert("Member.insertMember", memberBean);
 	}
 	
 	/***********************************

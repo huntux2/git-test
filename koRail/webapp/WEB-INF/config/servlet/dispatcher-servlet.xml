@@ -33,6 +33,7 @@
 			<mvc:exclude-mapping path="/member/memberAdd.html"/>
 			<mvc:exclude-mapping path="/member/memberAdd.do"/>
 			<mvc:exclude-mapping path="/member/idCheck.do"/>
+			<mvc:exclude-mapping path="/member/memberProcess.do"/>
         	<bean id="loginCheckInterceptor" class="com.koRail.common.interceptor.LoginCheckInterceptor" />
         </mvc:interceptor>
 	</mvc:interceptors>
@@ -72,7 +73,6 @@
 		mvc:annotation-driven이 적용된 문서에서 사용
 		 resources의 논리적 설정
 	-->
-     <mvc:annotation-driven />
-     
-	<mvc:resources mapping="/res/**" location="resources/" /> 
+   <mvc:annotation-driven />
+   <mvc:resources mapping="/res/**" location="resources/" /> 
 </beans>

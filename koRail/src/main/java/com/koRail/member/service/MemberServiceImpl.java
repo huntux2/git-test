@@ -34,12 +34,20 @@ public class MemberServiceImpl implements MemberService {
 		return stringMap;
 	}
 	
-	/***********************
-	 * 회원 등록, 수정, 삭제
+	/**********************************
+	 * 회원가입, 개인정보수정, 회원탈퇴
 	 * @param memberBean
-	 ***********************/
+	 **********************************/
 	@Override
 	public void setMember(MemberBean memberBean){
-		System.out.println("S: servie");
+		if("insert".equals(memberBean.getState())){
+			memberDAO.insertMember(memberBean);
+		}else if("update".equals(memberBean.getState())){
+			System.out.println("u");
+		}else if("delete".equals(memberBean.getState())){
+			System.out.println("d");
+		}else{
+			return;
+		}
 	}
 }

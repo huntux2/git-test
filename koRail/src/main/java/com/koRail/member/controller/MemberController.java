@@ -6,11 +6,13 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.koRail.common.controller.CommonController;
 import com.koRail.common.service.CommonService;
+import com.koRail.common.to.MemberBean;
 import com.koRail.member.service.MemberService;
 
 @Controller(value="memberController")
@@ -24,7 +26,7 @@ public class MemberController extends CommonController {
 	private MemberService memberService;
 	
 	/****************************************
-	 				개인정보
+	 				회원/개인정보
 	 ***************************************/
 	
 	/********************************
@@ -52,7 +54,14 @@ public class MemberController extends CommonController {
 		return "jsonView";
 	}
 	
-	public String processMMember(){
-		return null;
+	/********************************
+	 * 회원가입, 개인정보수정, 회원탈퇴
+	 * @param memberBean
+	 * @return
+	 *******************************/
+	@RequestMapping(value="memberProcess.do")
+	public String processMember(@ModelAttribute MemberBean memberBean){
+		memberService.setMember(memberBean);
+		return "redirect:login.html";
 	}
 }

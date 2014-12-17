@@ -5,7 +5,7 @@
 <sqlMap namespace="Addr">
 	<!-- 주소검색 -->
 	<select id="selectAddrList" resultClass="com.koRail.common.to.AddrBean" parameterClass="String">
-		SELECT	ZIP_CODE AS zipCode,
+		SELECT	TO_CHAR(ZIP_CODE, '999,999') AS zipCode,
 				SD || ' ' || SGG || ' ' || '' || UMD || ' ' || RI AS addr
 		FROM	ADDR
 		WHERE	UMD = #umd#

@@ -12,9 +12,9 @@ public interface MemberService {
 	 **************************/
 	public Map<String, String> doIdCheck(String id);
 	
-	/***********************
-	 * 회원 등록, 수정, 삭제
+	/**********************************
+	 * 회원가입, 개인정보수정, 회원탈퇴
 	 * @param memberBean
-	 ***********************/
+	 ********************************/
 	public void setMember(MemberBean memberBean);
 }
