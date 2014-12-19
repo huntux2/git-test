@@ -86,7 +86,7 @@
 					}); /*jqGrid end*/
 					
 					/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-					$("#gridBody").jqGrid('addRowData', 0, {state:"non", startStatnValue:"운행일정을 선택하십시오."});
+					$("#gridBody").jqGrid('addRowData', 0, {state:"non", startStatnValue:"상세운행정보를 등록하지 않았습니다."});
 	   			} /* 상세운행정보 end */
 	   			
 	   			/* 호실정보 */
@@ -118,7 +118,7 @@
 					}); /*jqGrid end*/
 					
 					/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-					$("#gridBody2").jqGrid('addRowData', 0, {state:"non", room:"운행일정을 선택하십시오."});
+					$("#gridBody2").jqGrid('addRowData', 0, {state:"non", room:"호실을 등록하지 않았습니다."});
 		   		} /* 호실정보 */
 
 		   		/* 초기데이터 설정 */
@@ -783,7 +783,7 @@
 								}
 							} /* for end */
 							
-							if(rowIds == ""){
+							if($("#gridBody").getGridParam("records") == 0){
 								doGridInit("detailOprat");
 							}
 						} /* if end */
@@ -811,7 +811,7 @@
 								}
 							} /* for end */
 							
-							if(rowIds == ""){
+							if($("#gridBody2").getGridParam("records") == 0){
 								doGridInit("room");
 							}
 						} /* if end */

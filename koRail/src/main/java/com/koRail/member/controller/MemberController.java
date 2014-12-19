@@ -3,6 +3,7 @@ package com.koRail.member.controller;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,5 +64,19 @@ public class MemberController extends CommonController {
 	public String processMember(@ModelAttribute MemberBean memberBean){
 		memberService.setMember(memberBean);
 		return "redirect:login.html";
+	}
+	
+	/******************************************************
+	 	 					승차권
+	 ******************************************************/
+	
+	@RequestMapping(value="tcktSearch.html")
+	public String findTcktSearchForm(Model model, HttpServletRequest request){
+		/*레이아웃 변경*/
+		super.setLayout(request, "stp");
+		
+		/*메뉴*/
+		super.getMenuTree(model, "tcktSearchForm");
+		return "/member/tckt/tcktSearchForm";
 	}
 }

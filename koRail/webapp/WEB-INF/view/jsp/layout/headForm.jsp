@@ -36,13 +36,5 @@
    		<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
      	
      	<title>KOARIL</title>
-     	
-     	<script type="text/javascript">
-     		/*페이지 시작 시 JQuery UI style 및 ETC style 적용 */
-     		$(document).ready(function(){
-     			$("button").button();
-     			//$("select").selectmenu();
-     		});
-     	</script>
    	</head>
 </html>

@@ -67,10 +67,7 @@
 						{ name : 'rgsde', width: 110, align:"center", sortable:false},
 						{ name : 'updUser', width: 70, align:"center", sortable:false},
 						{ name : 'updde', width: 110, align:"center", sortable:false}
-					],
-					afterInsertRow: function(rowId,rowData,rowElement){
-						$("button").button();
-					}
+					]
 				}); /*jqGrid end*/
 				/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
 				$("#gridBody").jqGrid('addRowData', 1, {update:"조회조건을 선택/입력하여 조회를 하십시오."});
@@ -148,10 +145,7 @@
 											{ name : 'rgsde', width: 110, align:"center", sortable:false},
 											{ name : 'updUsr', width: 70, align:"center", sortable:false},
 											{ name : 'updde', width: 110, align:"center", sortable:false}
-										],
-										gridComplete: function(){
-											$("button").button();
-										}
+										]
 									}); /*jqGrid end*/
 								} /*if end*/
 								

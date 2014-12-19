@@ -25,17 +25,17 @@ public class MenuTree {
 		Map<String, String> menuMap = new HashMap<String, String>();
 		
 		menuMap.put("home", "HOME");
-			menuMap.put("tic", "승차권");
-				menuMap.put("tictResve1", "승차권 예약");
-					menuMap.put("tictSelect", "승차권 조회");
-					menuMap.put("tictResve2", "승차권 예매");
+			menuMap.put("tckt", "승차권");
+				menuMap.put("tcktResve1", "승차권 예약");
+					menuMap.put("tcktSearch", "승차권 조회");
+					menuMap.put("tcktResve2", "승차권 예매");
 					menuMap.put("setle", "결제");
-					menuMap.put("tictt", "발권");
-				menuMap.put("ticState", "승차권 현황");
-					menuMap.put("dfTic", "승차권 상세");
+					menuMap.put("getTckt", "발권");
+				menuMap.put("tcktState", "승차권 현황");
+					menuMap.put("dfTckt", "승차권 상세");
 			menuMap.put("admin", "관리자");
 				menuMap.put("state", "현황");
-					menuMap.put("ticttState", "승차권 발권 현황");
+					menuMap.put("tcktState", "승차권 발권 현황");
 					menuMap.put("triState", "열차별 승객 현황");
 				menuMap.put("mng", "관리");
 					menuMap.put("sttMng", "역 관리");
@@ -67,15 +67,19 @@ public class MenuTree {
 		list.add(menu.get("home"));
 		
 		switch (formName) {
-			/*역 관리*/
+			/* 역 */
 			case "statnMngForm":
 				list.add(menu.get("mng"));
 				list.add(menu.get("sttMng"));
 				break;
+				
+			/* 열차 */
 			case "trainMngForm":
 				list.add(menu.get("mng"));
 				list.add(menu.get("triMng"));
 				break;
+				
+			/*운행일정*/
 			case "opratMngForm":
 				list.add(menu.get("mng"));
 				list.add(menu.get("opratMng"));
@@ -90,9 +94,18 @@ public class MenuTree {
 				list.add(menu.get("opratMng"));
 				list.add(menu.get("opratUpdate"));
 				break;
+			
+			/*회원*/
 			case "memberMngForm":
 				list.add(menu.get("mng"));
 				list.add(menu.get("memberMng"));
+				break;
+				
+			/* 승차권 */
+			case "tcktSearchForm":
+				list.add(menu.get("tckt"));
+				list.add(menu.get("tcktResve1"));
+				list.add(menu.get("tcktSearch"));
 				break;
 		}
 		

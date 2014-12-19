@@ -17,7 +17,6 @@
    		<script type="text/javascript">
 	   		$(document).ready(function(){
 	 			/*JQuery UI*/
-	   			$("button").button();
 	 			$("#menu").menu();
 	 			
 	 			/*관리자 메뉴 */
@@ -55,10 +54,11 @@
     				<tr>
     					<td onclick="findForm('/main.html')" style="background-image: url('/res/img/logo2.gif');
 							height: 50px; width:163px; background-position: -17px;">
-    					<td>
-    						<strong>승차권</strong>
-    					</td>
+    					<!-- 관리자 -->
 		    			<c:if test="${type == 'admin'}">
+		    				<td onclick="alert('관리자 모드에서는 승차권 예약을 하실 수 없습니다.');">
+	    						<strong>승차권</strong>
+	    					</td>
 		    				<td id="adminMenu">
 		    					<strong>관리자</strong>
 		    					<ul id="menu" style="display: none; position: fixed;">
@@ -67,7 +67,11 @@
 								</ul>
 		    				</td>
 		    			</c:if>
+		    			<!-- 일반 사용자 -->
 			    		<c:if test="${type == 'common'}">
+			   				<td onclick="findForm('/member/tcktSearch.html');">
+	    						<strong>승차권</strong>
+	    					</td>
 			   				<td>
 			   					<strong>내 정보</strong>
 			   				</td>

@@ -24,19 +24,31 @@
    	
    		<nav class="lmb">
    			<table>
-				<tbody>
-					<tr>
-						<td onclick="findForm('/admin/statnMng.html')" style="border-radius: 7px 7px 0px 0px;">역 관리</td>
-					</tr>
-					<tr>
-						<td onclick="findForm('/admin/trainMng.html')">열차 관리</td>
-					</tr>
-					<tr>
-						<td onclick="findForm('/admin/opratMng.html')">운행일정 관리</td>
-					</tr>
-					<tr>
-						<td onclick="findForm('/admin/memberMng.html')">회원 관리</td>
-					</tr>
+   				<tbody>
+	   				<!-- 관리자 -->
+    				<c:if test="${type == 'admin'}">
+    					<tr>
+							<td onclick="findForm('/admin/statnMng.html')" style="border-radius: 7px 7px 0px 0px;">역 관리</td>
+						</tr>
+						<tr>
+							<td onclick="findForm('/admin/trainMng.html')">열차 관리</td>
+						</tr>
+						<tr>
+							<td onclick="findForm('/admin/opratMng.html')">운행일정 관리</td>
+						</tr>
+						<tr>
+							<td onclick="findForm('/admin/memberMng.html')">회원 관리</td>
+						</tr>
+    				</c:if>
+    				<!-- 일반 사용자 -->
+	    			<c:if test="${type == 'common'}">
+	    				<tr>
+							<td onclick="findForm('/member/tcktSearch.html')" style="border-radius: 7px 7px 0px 0px;">승차권 예약</td>
+						</tr>
+						<tr>
+							<td>승차권 현황</td>
+						</tr>
+					</c:if>
 				</tbody>
 			</table>
    		</nav>

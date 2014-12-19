@@ -65,6 +65,7 @@
 		</isEqual>
 	</select>
 	
+	<!-- 회원 가입 -->
 	<insert id="insertMember" parameterClass="com.koRail.common.to.MemberBean">
 		INSERT INTO MEMBER(
 			ID				/* 아이디 */,

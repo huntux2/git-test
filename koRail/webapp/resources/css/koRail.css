@@ -16,6 +16,24 @@
 	margin-bottom: 10px;
 }
 
+/* button */
+button {
+	background: #515151;
+	border-color: #515151;
+	border-radius: 7px;
+	color: #FFFFFF;
+}
+
+button:HOVER {
+	background: #FFFFFF;
+	color: #000000;
+}
+
+button:ACTIVE { 
+	color: #FFFFFF;
+    background-color: #000000;
+}
+
 /* menu */
 .menu {
 	border-radius: 7px;
