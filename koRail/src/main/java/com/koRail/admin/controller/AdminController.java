@@ -103,7 +103,7 @@ public class AdminController extends CommonController {
 	}
 	
 	/**********************************************
-					열차 관리
+						열차 관리
 	***********************************************/
 	
 	/****************************************
@@ -188,7 +188,7 @@ public class AdminController extends CommonController {
 	
 		/*열차종류 조회를 위한 코드설정*/
 		commonBean.setSeCode("TRAIN");
-		/*지역*/
+		/*열차*/
 		model.addAttribute("commonCodeList", commonService.getCommonCodeList(commonBean));
 	
 		return "admin/oprat/opratMngForm";

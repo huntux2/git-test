@@ -1,6 +1,7 @@
 package com.koRail.member.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -9,11 +10,20 @@ import org.springframework.stereotype.Service;
 
 import com.koRail.common.dao.MemberDAO;
 import com.koRail.common.to.MemberBean;
+import com.koRail.member.dao.ResveDAO;
+import com.koRail.member.to.TcktBean;
 
 @Service(value="memberService")
 public class MemberServiceImpl implements MemberService {
 	@Resource(name="memberDAO")
 	private MemberDAO memberDAO;
+	
+	@Resource(name="resveDAO")
+	private ResveDAO resveDAO;
+	
+	/*****************************************
+					회원 게인정보
+	******************************************/
 	
 	/***************************
 	 * ID 중복확인
@@ -49,5 +59,19 @@ public class MemberServiceImpl implements MemberService {
 		}else{
 			return;
 		}
+	}
+	
+	/*****************************************
+						승차권
+	******************************************/
+
+	/***********************************
+	 * 승차권 예매를 위한 운행일정 조회
+	 * @param tcktBean
+	 * @return
+	 **********************************/
+	@Override
+	public List<TcktBean> getTcktList(TcktBean tcktBean){
+		return resveDAO.selectTcktList(tcktBean);
 	}
 }

@@ -1276,7 +1276,7 @@
 			<input id="rowData3" type="hidden">
    		</div>
    		
-   		<!-- 드옥취소 버튼 -->
+   		<!-- 등록, 취소 버튼 -->
    		<div class="button-group" style="width: 847px; margin-top: 30px; text-align: center;">
    			<button type="button" onclick="addOprat();">등록</button>
 			<button type="button" onclick="doCancel();">취소</button>
