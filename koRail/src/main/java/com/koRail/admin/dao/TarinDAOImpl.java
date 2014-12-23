@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.koRail.admin.to.TrainBean;
 import com.koRail.common.to.CommonBean;
 
-@SuppressWarnings("deprecation")
 @Repository(value="trainDAO")
+@SuppressWarnings({ "unchecked", "deprecation" })
 public class TarinDAOImpl implements TrainDAO {
 	@Autowired
 	SqlMapClientTemplate sqlMapClientTemplate;
@@ -20,7 +20,6 @@ public class TarinDAOImpl implements TrainDAO {
 	 * @param commonBean
 	 * @return
 	 *************************/
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<TrainBean> selectTrainList(CommonBean commonBean){
 		return sqlMapClientTemplate.queryForList("Train.selectTrain", commonBean);

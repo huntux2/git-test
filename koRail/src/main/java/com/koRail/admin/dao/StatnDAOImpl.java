@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.koRail.admin.to.StatnBean;
 import com.koRail.common.to.CommonBean;
 
-@SuppressWarnings("deprecation")
 @Repository(value="statnDAO")
+@SuppressWarnings({ "unchecked", "deprecation" })
 public class StatnDAOImpl implements StatnDAO {
 
 	@Autowired
@@ -21,7 +21,6 @@ public class StatnDAOImpl implements StatnDAO {
 	 * @param commonBean
 	 * @return
 	 *************************/
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<StatnBean> selectStatnList(CommonBean commonBean) {
 		return sqlMapClientTemplate.queryForList("Statn.selectStatn", commonBean);

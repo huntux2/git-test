@@ -54,6 +54,12 @@
     				<tr>
     					<td onclick="findForm('/main.html')" style="background-image: url('/res/img/logo2.gif');
 							height: 50px; width:163px; background-position: -17px;">
+    					<!-- 기본 -->
+    					<c:if test="${type == null}">
+    						<td onclick="findForm('/login.html');">
+	    						<strong>승차권</strong>
+	    					</td>
+    					</c:if>
     					<!-- 관리자 -->
 		    			<c:if test="${type == 'admin'}">
 		    				<td onclick="alert('관리자 모드에서는 승차권 예약을 하실 수 없습니다.');">
@@ -62,8 +68,8 @@
 		    				<td id="adminMenu">
 		    					<strong>관리자</strong>
 		    					<ul id="menu" style="display: none; position: fixed;">
-									<li>현황</li>
-									<li onclick="findForm('/admin/statnMng.html')">관리</li>
+									<li onclick="findForm('/admin/tcktRcrd.html');">현황</li>
+									<li onclick="findForm('/admin/statnMng.html');">관리</li>
 								</ul>
 		    				</td>
 		    			</c:if>

@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import com.koRail.admin.to.RoomBean;
 
-@SuppressWarnings("deprecation")
 @Repository(value="roomDAO")
+@SuppressWarnings({ "deprecation" })
 public class RoomDAOImpl implements RoomDAO {
 
 	@Autowired

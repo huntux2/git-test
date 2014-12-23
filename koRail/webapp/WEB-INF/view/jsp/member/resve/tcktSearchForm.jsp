@@ -254,10 +254,7 @@
 	   			var arvlStatn = $("#arvlStatnCode").val();
 	   			
 	   			/* 검색조건 확인 */
-	   			if(trainKndCode == "선택"){
-	   				alert("열차종류를 선택해야 합니다.");
-	   				return;
-	   			}else if(seatCo == 0){
+	   			if(seatCo == 0){
 	   				alert("인원수는 최소 1명 이상 선택해야 합니다.");
 	   				return;
 	   			}else if(seatCo > 9){
@@ -320,17 +317,17 @@
 								var nButton = "";
 								
 								/* 예약가능 확인 */
-								if(v.prtclrRoomY > 0){
-									yButton = "<button onclick='alert("+v.prtclrRoomY+");'>예약하기</button>";
-								}else{
+								if(v.prtclrSeatYCo == v.prtclrRoomYCo){
 									yButton = "<button class='sell-out'>매진</button>";
+								}else{
+									yButton = "<button onclick='alert("+v.prtclrRoomYCo+");'>예약하기</button>";
 								}
 								
 								/* 예약가능 확인 */
-								if(v.prtclrRoomN > 0){
-									nButton = "<button onclick='alert("+v.prtclrRoomN+");'>예약하기</button>";
-								}else{
+								if(v.prtclrSeatNCo == v.prtclrRoomNCo){
 									nButton = "<button class='sell-out'>매진</button>";
+								}else{
+									nButton = "<button onclick='alert("+v.prtclrRoomNCo+");'>예약하기</button>";
 								}
 								
 								$("#gridBody").jqGrid('addRowData', k,
@@ -460,7 +457,7 @@
 	   						<td>열차종류</td>
 	   						<td>
 	   							<select id="trainKndSelect" style="width: 95%;">
-	   								<option value="ALL">선택</option>
+	   								<option value="ALL">전채</option>
 	   								<c:forEach var="value" items="${commonCodeList}">
 		   								<option value="${value.cmmnCode}">${value.cmmnCodeValue}</option>
 	   								</c:forEach>

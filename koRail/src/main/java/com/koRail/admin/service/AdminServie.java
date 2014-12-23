@@ -4,12 +4,24 @@ import java.util.List;
 
 import com.koRail.admin.to.OpratBean;
 import com.koRail.admin.to.StatnBean;
+import com.koRail.admin.to.TcktRcrdBean;
 import com.koRail.admin.to.TrainBean;
 import com.koRail.common.exception.DataDeleteException;
 import com.koRail.common.to.CommonBean;
 import com.koRail.common.to.MemberBean;
 
 public interface AdminServie {
+	/*************************************
+						현황
+	*************************************/
+	
+	/*****************************
+	 * 승차권 발권 현황 조회
+	 * @param tcktRcrdBean
+	 * @return
+	 *****************************/
+	public List<TcktRcrdBean> getTcktRcrdList(TcktRcrdBean tcktRcrdBean);
+	
 	/*************************************
 	 				역 관리
 	 *************************************/

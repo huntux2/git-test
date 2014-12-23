@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.koRail.admin.service.AdminServie;
 import com.koRail.admin.to.OpratBean;
 import com.koRail.admin.to.StatnBean;
+import com.koRail.admin.to.TcktRcrdBean;
 import com.koRail.admin.to.TrainBean;
 import com.koRail.common.controller.CommonController;
 import com.koRail.common.exception.DataDeleteException;
@@ -31,6 +32,78 @@ public class AdminController extends CommonController {
 	@Resource(name="adminServie")
 	private AdminServie adminServie;
 	
+	/**********************************************
+							현황
+	***********************************************/
+	
+	/******************************
+	 * 승차권 발권 현황 화면
+	 * @param model
+	 * @param request
+	 * @param commonBean
+	 * @return
+	 ******************************/
+	@RequestMapping(value="tcktRcrd.html")
+	public String findTcktRcrdForm(Model model, HttpServletRequest request,
+			@ModelAttribute CommonBean commonBean){
+		/*레이아웃 변경*/
+		super.setLayout(request, "stp");
+		
+		/*메뉴*/
+		super.getMenuTree(model, "tcktRcrdForm");
+		
+		/*열차종류 조회를 위한 코드설정*/
+		commonBean.setSeCode("TRAIN");
+		/*열차종류*/
+		model.addAttribute("commonCodeList", commonService.getCommonCodeList(commonBean));
+		
+		request.getSession().setAttribute("type2", "rcrd");
+		
+		return "/admin/rcrd/tcktRcrdForm";
+	}
+	
+	@RequestMapping(value="tcktRcrdList.do")
+	public String findTcktRcrdList(Model model, TcktRcrdBean tcktRcrdBean){
+		List<TcktRcrdBean> tcktRcrdList = adminServie.getTcktRcrdList(tcktRcrdBean);
+		
+		model.addAttribute("tcktRcrdListSize", tcktRcrdList.size());
+		model.addAttribute("tcktRcrdList", tcktRcrdList);
+		
+		return "jsonView";
+	}
+	
+	/**********************************************
+						열차별 승객 현황
+	***********************************************/
+	
+	/******************************
+	 * 열차별 승객 현황 화면
+	 * @param model
+	 * @param request
+	 * @return
+	 ******************************/
+	@RequestMapping(value="trainPssngrRcrd.html")
+	public String findTrainPssngrRcrdForm(Model model, HttpServletRequest request,
+			@ModelAttribute CommonBean commonBean){
+		/*레이아웃 변경*/
+		super.setLayout(request, "stp");
+		
+		/*메뉴*/
+		super.getMenuTree(model, "trainPssngrRcrdForm");
+		
+		/*열차종류 조회를 위한 코드설정*/
+		commonBean.setSeCode("TRAIN");
+		/*열차종류*/
+		model.addAttribute("commonCodeList", commonService.getCommonCodeList(commonBean));
+		
+		return "/admin/rcrd/trainPssngrRcrdForm";
+	}
+	
+	@RequestMapping(value="trainPssngrRcrdList.do")
+	public String findTrainPssngrRcrdList(Model model, CommonBean commonBean){
+		
+		return "jsonView";
+	}
 	
 	/**********************************************
 	 						역 관리
@@ -51,6 +124,8 @@ public class AdminController extends CommonController {
 		
 		/*메뉴*/
 		super.getMenuTree(model, "statnMngForm");
+		
+		request.getSession().setAttribute("type2", "mng");
 		
 		/*지역조회를 위한 코드설정*/
 		commonBean.setSeCode("AREA");

@@ -11,11 +11,13 @@ import com.koRail.admin.dao.DetailOpratDAO;
 import com.koRail.admin.dao.OpratDAO;
 import com.koRail.admin.dao.RoomDAO;
 import com.koRail.admin.dao.StatnDAO;
+import com.koRail.admin.dao.TcktRcrdDAO;
 import com.koRail.admin.dao.TrainDAO;
 import com.koRail.admin.to.DetailOpratBean;
 import com.koRail.admin.to.OpratBean;
 import com.koRail.admin.to.RoomBean;
 import com.koRail.admin.to.StatnBean;
+import com.koRail.admin.to.TcktRcrdBean;
 import com.koRail.admin.to.TrainBean;
 import com.koRail.common.dao.MemberDAO;
 import com.koRail.common.exception.DataDeleteException;
@@ -25,6 +27,10 @@ import com.koRail.common.util.JSONParser;
 
 @Service(value="adminServie")
 public class AdminServieImpl implements AdminServie {
+	/* 승차권 발권 현황 DAO */
+	@Resource(name="tcktRcrdDAO")
+	private TcktRcrdDAO tcktRcrdDAO;
+	
 	/*역 DAO*/
 	@Resource(name="statnDAO")
 	private StatnDAO statnDAO;
@@ -47,6 +53,20 @@ public class AdminServieImpl implements AdminServie {
 	
 	@Resource(name="memberDAO")
 	private MemberDAO memberDAO;
+
+	/*************************************
+					현황
+	*************************************/
+	
+	/*****************************
+	 * 승차권 발권 현황 조회
+	 * @param tcktRcrdBean
+	 * @return
+	 *****************************/
+	@Override
+	public List<TcktRcrdBean> getTcktRcrdList(TcktRcrdBean tcktRcrdBean){
+		return tcktRcrdDAO.selectTcktRcrdList(tcktRcrdBean);
+	}
 	
 	/*************************************
 					역 관리

@@ -14,8 +14,10 @@
 	    <result property="arvlStatnCode" column="ARVL_STATN_CODE" />
 	    <result property="arvlStatnValue" column="ARVL_STATN_VALUE" />
 	    <result property="arvlTm" column="ARVL_TM" />
-	    <result property="prtclrRoomY" column="PRTCLR_ROOM_Y" />
-	    <result property="prtclrRoomN" column="PRTCLR_ROOM_N" />
+	    <result property="prtclrSeatYCo" column="PRTCLR_SEAT_Y_CO" />
+	    <result property="prtclrRoomYCo" column="PRTCLR_ROOM_Y_CO" />
+	    <result property="prtclrSeatNCo" column="PRTCLR_SEAT_N_CO" />
+	    <result property="prtclrRoomNCo" column="PRTCLR_ROOM_N_CO" />
 	    <result property="fare" column="FARE" />
 	</resultMap>
 	
@@ -30,8 +32,10 @@
 				ARVL_STATN_CODE 									/*도착역코드*/, 
 				ARVL_STATN_VALUE 									/*도착역값*/, 
 				TO_CHAR(ARVL_TM, 'YYYY-MM-DD HH24:MI') AS ARVL_TM	/*도착시각*/, 
-				NVL(PRTCLR_ROOM_Y, 0) AS PRTCLR_ROOM_Y				/*특실 좌석수*/,
-				NVL(PRTCLR_ROOM_N, 0) AS PRTCLR_ROOM_N				/*일반실 좌석수*/,
+				NVL(PRTCLR_SEAT_Y_CO, 0) AS PRTCLR_SEAT_Y_CO		/*특실 좌석수*/,
+				NVL(PRTCLR_ROOM_Y_CO, 0) AS PRTCLR_ROOM_Y_CO		/*예약된 특실 좌석수*/,
+				NVL(PRTCLR_SEAT_N_CO, 0) AS PRTCLR_SEAT_N_CO		/*일반실 좌석수*/,
+				NVL(PRTCLR_ROOM_N_CO, 0) AS PRTCLR_ROOM_N_CO		/*예약된 일반실 좌석수*/,
 				TO_CHAR(FARE, '9,999,999,999') AS FARE 				/*요금*/
 		FROM TABLE(
 			PK_MEMBER_RESVE.FN_SLT_TCKT(

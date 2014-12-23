@@ -113,7 +113,7 @@
 							if(telText.test(tel1+"-"+tel2+"-"+tel3)){
 								chTag.removeClass("false-text");
 								chTag.addClass("true-text");
-								chTag.html("옭바른 전화번호 형식 입니다.");
+								chTag.html("올바른 전화번호 형식 입니다.");
 								/* 전송할 데이터 */
 								$(obj).parent().children(":hidden").val(tel1+"-"+tel2+"-"+tel3);
 							}else{
@@ -156,11 +156,11 @@
 							if(emailText.test(hEmail.val())){
 								chTag.removeClass("false-text");
 								chTag.addClass("true-text");
-								chTag.html("옭바른 이메일 형식 입니다.");
+								chTag.html("올바른 이메일 형식 입니다.");
 							}else{
 								chTag.removeClass("true-text");
 								chTag.addClass("false-text");
-								chTag.html("<input class='false' type='hidden'>옭바른 이메일 형식이 아닙니다.");
+								chTag.html("<input class='false' type='hidden'>올바른 이메일 형식이 아닙니다.");
 							}
 						} /* else end */
 					} /* else end */	

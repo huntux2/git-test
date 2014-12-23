@@ -15,6 +15,11 @@
 					</td>
 				</tr>
 				<tr>
+					<td colspan="3">
+						<img src="/res/img/d62c12cb30e5dd20d03d8b50dfe58011.jpg" style="border: 1px solid black; width: 1017px; height: 360px;">
+					</td>
+				</tr>
+				<tr>
 					<td>
 						<img src="/res/img/c_img_3.jpg" style="border: 1px solid black; width: 506px; height: 360px;">
 					</td>

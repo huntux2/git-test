@@ -31,12 +31,12 @@ public class MenuTree {
 					menuMap.put("tcktResve2", "승차권 예매");
 					menuMap.put("setle", "결제");
 					menuMap.put("getTckt", "발권");
-				menuMap.put("tcktState", "승차권 현황");
+				menuMap.put("tcktRcrd", "승차권 현황");
 					menuMap.put("dfTckt", "승차권 상세");
 			menuMap.put("admin", "관리자");
-				menuMap.put("state", "현황");
-					menuMap.put("tcktState", "승차권 발권 현황");
-					menuMap.put("triState", "열차별 승객 현황");
+				menuMap.put("rcrd", "현황");
+					menuMap.put("tcktRcrd", "승차권 발권 현황");
+					menuMap.put("triPssngrRcrd", "열차별 승객 현황");
 				menuMap.put("mng", "관리");
 					menuMap.put("sttMng", "역 관리");
 					menuMap.put("triMng", "열차 관리");
@@ -67,6 +67,18 @@ public class MenuTree {
 		list.add(menu.get("home"));
 		
 		switch (formName) {
+			/* 승차권 발권 현황 */
+			case "tcktRcrdForm":
+				list.add(menu.get("rcrd"));
+				list.add(menu.get("tcktRcrd"));
+				break;
+			
+			/* 열차별 승객 현황 */
+			case "trainPssngrRcrdForm":
+				list.add(menu.get("rcrd"));
+				list.add(menu.get("triPssngrRcrd"));
+				break;
+		
 			/* 역 */
 			case "statnMngForm":
 				list.add(menu.get("mng"));
