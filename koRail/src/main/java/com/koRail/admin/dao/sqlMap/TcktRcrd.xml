@@ -3,7 +3,6 @@
 	    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 	    
 <sqlMap namespace="TcktRcrd">
-	<!-- 상세운행 -->
 	<resultMap class="com.koRail.admin.to.TcktRcrdBean" id="tcktRcrdResultMap">
 	    <result property="opratCode" column="OPRAT_CODE" />
 	    <result property="tcktTm" column="TCKT_TM" />
@@ -40,5 +39,11 @@
 			) 
 		) 
 		ORDER BY START_TM DESC
+		
+		/*******************************************************************
+	    * 이름	: FN_SLT_TCKT_RCRD
+	    * 설명	: 승차권 발권 현황
+	    * 파라미터: 열차종류코드, 승차일자
+	    ******************************************************************/
   	</select>
 </sqlMap>

@@ -13,12 +13,14 @@ import com.koRail.admin.dao.RoomDAO;
 import com.koRail.admin.dao.StatnDAO;
 import com.koRail.admin.dao.TcktRcrdDAO;
 import com.koRail.admin.dao.TrainDAO;
+import com.koRail.admin.dao.TrainRcrdDAO;
 import com.koRail.admin.to.DetailOpratBean;
 import com.koRail.admin.to.OpratBean;
 import com.koRail.admin.to.RoomBean;
 import com.koRail.admin.to.StatnBean;
 import com.koRail.admin.to.TcktRcrdBean;
 import com.koRail.admin.to.TrainBean;
+import com.koRail.admin.to.TrainRcrdBean;
 import com.koRail.common.dao.MemberDAO;
 import com.koRail.common.exception.DataDeleteException;
 import com.koRail.common.to.CommonBean;
@@ -30,6 +32,10 @@ public class AdminServieImpl implements AdminServie {
 	/* 승차권 발권 현황 DAO */
 	@Resource(name="tcktRcrdDAO")
 	private TcktRcrdDAO tcktRcrdDAO;
+	
+	/* 열차별 승객 현황 DAO */
+	@Resource(name="trainRcrdDAO")
+	private TrainRcrdDAO trainRcrdDAO;
 	
 	/*역 DAO*/
 	@Resource(name="statnDAO")
@@ -66,6 +72,15 @@ public class AdminServieImpl implements AdminServie {
 	@Override
 	public List<TcktRcrdBean> getTcktRcrdList(TcktRcrdBean tcktRcrdBean){
 		return tcktRcrdDAO.selectTcktRcrdList(tcktRcrdBean);
+	}
+	
+	/*************************************
+	 * 열차별 승객 현황 조회
+	 * @param trainRcrdBean
+	 * @return
+	 *************************************/
+	public List<TrainRcrdBean> getTrainRcrdList(TrainRcrdBean trainRcrdBean){
+		return trainRcrdDAO.selectTrainRcrdList(trainRcrdBean);
 	}
 	
 	/*************************************

@@ -16,6 +16,7 @@ import com.koRail.admin.to.OpratBean;
 import com.koRail.admin.to.StatnBean;
 import com.koRail.admin.to.TcktRcrdBean;
 import com.koRail.admin.to.TrainBean;
+import com.koRail.admin.to.TrainRcrdBean;
 import com.koRail.common.controller.CommonController;
 import com.koRail.common.exception.DataDeleteException;
 import com.koRail.common.service.CommonService;
@@ -62,6 +63,12 @@ public class AdminController extends CommonController {
 		return "/admin/rcrd/tcktRcrdForm";
 	}
 	
+	/***********************************
+	 * 승차권 발권 현황 조회
+	 * @param model
+	 * @param tcktRcrdBean
+	 * @return
+	 ************************************/
 	@RequestMapping(value="tcktRcrdList.do")
 	public String findTcktRcrdList(Model model, TcktRcrdBean tcktRcrdBean){
 		List<TcktRcrdBean> tcktRcrdList = adminServie.getTcktRcrdList(tcktRcrdBean);
@@ -82,8 +89,8 @@ public class AdminController extends CommonController {
 	 * @param request
 	 * @return
 	 ******************************/
-	@RequestMapping(value="trainPssngrRcrd.html")
-	public String findTrainPssngrRcrdForm(Model model, HttpServletRequest request,
+	@RequestMapping(value="trainRcrd.html")
+	public String findTrainRcrdForm(Model model, HttpServletRequest request,
 			@ModelAttribute CommonBean commonBean){
 		/*레이아웃 변경*/
 		super.setLayout(request, "stp");
@@ -96,11 +103,21 @@ public class AdminController extends CommonController {
 		/*열차종류*/
 		model.addAttribute("commonCodeList", commonService.getCommonCodeList(commonBean));
 		
-		return "/admin/rcrd/trainPssngrRcrdForm";
+		return "/admin/rcrd/trainRcrdForm";
 	}
 	
-	@RequestMapping(value="trainPssngrRcrdList.do")
-	public String findTrainPssngrRcrdList(Model model, CommonBean commonBean){
+	/******************************
+	 * 열차별 승객 현황 조회
+	 * @param model
+	 * @param trainRcrdBean
+	 * @return
+	 ******************************/
+	@RequestMapping(value="trainRcrdList.do")
+	public String findTrainRcrdList(Model model, TrainRcrdBean trainRcrdBean){
+		List<TrainRcrdBean> trainRcrdList = adminServie.getTrainRcrdList(trainRcrdBean);
+		
+		model.addAttribute("trainRcrdListSize", trainRcrdList.size());
+		model.addAttribute("trainRcrdList", trainRcrdList);
 		
 		return "jsonView";
 	}

@@ -3,7 +3,6 @@
 	    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 	    
 <sqlMap namespace="Room">
-	<!-- 상세운행 -->
 	<resultMap class="com.koRail.admin.to.RoomBean" id="roomResultMap">
 	    <result property="roomCode" column="ROOM_CODE" />
 	    <result property="opratCode" column="OPRAT_CODE" />

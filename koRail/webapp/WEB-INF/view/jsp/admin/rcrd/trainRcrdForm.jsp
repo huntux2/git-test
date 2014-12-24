@@ -68,36 +68,37 @@
    				
 				$("#gridBody").jqGrid({
 					datatype: "LOCAL",
-	   				caption:"승차권 발권 현황",
+	   				caption:"열차별 승객 현황",
 	   				width: 845,
-	   				height: 323,
+	   				height: 305,
 	   				scroll: 1,
 	   				rowNum : 'max',
 	   				pager: '#footer',
-	   				colNames:["승차일자", "열차번호", "열치종류",  "출발역", "출발시각", "도착역", "도착시각", "특실발권", "일반실발권"],
+	   				colNames:["번호", "예약자명", "좌석",  "경로/장애인/어린이", "총 인원수", "영수금액", "결제상태", "사용포인트", "할인금액", "결제금액"],
 	          		colModel : [
-						{ name : "tcktTm", width: 70, align:"center", sortable:false,
+						{ name : "rowNum", width: 60, align:"center", sortable:false,
 							cellattr: function(rowId, value, rowObject, colModel, arrData) {
-								return ' colspan=9';
+								return ' colspan=10';
 							}
 						},
-						{ name : 'trainNo', width: 70, align:"center", sortable:false},
-						{ name : 'trainKndValue', width: 90, align:"center", sortable:false},
-						{ name : 'startStatnValue', width: 70, align:"center", sortable:false},
-						{ name : 'startTm', width: 40, align:"center", sortable:false},
-						{ name : 'arvlStatnValue', width: 70, align:"center", sortable:false},
-						{ name : 'arvlTm', width: 40, align:"center", sortable:false},
-						{ name : 'prtclrRoomY', width: 70, align:"center", sortable:false},
-						{ name : 'prtclrRoomN', width: 70, align:"center", sortable:false}
+						{ name : "register", width: 70, align:"center", sortable:false},
+						{ name : 'seat', width: 70, align:"center", sortable:false},
+						{ name : 'edcco', width: 130, align:"center", sortable:false},
+						{ name : 'resveCo', width: 70, align:"center", sortable:false},
+						{ name : 'allRcptAmount', width: 120, align:"right", sortable:false},
+						{ name : 'setelSttus', width: 60, align:"center", sortable:false},
+						{ name : 'usePint', width: 120, align:"right", sortable:false},
+						{ name : 'dscntAmount', width: 120, align:"right", sortable:false},
+						{ name : 'setleAmount', width: 120, align:"right", sortable:false}
 					]
-				}); /*jqGrid end*/
+				}); /*jqGrid end
 			
 				/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-				$("#gridBody").jqGrid('addRowData', 1, {tcktTm:"조회조건을 선택하여 조회를 하십시오."});
+				$("#gridBody").jqGrid('addRowData', 1, {rowNum:"조회조건을 선택하여 조회를 하십시오."});
 	   		}
 	   		
-	   		/* 승차권 발권 현황 조회 */
-	   		function findTcktRcrdList(){
+	   		/* 열차벼 승객 현황 조회 */
+	   		function findTrainRcrdList(){
 	   			/* 열차종류 */
 	   			var trainKndCode = $("#trainKndSelect").val();
 	   			/* 승차일자 */
@@ -112,11 +113,11 @@
 	   			/*그리드 내용*/				
 				$.ajax({
 					type:"POST",
-					url: "/admin/tcktRcrdList.do?trainKndCode="
-							+trainKndCode+"&tcktTm="+tcktTm,
+					url: "/admin/trainRcrdList.do?srcType="
+							+trainKndCode+"&srcDate1="+tcktTm,
 					Type:"JSON",
 					success : function(data) {
-						if(data.tcktRcrdListSize == 0){
+						if(data.trainRcrdListSize == 0){
 							alert("조회된 결과가 없습니다.");
 							return;
 						}else{
@@ -129,23 +130,24 @@
 				   				
 								$("#gridBody").jqGrid({
 									datatype: "LOCAL",
-					   				caption:"승차권 발권 현황",
+					   				caption:"열차별 승객 현황",
 					   				width: 845,
-					   				height: 323,
+					   				height: 305,
 					   				scroll: 1,
 					   				rowNum : 'max',
 					   				pager: '#footer',
-					   				colNames:["승차일자", "열차번호", "열치종류",  "출발역", "출발시각", "도착역", "도착시각", "특실발권", "일반실발권"],
+					   				colNames:["번호", "예약자명", "좌석",  "경로/장애인/어린이", "총 인원수", "영수금액", "결제상태", "사용포인트", "할인금액", "결제금액"],
 					          		colModel : [
-										{ name : 'tcktTm', width: 70, align:"center", sortable:false},
-										{ name : 'trainNo', width: 70, align:"center", sortable:false},
-										{ name : 'trainKndValue', width: 90, align:"center", sortable:false},
-										{ name : 'startStatnValue', width: 70, align:"center", sortable:false},
-										{ name : 'startTm', width: 40, align:"center", sortable:false},
-										{ name : 'arvlStatnValue', width: 70, align:"center", sortable:false},
-										{ name : 'arvlTm', width: 40, align:"center", sortable:false},
-										{ name : 'prtclrRoomY', width: 70, align:"center", sortable:false},
-										{ name : 'prtclrRoomN', width: 70, align:"center", sortable:false}
+										{ name : "rowNum", width: 60, align:"right", sortable:false},
+										{ name : "register", width: 70, align:"center", sortable:false},
+										{ name : 'seat', width: 70, align:"center", sortable:false},
+										{ name : 'edcco', width: 130, align:"center", sortable:false},
+										{ name : 'resveCo', width: 70, align:"center", sortable:false},
+										{ name : 'allRcptAmount', width: 120, align:"right", sortable:false},
+										{ name : 'setelSttus', width: 60, align:"center", sortable:false},
+										{ name : 'usePint', width: 120, align:"right", sortable:false},
+										{ name : 'dscntAmount', width: 120, align:"right", sortable:false},
+										{ name : 'setleAmount', width: 120, align:"right", sortable:false}
 									]
 								}); /*jqGrid end*/
 				   			} /* if end */
@@ -154,25 +156,26 @@
 							$("#gridBody").jqGrid('clearGridData');
 							
 							/* 데이터 추가 */
-							$.each(data.tcktRcrdList, function(k, v){
+							$.each(data.trainRcrdList, function(k, v){
 								$("#gridBody").jqGrid('addRowData', k,
 									{
-										tcktTm:v.tcktTm,
-										trainNo:v.trainNo,
-										trainKndValue:v.trainKndValue,
-										startStatnValue:v.startStatnValue,
-										startTm:v.startTm,
-										arvlStatnValue:v.arvlStatnValue,
-										arvlTm:v.arvlTm,
-										prtclrRoomY:v.prtclrRoomYCo+" / "+v.prtclrSeatYCo,
-										prtclrRoomN:v.prtclrRoomNCo+" / "+v.prtclrSeatNCo
+										rowNum:(k+1),
+										register:v.register,
+										seat:"<button>좌석보기</button>",
+										edcco:v.eldrlyCo+" 명 / "+v.dspsnCo+" 명 / "+v.chldCo+" 명",
+										resveCo:v.resveCo+" 명",
+										allRcptAmount:v.allRcptAmount+" 원",
+										setelSttus:v.setelSttus,
+										usePint:v.usePint+" P",
+										dscntAmount:v.dscntAmount+" 원",
+										setleAmount:v.setleAmount+" 원"
 									}
 								);
 							}); /* each end */
 						} /* else end */
 					} /* success end */
 				}); /* ajax end */
-	   		} /* findTcktRcrdList end */
+	   		} /* findrainRcrdList end */
    		</script>
 	</head>
 	<body>
@@ -184,9 +187,11 @@
 	
 		<!-- 사용방법 -->
    		<div class="caption">
-			* 열차종류와 승차일자를 선택하여 해당하는 승차권 발권 현황을 조회할 수 있습니다.
+			* 열차종류와 승차일자를 선택하여 해당하는 열차별 승객 현황을 조회할 수 있습니다.
    			<br>
-   			* 특실발권, 일반실발권 표기방법 : 예약된 좌석수 / 총 좌석수
+   			* 경로, 장애인 표기방법 : 경로대상자 / 장애인 / 어린이 순 입니다.
+   			<br>
+   			* 총 인원수는 일반인 + 장애인 + 경로대상자 + 어린이의 수를 합산한 값 입니다.
    		</div>
    		
    		<!-- search-group -->
@@ -232,7 +237,7 @@
 						</td>
 						<td>일</td>
 						<td>
-							<button onclick="findTcktRcrdList();" type="button">조회</button>
+							<button onclick="findTrainRcrdList();" type="button">조회</button>
 						</td>
 					</tr>
 				</tbody>

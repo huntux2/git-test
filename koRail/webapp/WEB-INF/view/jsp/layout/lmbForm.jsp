@@ -33,7 +33,7 @@
 								<td onclick="findForm('/admin/tcktRcrd.html')" style="border-radius: 7px 7px 0px 0px;">승차권 발권 현황</td>
 							</tr>
 							<tr>
-								<td onclick="findForm('/admin/trainPssngrRcrd.html')">열차별 승객 현황</td>
+								<td onclick="findForm('/admin/trainRcrd.html')">열차별 승객 현황</td>
 							</tr>
     					</c:if>
     					<!-- 관리 -->

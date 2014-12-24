@@ -6,6 +6,7 @@ import com.koRail.admin.to.OpratBean;
 import com.koRail.admin.to.StatnBean;
 import com.koRail.admin.to.TcktRcrdBean;
 import com.koRail.admin.to.TrainBean;
+import com.koRail.admin.to.TrainRcrdBean;
 import com.koRail.common.exception.DataDeleteException;
 import com.koRail.common.to.CommonBean;
 import com.koRail.common.to.MemberBean;
@@ -21,6 +22,13 @@ public interface AdminServie {
 	 * @return
 	 *****************************/
 	public List<TcktRcrdBean> getTcktRcrdList(TcktRcrdBean tcktRcrdBean);
+	
+	/*************************************
+	 * 열차별 승객 현황 조회
+	 * @param trainRcrdBean
+	 * @return
+	 *************************************/
+	public List<TrainRcrdBean> getTrainRcrdList(TrainRcrdBean trainRcrdBean);
 	
 	/*************************************
 	 				역 관리
