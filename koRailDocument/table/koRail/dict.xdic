@@ -127,6 +127,7 @@
   <term name="운임요금" physicalName="FR_AMOUNT" physicalDescription="Fare amount" tag="//@tag.6"/>
   <term name="포인트사용여부" physicalName="PINT_USE_YN" physicalDescription="Point use yes or no" tag="//@tag.6"/>
   <term name="우편번호" physicalName="ZIP_CODE" tag="//@tag.7"/>
+  <term name="예약된좌석수" physicalName="RESVE_SEAT_CO" physicalDescription="Reservation seat count" tag="//@tag.15"/>
   <tag name="열차"/>
   <tag name="역"/>
   <tag name="지역"/>
