@@ -654,43 +654,43 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>열차번호</td>
+						<td class="head">열차번호</td>
 						<td id="trainNo">--</td>
-						<td>열차종류</td>
+						<td class="head">열차종류</td>
 						<td id="trainKnd">--</td>
 					</tr>
 					<tr>
-						<td>출발역</td>
+						<td class="head">출발역</td>
 						<td id="startStatn">--</td>
-						<td>출발시각</td>
+						<td class="head">출발시각</td>
 						<td id="startTm">--</td>
 					</tr>
 					<tr>
-						<td>도착역</td>
+						<td class="head">도착역</td>
 						<td id="arvlStatn">--</td>
-						<td>도착시각</td>
+						<td class="head">도착시각</td>
 						<td id="arvlTm">--</td>
 					</tr>
 					<tr>
-						<td>노선</td>
+						<td class="head">노선</td>
 						<td id="route">--</td>
-						<td>거리</td>
+						<td class="head">거리</td>
 						<td id="distnc">--</td>
 					</tr>
 					<tr>
-						<td>요금</td>
+						<td class="head">요금</td>
 						<td id="fare" colspan="3">--</td>
 					</tr>
 					<tr>
-						<td>등록자</td>
+						<td class="head">등록자</td>
 						<td id="register">--</td>
-						<td>등록일</td>
+						<td class="head">등록일</td>
 						<td id="rgsde">--</td>
 					</tr>
 					<tr>
-						<td class="b-l-radius" style="border: none;">수정자</td>
+						<td class="b-l-radius head" style="border: none;">수정자</td>
 						<td id="updUsr">--</td>
-						<td>수정일</td>
+						<td class="head">수정일</td>
 						<td id="updde" class="b-r-radius" style="border: none;">--</td>
 					</tr>
 				</tbody>

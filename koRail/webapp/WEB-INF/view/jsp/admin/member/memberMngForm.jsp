@@ -429,37 +429,37 @@
    				</thead>
    				<tbody>
    					<tr>
-   						<td>아이디</td>
+   						<td class="head">아이디</td>
    						<td id="id">--</td>
-   						<td>성명</td>
+   						<td class="head">성명</td>
    						<td id="nm">--</td>
    					</tr>
    					<tr>
-   						<td>가입일</td>
+   						<td class="head">가입일</td>
    						<td id="rgsde">--</td>
-   						<td>개인정보 수정일</td>
+   						<td class="head">개인정보 수정일</td>
    						<td id="updde">--</td>
    					</tr>
    					<tr>
-   						<td>전화번호</td>
+   						<td class="head">전화번호</td>
    						<td id="telNo">--</td>
-   						<td>휴대전화번호</td>
+   						<td class="head">휴대전화번호</td>
    						<td id="mbtlnum">--</td>
    					</tr>
    					<tr>
-   						<td>이메일</td>
+   						<td class="head">이메일</td>
    						<td id="email">--</td>
-   						<td>성별</td>
+   						<td class="head">성별</td>
    						<td id="gndr">--</td>
    					</tr>
    					<tr>
-   						<td>우편번호</td>
+   						<td class="head">우편번호</td>
    						<td id="zipCode">--</td>
-   						<td>주소</td>
+   						<td class="head">주소</td>
    						<td id="addrs">--</td>
    					</tr>
    					<tr>
-   						<td>상세주소</td>
+   						<td class="head">상세주소</td>
    						<td id="detailAddrs" colspan="5">--</td>
    					</tr>
    				</tbody>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQLMap 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="DetailResve">
+	<!-- 예약에 대한 좌석정보 -->
+	<resultMap class="com.koRail.common.to.DetailResveBean" id="seatResultMap">
+		<result property="detailResveCode" column="DETAIL_RESVE_CODE"/>
+		<result property="resveCode" column="RESVE_CODE"/>
+		<result property="roomKndCode" column="ROOM_KND_CODE"/>
+		<result property="roomKndValue" column="ROOM_KND_VALUE"/>
+		<result property="seatNo" column="SEAT_NO"/>
+		<result property="room" column="ROOM"/>
+	</resultMap>
+	
+	<!-- 예약에 대한 좌석정보 -->
+	<select id="selectSeatList" resultMap="seatResultMap">
+		SELECT	B.DETAIL_RESVE_CODE, 
+				B.RESVE_CODE, 
+				B.ROOM_KND AS ROOM_KND_CODE, 
+				PK_CMMN.TO_CODE_VALUE('CMMN_CODE', B.ROOM_KND) AS ROOM_KND_VALUE, 
+				B.SEAT_NO, 
+				B.ROOM 
+		FROM	RESVE A, 
+				DETAIL_RESVE B 
+		WHERE	A.RESVE_CODE = B.RESVE_CODE 
+		AND		B.RESVE_CODE = #RESVE_CODE#
+	</select>
+</sqlMap>

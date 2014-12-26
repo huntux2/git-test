@@ -142,6 +142,11 @@ button:ACTIVE {
 	color: #FFFFFF;
 }
 
+.d-table .head {
+	background: #515151;
+	color: #FFFFFF;
+}
+
 .d-table td {
 	border: 1px;
 	border-style: solid;

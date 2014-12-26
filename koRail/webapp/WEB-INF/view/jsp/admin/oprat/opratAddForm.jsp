@@ -886,20 +886,20 @@
 							<td style="display: none;">
 								<input id="trainCode" name="trainCode" type="hidden">
 							</td>
-							<td>열차번호</td>
+							<td class="head">열차번호</td>
 							<td>
 								<input id="trainNo" type="text" style="width: 95%;" disabled="disabled">
 							</td>
 							<td>
 								<button type="button" onclick="setTrainDialog();" style="width: 70px; height: 23px; margin-top: 5px; margin-bottom: 5px;">검색</button>
 							</td>
-							<td>열차종류</td>
+							<td class="head">열차종류</td>
 							<td colspan="2">
 								<input id="trainKnd" style="width: 95%;" type="text" disabled="disabled">
 							</td>
 						</tr>
 						<tr>
-							<td>출발역</td>
+							<td class="head">출발역</td>
 							<td>
 								<input id="startStatnCode" name="startStatnCode" type="hidden">
 								<input id="startStatnValue" style="width: 95%;" type="text" disabled="disabled">
@@ -907,13 +907,13 @@
 							<td>
 								<button type="button" onclick="setStatnDialog('text', 'start');" style="width: 70px; height: 23px; margin-top: 5px; margin-bottom: 5px;">검색</button>
 							</td>
-							<td>출발시각</td>
+							<td class="head">출발시각</td>
 							<td colspan="2">
 								<input name="startTm" onclick="setDateTimeDialog(this);" readonly="readonly" style="width: 95%;" type="text">
 							</td>
 						</tr>
 						<tr>
-							<td>도착역</td>
+							<td class="head">도착역</td>
 							<td>
 								<input id="arvlStatnCode" name="arvlStatnCode" type="hidden">
 								<input id="arvlStatnValue" style="width: 95%;" type="text" disabled="disabled">
@@ -921,13 +921,13 @@
 							<td>
 								<button type="button" onclick="setStatnDialog('text', 'arvl');" style="width: 70px; height: 23px; margin-top: 5px; margin-bottom: 5px;">검색</button>
 							</td>
-							<td>도착시각</td>
+							<td class="head">도착시각</td>
 							<td colspan="2">
 								<input name="arvlTm" onclick="setDateTimeDialog(this);" readonly="readonly" style="width: 95%;" type="text">
 							</td>
 						</tr>
 						<tr>
-							<td>노선</td>
+							<td class="head">노선</td>
 							<td>
 								<input id="routeCode" name="routeCode" type="hidden" value="ROOT_1">
 								<input id="routeValue" type="text" disabled="disabled" value="경부선">
@@ -935,18 +935,18 @@
 							<td>
 								<button type="button" style="width: 70px; height: 23px; margin-top: 5px; margin-bottom: 5px;">검색</button>
 							</td>
-							<td>거리</td>
+							<td class="head">거리</td>
 							<td>
 								<input name="distnc" type="text">
 							</td>
-							<td>km</td>
+							<td class="head">km</td>
 						</tr>
 						<tr>
-							<td style="border: none;" class="b-l-radius">요금</td>
+							<td style="border: none;" class="b-l-radius head">요금</td>
 							<td colspan="4" style="text-align: right;">
 								<input name="fare" type="text">
 							</td>
-							<td class="b-r-radius" style="border: none;">원</td>
+							<td class="b-r-radius head" style="border: none;">원</td>
 						</tr>
 					</tbody>
 				</table>

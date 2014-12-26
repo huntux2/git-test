@@ -10,9 +10,22 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<style type="text/css">
+			#seatList td {
+				width: 100px;
+				padding: 5px;
+				background-color: #FFFFFF;
+				color: #FFFFFF;
+				font-size: 12px;
+				font-weight:bold;
+				text-align: center;
+				border-radius: 7px;
+			}
+		</style>
 		<script type="text/javascript">
-   			var viewState = false; /* 그리드 생성싱테 : true 생성됨, false 생성되 않음 */
-   		
+   			var viewState = false; 	/* 그리드 생성싱테 : true 생성됨, false 생성되 않음 */
+   			var seatArray = "";		/* 좌석정보 */
+   			
 	   		$(document).ready(function(){
 	   			/*Action style*/
 				$($(".menu td").get(2)).addClass("set");
@@ -99,6 +112,9 @@
 	   		
 	   		/* 열차벼 승객 현황 조회 */
 	   		function findTrainRcrdList(){
+	   			/* 초기화 */
+	   			seatArray = new Array();
+	   			
 	   			/* 열차종류 */
 	   			var trainKndCode = $("#trainKndSelect").val();
 	   			/* 승차일자 */
@@ -161,7 +177,7 @@
 									{
 										rowNum:(k+1),
 										register:v.register,
-										seat:"<button>좌석보기</button>",
+										seat:"<button onclick='setSeatDialog(&quot;"+v.resveCode+"&quot;, &quot;"+v.register+"&quot;)'>좌석보기</button>",
 										edcco:v.eldrlyCo+" 명 / "+v.dspsnCo+" 명 / "+v.chldCo+" 명",
 										resveCo:v.resveCo+" 명",
 										allRcptAmount:v.allRcptAmount+" 원",
@@ -171,11 +187,79 @@
 										setleAmount:v.setleAmount+" 원"
 									}
 								);
+								
+								/* 좌석정보 추가 */
+								$.each(v.seatList, function(k2, v2){
+									seatArray.push(
+										{
+											resveCode:v.resveCode,
+											roomKndCode:v2.roomKndCode,
+											room:v2.room+" 호실",
+											seatNo:v2.seatNo+" 석"
+										}		
+									);
+								});
 							}); /* each end */
 						} /* else end */
 					} /* success end */
 				}); /* ajax end */
-	   		} /* findrainRcrdList end */
+	   		} /* findTrainRcrdList end */
+	   		
+	   		/* 좌석정보 조회 */
+	   		function setSeatDialog(resveCode, register){
+	   			var count = 0; 		/* 인원수 */
+
+	   			/* 초기화 */
+	   			$($("#seatList tbody tr").get(0)).html("");
+	   			$($("#seatList tbody tr").get(1)).html("");
+	   			
+	   			for(var i = 0, i2 = 1; i < seatArray.length; i++, i2++){
+	   				if(seatArray[i].resveCode == resveCode){
+	   					count++;
+	   					
+	   					if(i2 < 6){
+	   						if(seatArray[i].roomKndCode == "ROOM_Y"){
+	   							$($("#seatList tbody tr").get(0)).append(
+   									"<td style='background: #65FF5E'>"+seatArray[i].room+"-"+seatArray[i].seatNo+"</td>"		
+   			   					);
+		   					}else{
+		   						$($("#seatList tbody tr").get(0)).append(
+			   						"<td style='background: #6CC0FF'>"+seatArray[i].room+"-"+seatArray[i].seatNo+"</td>"		
+			   					);
+		   					}
+		   				}else{
+		   					if($($("#seatList tbody tr").get(1)).children("td").size() == 2){
+		   						$($("#seatList tbody tr").get(1)).append("<td></td>");
+		   					}else{
+		   						if(seatArray[i].roomKndCode == "ROOM_Y"){
+		   							$($("#seatList tbody tr").get(0)).append(
+	   									"<td style='background: #65FF5E'>"+seatArray[i].room+"-"+seatArray[i].seatNo+"</td>"		
+	   			   					);
+			   					}else{
+			   						$($("#seatList tbody tr").get(0)).append(
+				   						"<td style='background: #6CC0FF'>"+seatArray[i].room+"-"+seatArray[i].seatNo+"</td>"		
+				   					);
+			   					}
+		   					}
+		   				} /* else end */
+	   				} /* if end */
+	   			} /* for end */
+	   			
+	   			/* 값 설정 */
+	   			$("#count").html(count);
+	   			$("#register").html(register);
+	   			
+	   			/*다이알로그*/
+   				$("#seatDialog").dialog({
+   					modal: true,
+   					width: 570,
+					buttons: {
+						"확인": function() {
+							$(this).dialog("close");
+						}
+					} /* btuuon end */
+   				}); /* dialog end */
+	   		} /* findSeatInfo end */
    		</script>
 	</head>
 	<body>
@@ -248,5 +332,42 @@
    		<div id="grid" style="margin-top: 7px; clear: left;">
    			<table id="gridBody"></table>
    		</div>
+   		
+   		<!-- 좌석정보 -->
+   		<div id="seatDialog" title="좌석정보" style="display: none;">
+			<!-- 기본정보 -->
+			<div style="width: 250px; margin: 0 auto;">
+				<table class="d-table" style="width: 250px; margin-bottom: 15px;">	
+					<colgroup>
+						<col width="25%">
+						<col width="25%">
+						<col width="25%">
+						<col width="25%">
+					</colgroup>
+					<tbody>
+						<tr height="25px">
+							<td class="head" style="font-size: 12px; font-weight: bold;">예약자</td>
+							<td id="register" style="font-size: 12px; font-weight: bold;"></td>
+							<td class="head" style="font-size: 12px; font-weight: bold;">인원수</td>
+							<td id="count" style="font-size: 12px; font-weight: bold;"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- 좌석 -->
+			<table id="seatList">
+				<tbody>
+					<tr></tr>
+					<tr></tr>
+				</tbody>
+			</table>
+			
+			<!-- 기타 -->
+			<div style="float: right; width: 150px; text-align: center; margin-top: 15px;">
+				<div style="border-radius: 7px; float: left; width: 50px; margin-right: 10px; padding: 10px; background: #65FF5E; font-size: 12px; font-weight: bold;">특실</div>
+				<div style="border-radius: 7px; float: left; width: 50px; background: #6CC0FF; padding: 10px; font-size: 12px; font-weight: bold;">일반실</div>
+				
+			</div>
+		</div>
 	</body>
 </html>

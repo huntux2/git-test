@@ -15,6 +15,7 @@
 	    <result property="usePint" column="USE_PINT" />
 	    <result property="dscntAmount" column="DSCNT_AMOUNT" />
 	    <result property="setleAmount" column="SETLE_AMOUNT" />
+		<result property="seatList" column="RESVE_CODE" select="DetailResve.selectSeatList"/>
 	</resultMap>
 	
   	<!-- 승차권 발권 현황 -->

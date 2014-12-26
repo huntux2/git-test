@@ -1,20 +1,25 @@
 package com.koRail.admin.to;
 
+import java.util.List;
+
 import com.koRail.common.to.CommonBean;
+import com.koRail.common.to.DetailResveBean;
 
 /* 열차별 승객 현황 */
 public class TrainRcrdBean extends CommonBean {
-	private String resveCode;		/* 예약코드 */
-	private String register;		/* 예예약자명 */
-	private String eldrlyCo;		/* 경로우대 대상자 */
-	private String dspsnCo;			/* 장애인 */
-	private String chldCo;			/* 어린이 수 */
-	private String resveCo;			/* 총 인원수 */
-	private String allRcptAmount;	/* 영수금액 */
-	private String setelSttus;		/* 결제상태 */
-	private String usePint;			/* 사용포인트 */
-	private String dscntAmount;		/* 할인금액 */
-	private String setleAmount;		/* 결제금액 */
+	private String resveCode;					/* 예약코드 */
+	private String register;					/* 예예약자명 */
+	private String eldrlyCo;					/* 경로우대 대상자 */
+	private String dspsnCo;						/* 장애인 */
+	private String chldCo;						/* 어린이 수 */
+private String resveCo;							/* 총 인원수 */
+	private String allRcptAmount;				/* 영수금액 */
+	private String setelSttus;					/* 결제상태 */
+	private String usePint;						/* 사용포인트 */
+	private String dscntAmount;					/* 할인금액 */
+	private String setleAmount;					/* 결제금액 */
+	
+	private List<DetailResveBean> seatList;		/* 좌석정보 */
 	
 	public String getResveCode() {
 		return resveCode;
@@ -81,5 +86,11 @@ public class TrainRcrdBean extends CommonBean {
 	}
 	public void setSetleAmount(String setleAmount) {
 		this.setleAmount = setleAmount;
+	}
+	public List<DetailResveBean> getSeatList() {
+		return seatList;
+	}
+	public void setSeatList(List<DetailResveBean> seatList) {
+		this.seatList = seatList;
 	}
 }
