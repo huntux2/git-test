@@ -15,7 +15,7 @@
    		
 	   		$(document).ready(function(){
 	   			/*Action style*/
-				$($(".menu td").get(2)).addClass("set");
+				$($(".menu td").get(3)).addClass("set");
 				$($(".lmb tr").get(0)).children("td").addClass("set");
 				/*lmb img*/
 				$("#lmbImg").attr("src", "/res/img/tra_visual06.jpg");

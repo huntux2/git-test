@@ -1,24 +1,30 @@
 package com.koRail.member.to;
 
+import java.util.List;
+
 import com.koRail.common.to.CommonBean;
+import com.koRail.common.to.RoomBean;
 
 /* 승치권 조회 */
 public class TcktBean extends CommonBean {
-	private String trainNo; 		/* 열차코드 */
-	private String trainKndCode; 	/* 열차종류코드 */
-	private String trainKndValue; 	/* 열차종류값 */
-	private String startStatnCode; 	/* 출발역코드 */
-	private String startStatnValue; /* 출발역값 */
-	private String startTm;			/* 출발시각 */
-	private String arvlStatnCode; 	/* 도착역코드 */
-	private String arvlStatnValue; 	/* 도착역값 */
-	private String arvlTm; 			/* 도착시각 */
-	private String seatCo;			/* 좌석수 */
-	private String prtclrSeatYCo;	/* 특실 좌석수 */
-	private String prtclrRoomYCo;	/* 예약된 특실 좌석수 */
-	private String prtclrSeatNCo;	/* 일반실 좌석수 */
-	private String prtclrRoomNCo;	/* 예약된 일반실 좌석수 */
-	private String fare; 			/* 요금 */
+	private String opratCode;			/* 운행코드 */
+	private String trainNo; 			/* 열차코드 */
+	private String trainKndCode; 		/* 열차종류코드 */
+	private String trainKndValue; 		/* 열차종류값 */
+	private String startStatnCode; 		/* 출발역코드 */
+	private String startStatnValue; 	/* 출발역값 */
+	private String startTm;				/* 출발시각 */
+	private String arvlStatnCode; 		/* 도착역코드 */
+	private String arvlStatnValue; 		/* 도착역값 */
+	private String arvlTm; 				/* 도착시각 */
+	private String seatCo;				/* 좌석수 */
+	private String prtclrSeatYCo;		/* 특실 좌석수 */
+	private String prtclrRoomYCo;		/* 예약된 특실 좌석수 */
+	private String prtclrSeatNCo;		/* 일반실 좌석수 */
+	private String prtclrRoomNCo;		/* 예약된 일반실 좌석수 */
+	private String fare; 				/* 요금 */
+	
+	private List<RoomBean> roomList;	/* 호실정보 */
 	
 	public String getTrainNo() {
 		return trainNo;
@@ -109,5 +115,17 @@ public class TcktBean extends CommonBean {
 	}
 	public void setFare(String fare) {
 		this.fare = fare;
+	}
+	public List<RoomBean> getRoomList() {
+		return roomList;
+	}
+	public void setRoomList(List<RoomBean> roomList) {
+		this.roomList = roomList;
+	}
+	public String getOpratCode() {
+		return opratCode;
+	}
+	public void setOpratCode(String opratCode) {
+		this.opratCode = opratCode;
 	}	
 }

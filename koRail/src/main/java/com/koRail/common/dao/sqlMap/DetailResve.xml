@@ -26,4 +26,26 @@
 		WHERE	A.RESVE_CODE = B.RESVE_CODE 
 		AND		B.RESVE_CODE = #RESVE_CODE#
 	</select>
+	
+	<!-- 상세예약 등록 -->
+	<procedure id="insertDetailResve" parameterClass="com.koRail.common.to.DetailResveBean">
+		{ CALL PK_MEMBER_RESVE.SP_IST_DEATIL_RESVE(
+			#roomKndCode,mode=IN#,
+			#seatNo,mode=IN#,
+			#psngrKndCode,mode=IN#,
+			#dspsnGradCode,mode=IN#,
+			#room,mode=IN#,
+			#frAmount,mode=IN#,
+			#code,mode=OUT,jdbcType=VARCHAR#,
+			#rtCode,mode=OUT,jdbcType=VARCHAR#,
+			#rtMsg,mode=OUT,jdbcType=VARCHAR#
+		) }
+		
+		/*******************************************************************
+	    * 이름		: SP_IST_DEATIL_RESVE
+	    * 설명		: 상세예약 등록
+	    * 파라미터	: 객실유형, 좌석번호, 승객유형, 장애인등급, 호실, 운임금액
+	    			  리턴할 예약 코드, 에러 코드(0 : 성공, 1 : 에러), 에러 메세지
+	    ******************************************************************/
+	</procedure>
 </sqlMap>

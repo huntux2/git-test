@@ -115,8 +115,8 @@
             ROUTE_CODE		/*노선*/,
             DISTNC			/*거리*/,
             FARE			/*요금*/,
-			REGISTER	/*등록자*/,
-			RGSDE		/*등록일*/
+			REGISTER		/*등록자*/,
+			RGSDE			/*등록일*/
 		) VALUES(
 			(
 				SELECT 'OPRAT_CODE_'|| NVL(

@@ -113,11 +113,16 @@ public class MenuTree {
 				list.add(menu.get("memberMng"));
 				break;
 				
-			/* 승차권 */
+			/* 승차권 예매 */
 			case "tcktSearchForm":
 				list.add(menu.get("tckt"));
 				list.add(menu.get("tcktResve1"));
 				list.add(menu.get("tcktSearch"));
+				break;
+			case "resveAddForm":
+				list.add(menu.get("tckt"));
+				list.add(menu.get("tcktResve1"));
+				list.add(menu.get("tcktResve2"));
 				break;
 		}
 		

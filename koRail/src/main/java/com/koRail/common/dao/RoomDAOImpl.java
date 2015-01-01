@@ -1,17 +1,29 @@
-package com.koRail.admin.dao;
+package com.koRail.common.dao;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ibatis.SqlMapClientTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.koRail.admin.to.RoomBean;
+import com.koRail.common.to.RoomBean;
 
 @Repository(value="roomDAO")
-@SuppressWarnings({ "deprecation" })
+@SuppressWarnings({ "deprecation", "unchecked" })
 public class RoomDAOImpl implements RoomDAO {
 
 	@Autowired
 	SqlMapClientTemplate sqlMapClientTemplate;
+	
+	/*******************************************
+	 * 예약을 위해 선택한 승차권에 대한 호실정보 조회
+	 * @param roomBean
+	 * @return
+	 *******************************************/
+	@Override
+	public List<RoomBean> selectTcktRommList(RoomBean roomBean){
+		return sqlMapClientTemplate.queryForList("Room.selectTcktRommList", roomBean);
+	}
 	
 	/***************************
 	 * 호실 등록

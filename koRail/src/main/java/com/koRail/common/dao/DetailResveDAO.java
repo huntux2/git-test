@@ -11,4 +11,10 @@ public interface DetailResveDAO {
 	 * @return
 	 **************************/
 	public List<DetailResveBean> selectDetailResveList(DetailResveBean detailResveBean);
+
+	/****************************
+	 * 상세예약 등록
+	 * @param detailResveBean
+	 ****************************/
+	public void insertDetailResve(DetailResveBean detailResveBean);
 }

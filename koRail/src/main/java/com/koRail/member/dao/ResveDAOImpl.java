@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ibatis.SqlMapClientTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.koRail.member.to.ResveBean;
 import com.koRail.member.to.TcktBean;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "unchecked"})
 @Repository(value="resveDAO")
 public class ResveDAOImpl implements ResveDAO {
 	
@@ -20,10 +21,18 @@ public class ResveDAOImpl implements ResveDAO {
 	 * @param tcktBean
 	 * @return
 	 *******************************/
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<TcktBean> selectTcktList(TcktBean tcktBean) {
 		return sqlMapClientTemplate.queryForList("Resve.selectTcktList", tcktBean);
 	}
 
+	/********************************
+	 * 예약 등록
+	 * @param resveBean
+	 * @return
+	 ********************************/
+	@Override
+	public int insertResve(ResveBean resveBean){
+		return sqlMapClientTemplate.update("Resve.insertResve", resveBean);
+	}
 }

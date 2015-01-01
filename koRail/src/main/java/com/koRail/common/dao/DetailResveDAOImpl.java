@@ -23,5 +23,14 @@ public class DetailResveDAOImpl implements DetailResveDAO {
 	public List<DetailResveBean> selectDetailResveList(DetailResveBean detailResveBean){
 		return sqlMapClientTemplate.queryForList("DetailResve.selectDetailResveList", detailResveBean);
 	}
+	
+	/****************************
+	 * 상세예약 등록
+	 * @param detailResveBean
+	 ****************************/
+	@Override
+	public void insertDetailResve(DetailResveBean detailResveBean) {
+		sqlMapClientTemplate.insert("DetailResve.insertDetailResve", detailResveBean);
+	}
 }
 

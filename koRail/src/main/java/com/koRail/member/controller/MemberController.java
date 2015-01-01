@@ -11,12 +11,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.koRail.common.controller.CommonController;
 import com.koRail.common.service.CommonService;
 import com.koRail.common.to.CommonBean;
 import com.koRail.common.to.MemberBean;
+import com.koRail.common.to.RoomBean;
 import com.koRail.member.service.MemberService;
+import com.koRail.member.to.ResveBean;
 import com.koRail.member.to.TcktBean;
 
 @Controller(value="memberController")
@@ -86,6 +90,8 @@ public class MemberController extends CommonController {
 		/*메뉴*/
 		super.getMenuTree(model, "tcktSearchForm");
 		
+		request.getSession().setAttribute("type2", "tckt");
+		
 		/*열차종류 조회를 위한 코드설정*/
 		CommonBean commonBean = new CommonBean();
 		commonBean.setSeCode("TRAIN");
@@ -108,5 +114,62 @@ public class MemberController extends CommonController {
 		model.addAttribute("tcktListSize", tcktList.size());
 		
 		return "jsonView";
+	}
+	
+	/**********************************************************
+	 * 예약을 위해 선택한 승차권에 대한 호실정보 조회 및 예약된 좌석정보 조회
+	 * @param model
+	 * @param roomBean
+	 * @return
+	 **********************************************************/
+	@RequestMapping(value="tcktRoomInfo.do")
+	public String findTcktRoomInfo(Model model, @ModelAttribute RoomBean roomBean){
+		Map<String, ?> map = memberService.getTcktRoomInfoList(roomBean);
+		
+		model.addAttribute("tcktRoomInfoList", map.get("roomList"));
+		model.addAttribute("seatNoList", map.get("seatNoList"));
+		
+		return "jsonView";
+	}
+	
+	/***************************************
+	 * 예약 등록, 삭제
+	 * @param model
+	 * @param resveBean
+	 * @param json
+	 * @param redirectAttributes
+	 * @return
+	 ***************************************/
+	@RequestMapping(value="processResve.do")
+	public String doTest(Model model, @ModelAttribute ResveBean resveBean,
+			@RequestParam(value="json") String json, RedirectAttributes redirectAttributes){
+		if("insert".equals(resveBean.getState())){
+			/* 
+				* 예약 등록
+			 	* Redirect post type parameter setting
+			*/
+			redirectAttributes.addFlashAttribute("resveCode", memberService.setResve(resveBean, json));
+			
+			return "redirect:resveAdd.html";
+		}else{
+			return "json";
+		}
+	}
+	
+	@RequestMapping(value="resveAdd.html")
+	public String findResveAddForm(Model model, HttpServletRequest request,
+			@RequestParam(value="resveCode", required=false) String resveCode) {
+		/* Redirect post type parameter */
+		if(resveCode == null){
+			Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+			resveCode = (String) flashMap.get("resveCode");
+        }
+		
+		/*메뉴*/
+		super.getMenuTree(model, "resveAddForm");
+		
+        System.out.println(resveCode);
+		
+		return "/member/resve/resveAddForm";
 	}
 }

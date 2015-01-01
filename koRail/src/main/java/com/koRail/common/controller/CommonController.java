@@ -71,7 +71,6 @@ public class CommonController {
 		model.addAttribute("menuTree", MenuTree.getInstance().getMenu(formName));
 	}
 	
-	
 	/*********************************************************
 								main
 	*********************************************************/
@@ -151,7 +150,6 @@ public class CommonController {
 		this.setLayout(request, "nlg"); /*레이아웃 제설정*/
 		return "redirect:login.html";
 	}
-	
 	
 	/*************************************************************
 	 						공통코드

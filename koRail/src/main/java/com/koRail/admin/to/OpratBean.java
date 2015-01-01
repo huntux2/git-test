@@ -3,6 +3,7 @@ package com.koRail.admin.to;
 import java.util.List;
 
 import com.koRail.common.to.CommonBean;
+import com.koRail.common.to.RoomBean;
 
 /*운행일정*/
 public class OpratBean extends CommonBean {

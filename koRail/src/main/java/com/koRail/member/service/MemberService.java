@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.koRail.common.to.MemberBean;
+import com.koRail.common.to.RoomBean;
+import com.koRail.member.to.ResveBean;
 import com.koRail.member.to.TcktBean;
 
 public interface MemberService {
@@ -35,4 +37,19 @@ public interface MemberService {
 	 * @return
 	 **********************************/
 	public List<TcktBean> getTcktList(TcktBean tcktBean);
+
+	/*****************************************
+	 * 예약을 위해 선택한 승차권에 대한 호실정보 조회
+	 * @param roomBean
+	 * @return
+	 *****************************************/
+	public Map<String, ?> getTcktRoomInfoList(RoomBean roomBean);
+
+	/*****************************************
+	 * 예약 등록, 삭제
+	 * @param resveBean
+	 * @param json
+	 * @return
+	 *****************************************/
+	public String setResve(ResveBean resveBean, String json);
 }

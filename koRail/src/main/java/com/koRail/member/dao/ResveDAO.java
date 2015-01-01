@@ -2,6 +2,7 @@ package com.koRail.member.dao;
 
 import java.util.List;
 
+import com.koRail.member.to.ResveBean;
 import com.koRail.member.to.TcktBean;
 
 public interface ResveDAO {
@@ -11,4 +12,11 @@ public interface ResveDAO {
 	 * @return
 	 *******************************/
 	public List<TcktBean> selectTcktList(TcktBean tcktBean);
+
+	/********************************
+	 * 예약 등록
+	 * @param resveBean
+	 * @return
+	 ********************************/
+	public int insertResve(ResveBean resveBean);
 }

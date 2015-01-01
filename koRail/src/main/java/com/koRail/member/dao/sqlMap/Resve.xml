@@ -5,6 +5,7 @@
 <sqlMap namespace="Resve">
 	<!-- 승차권 예매를 위한 운행일정 조회 -->
 	<resultMap class="com.koRail.member.to.TcktBean" id="tcktResultMap">
+	    <result property="opratCode" column="OPRAT_CODE" />
 	    <result property="trainNo" column="TRAIN_NO" />
 	    <result property="trainKndCode" column="TRAIN_KND_CODE" />
 	    <result property="trainKndValue" column="TRAIN_KND_VALUE" />
@@ -19,11 +20,13 @@
 	    <result property="prtclrSeatNCo" column="PRTCLR_SEAT_N_CO" />
 	    <result property="prtclrRoomNCo" column="PRTCLR_ROOM_N_CO" />
 	    <result property="fare" column="FARE" />
+		<result property="roomList" column="OPRAT_CODE" select="Room.selectRoom"/>
 	</resultMap>
 	
   	<!-- 승차권 예매를 위한 운행일정 조회 -->
   	<procedure id="selectTcktList" resultMap="tcktResultMap" parameterClass="com.koRail.member.to.TcktBean">
-  		SELECT	TRAIN_NO 											/*열차번호*/,
+  		SELECT	OPRAT_CODE											/* 운행코드 */,
+  				TRAIN_NO 											/*열차번호*/,
 				TRAIN_KND_CODE 										/*열차종류코드*/,
 				TRAIN_KND_VALUE 									/*열차종류값*/, 
 				START_STATN_CODE									/*출발역코드*/,
@@ -36,7 +39,7 @@
 				NVL(PRTCLR_ROOM_Y_CO, 0) AS PRTCLR_ROOM_Y_CO		/*예약된 특실 좌석수*/,
 				NVL(PRTCLR_SEAT_N_CO, 0) AS PRTCLR_SEAT_N_CO		/*일반실 좌석수*/,
 				NVL(PRTCLR_ROOM_N_CO, 0) AS PRTCLR_ROOM_N_CO		/*예약된 일반실 좌석수*/,
-				TO_CHAR(FARE, '9,999,999,999') AS FARE 				/*요금*/
+				TO_CHAR(FARE, 'FM9,999,999,999') AS FARE 											/*요금*/
 		FROM TABLE(
 			PK_MEMBER_RESVE.FN_SLT_TCKT(
 				#seatCo,mode=IN#,
@@ -53,4 +56,34 @@
 	    * 파라미터  : 좌석수, 열차종류, 출발역, 도착역, 출발시각
 	    **********************************************************/
   	</procedure>
+  	
+  	<!-- 예약 등록 -->
+  	<insert id="insertResve" parameterClass="com.koRail.member.to.ResveBean">
+  		INSERT INTO RESVE(
+  			RESVE_CODE		/*예약코드*/,
+			ID				/*아이디*/,
+			OPRAT_CODE		/*운행코드*/,
+			ROUTE_TYPE		/*여정경로*/,
+			RESVE_CO		/*예약매수*/,
+			ALL_RCPT_AMOUNT	/*총영수금액*/,
+			REGISTER		/*등록자*/,
+			RGSDE			/*등록일*/
+  		)VALUES(
+  			(
+				SELECT 'RESVE_CODE_'|| NVL(
+										MAX(
+											REGEXP_SUBSTR(RESVE_CODE, '[^_]+', 1, 3)+1
+										), 1
+									)
+				FROM RESVE
+			),
+			#id#,
+			#opratCode#,
+			#routeType#,
+			#resveCo#,
+			#allRcptAmount#,
+			#register#,
+			SYSDATE
+  		)
+  	</insert>
 </sqlMap>

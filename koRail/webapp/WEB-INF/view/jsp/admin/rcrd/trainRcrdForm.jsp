@@ -366,7 +366,6 @@
 			<div style="float: right; width: 150px; text-align: center; margin-top: 15px;">
 				<div style="border-radius: 7px; float: left; width: 50px; margin-right: 10px; padding: 10px; background: #65FF5E; font-size: 12px; font-weight: bold;">특실</div>
 				<div style="border-radius: 7px; float: left; width: 50px; background: #6CC0FF; padding: 10px; font-size: 12px; font-weight: bold;">일반실</div>
-				
 			</div>
 		</div>
 	</body>

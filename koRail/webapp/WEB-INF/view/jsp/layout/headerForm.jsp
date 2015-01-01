@@ -15,20 +15,7 @@
 		</style>
 	
    		<script type="text/javascript">
-	   		$(document).ready(function(){
-	 			/*JQuery UI*/
-	 			$("#menu").menu();
-	 			
-	 			/*관리자 메뉴 */
-	 			$("#menu").mouseout(function(){
-	 				$(this).hide();
-	 			});
-	 			$("#adminMenu").mouseover(function(){
-	 				$("#menu").show();
-	 			});
- 			});
-   		
-			function findForm(url){	
+	   		function findForm(url){	
 				location.href = url;
 			}
 		</script>
@@ -65,12 +52,11 @@
 		    				<td onclick="alert('관리자 모드에서는 승차권 예약을 하실 수 없습니다.');">
 	    						<strong>승차권</strong>
 	    					</td>
-		    				<td id="adminMenu">
-		    					<strong>관리자</strong>
-		    					<ul id="menu" style="display: none; position: fixed;">
-									<li onclick="findForm('/admin/tcktRcrd.html');">현황</li>
-									<li onclick="findForm('/admin/statnMng.html');">관리</li>
-								</ul>
+		    				<td onclick="findForm('/admin/tcktRcrd.html');">
+		    					<strong>현황</strong>
+		    				</td>
+		    				<td onclick="findForm('/admin/statnMng.html');">
+		    					<strong>관리</strong>
 		    				</td>
 		    			</c:if>
 		    			<!-- 일반 사용자 -->

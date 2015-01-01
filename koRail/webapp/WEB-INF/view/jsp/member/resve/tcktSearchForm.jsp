@@ -24,11 +24,53 @@
 				background-color: #FFFFFF;
 				color: #000000;
 			}
+			#roomList td{
+				font-weight: bold;
+				padding-left: 15px;
+				padding-right: 15px;
+				padding-top: 5px;
+				padding-bottom: 5px;
+				border: 1px solid #FFFFFF;
+				border-radius: 7px;
+				text-align: center;
+				cursor:pointer;
+				cursor:hand;
+			}
+			#roomList td:HOVER{
+				background: #515151;
+			}
+			#roomList .action{
+				background: #515151;
+			}
+			#seatList p {
+				font-weight: bold;
+				padding-left: 7px;
+				padding-right: 7px;
+				padding-top: 5px;
+				padding-bottom: 5px;
+				margin: 5px;
+				border-radius: 7px;
+				text-align: center;
+				cursor:pointer;
+				cursor:hand;
+			}
+			#seatList .def {
+				background: #65FF5E;
+			}
+			#seatList .slt {
+				background: #6CC0FF;
+			}
+			#seatList .non {
+				background: #515151;
+				cursor:default;
+			}
 		</style>
 	
    		<script type="text/javascript">
-   			var viewState = false; /* 그리드 생성싱테 : true 생성됨, false 생성되 않음 */
-   		
+   			var viewState = false;		/* 그리드 생성싱테 : true 생성됨, false 생성되 않음 */
+   			var seatNoArray = "";		/* 좌석정보 */
+   			var psngrKndArray = null;	/* 승객유형별 인원수만큼의 코드 */
+   			
 	   		$(document).ready(function(){
 	   			/*Action style*/
 				$($(".menu td").get(1)).addClass("set");
@@ -48,6 +90,7 @@
 	   			var dateTime = new Date();
 	   			
 	   			$("#year").html("");
+   				$("#year").append('<option value="'+(dateTime.getFullYear()-1)+'">'+(new Date().getFullYear()-1)+'</option>');
    				$("#year").append('<option value="'+dateTime.getFullYear()+'">'+new Date().getFullYear()+'</option>');
    				$("#year").append('<option value="'+(dateTime.getFullYear()+1)+'">'+(new Date().getFullYear()+1)+'</option>');
 	   		
@@ -243,8 +286,24 @@
 	   			var trainKndCode = $("#trainKndSelect").val();
 	   			/* 좌석수 */
 	   			var seatCo = 0;
+	   			
+	   			/* 승객유형별 인원수만큼의 코드 */
+	   			psngrKndArray = new Array();
+	   			
 	   			for(var i = 1; i < 6; i++){
-	   				seatCo += parseFloat($("#seatCoSelect"+i).val());	
+	   				/* 승객유형별 인원수만큼의 코드 */
+	   				for(var x = 0; x < parseInt($("#seatCoSelect"+i).val()); x++){
+	   					/* 승객유형 및 장애인 등급 */
+	   					var value = $("#seatCoSelect"+i).next().val().split(",");
+	   					psngrKndArray.push(
+	   						{
+	   							psngrKndCode:value[0],
+	   							dspsnGradCode:value[1]
+	   						}		
+	   					);
+	   				}
+	   				/* 총 인원수 */
+	   				seatCo += parseInt($("#seatCoSelect"+i).val());	
 	   			}
 	   			/* 출발일 */
 	   			var startTm = $("#year").val()+"-"+$("#month").val()+"-"+$("#date").val()+" "+$("#hh24").val();
@@ -268,34 +327,6 @@
 	   				return;
 	   			}
 	   			
-	   			/* 그리드 생성싱테에 따른 그리드 생성 */
-	   			if(!viewState){
-	   				/*그리드 초기화*/
-					$("#grid").html("<table id='gridBody'></table><div id='footer'></div>");
-	   				
-					$("#gridBody").jqGrid({
-						datatype: "LOCAL",
-		   				caption:"상세운행일정 정보",
-		   				width: 845,
-		   				height: 160,
-		   				scroll: 1,
-		   				rowNum : 'max',
-		   				pager: '#footer',
-		   				colNames:["열차번호", "열치종류",  "출발역", "출발시각", "도착역", "도착시각", "특실", "일반실", "요금"],
-		          		colModel : [
-							{ name : 'trainNo', width: 70, align:"center", sortable:false},
-							{ name : 'trainKnd', width: 90, align:"center", sortable:false},
-							{ name : 'startStatnValue', width: 70, align:"center", sortable:false},
-							{ name : 'startTm', width: 120, align:"center", sortable:false},
-							{ name : 'arvlStatnValue', width: 70, align:"center", sortable:false},
-							{ name : 'arvlTm', width: 120, align:"center", sortable:false},
-							{ name : 'prtclrRoomY', width: 70, align:"center", sortable:false},
-							{ name : 'prtclrRoomN', width: 70, align:"center", sortable:false},
-							{ name : 'fare', width: 90, align:"center", sortable:false}
-						]
-					}); /*jqGrid end*/
-	   			} /* if end */
-	   			
 	   			/*그리드 내용*/				
 				$.ajax({
 					type:"POST",
@@ -311,6 +342,34 @@
 							alert("조회된 결과가 없습니다.");
 							return;
 						}else{
+							/* 그리드 생성싱테에 따른 그리드 생성 */
+				   			if(!viewState){
+				   				/*그리드 초기화*/
+								$("#grid").html("<table id='gridBody'></table><div id='footer'></div>");
+				   				
+								$("#gridBody").jqGrid({
+									datatype: "LOCAL",
+					   				caption:"상세운행일정 정보",
+					   				width: 845,
+					   				height: 160,
+					   				scroll: 1,
+					   				rowNum : 'max',
+					   				pager: '#footer',
+					   				colNames:["열차번호", "열치종류",  "출발역", "출발시각", "도착역", "도착시각", "특실", "일반실", "요금"],
+					          		colModel : [
+										{ name : 'trainNo', width: 70, align:"center", sortable:false},
+										{ name : 'trainKnd', width: 90, align:"center", sortable:false},
+										{ name : 'startStatnValue', width: 70, align:"center", sortable:false},
+										{ name : 'startTm', width: 120, align:"center", sortable:false},
+										{ name : 'arvlStatnValue', width: 70, align:"center", sortable:false},
+										{ name : 'arvlTm', width: 120, align:"center", sortable:false},
+										{ name : 'prtclrRoomY', width: 70, align:"center", sortable:false},
+										{ name : 'prtclrRoomN', width: 70, align:"center", sortable:false},
+										{ name : 'fare', width: 90, align:"right", sortable:false}
+									]
+								}); /*jqGrid end*/
+				   			} /* if end */
+							
 							$.each(data.tcktList, function(k, v){
 								/* 예약 버튼 */
 								var yButton = "";
@@ -320,14 +379,14 @@
 								if(v.prtclrSeatYCo == v.prtclrRoomYCo){
 									yButton = "<button class='sell-out'>매진</button>";
 								}else{
-									yButton = "<button onclick='alert("+v.prtclrRoomYCo+");'>예약하기</button>";
+									yButton = "<button onclick='setSeatInfoDialog(&quot;"+v.opratCode+"&quot;, &quot;Y&quot;, &quot;"+seatCo+"&quot;, &quot;"+k+"&quot;);'>예약하기</button>";
 								}
 								
 								/* 예약가능 확인 */
 								if(v.prtclrSeatNCo == v.prtclrRoomNCo){
 									nButton = "<button class='sell-out'>매진</button>";
 								}else{
-									nButton = "<button onclick='alert("+v.prtclrRoomNCo+");'>예약하기</button>";
+									nButton = "<button onclick='setSeatInfoDialog(&quot;"+v.opratCode+"&quot;, &quot;N&quot;, &quot;"+seatCo+"&quot;, &quot;"+k+"&quot;);'>예약하기</button>";
 								}
 								
 								$("#gridBody").jqGrid('addRowData', k,
@@ -340,32 +399,301 @@
 										arvlTm:v.arvlTm,
 										prtclrRoomY:yButton,
 										prtclrRoomN:nButton,
-										fare:v.fare+" 원"
+										fare:v.fare.replace(" ", "")+" 원"
 									}
 								);
+								
+								/* 
+								$.each(v.roomList, function(k2, v2){
+									roomArray.push({
+										roomCode:v2.roomCode,
+										opratCode:v2.opratCode,
+										room:v2.room+" 호실",
+										seatCo:v2.seatCo,
+										prtclrRoomYN:v2.prtclrRoomYN
+									});
+								}); 
+								*/
 							}); /* each end */
 						} /* else end */
 					} /* success end */
 				}); /* ajax end */
 	   		} /* findTcktList end */
+	   		
+	   		/* 좌석선택 다이알로그 */
+	   		function setSeatInfoDialog(opratCode, prtclrRoomYN, searchCount, rowId){
+	   			var data = $("#gridBody").getRowData(rowId); /* 선택한 예약정보 */
+	   			seatNoArray = new Array(); 					 /* 좌석정보 */
+	   			
+	   			/* 초기화 */
+	   			$("#roomList tbody").html("");
+	   			
+	   			/* 선택한 승차권의 기본정보 */
+	   			if("Y" == prtclrRoomYN){
+	   				$("#tcktInfo").html(
+   		   				"열차정보:&nbsp;&nbsp;"+data.startStatnValue+"("+data.startTm+")&nbsp;&nbsp;▶&nbsp;&nbsp;"
+   		   				+data.arvlStatnValue+"("+data.arvlTm+")&nbsp;&nbsp;"+data.trainNo+"&nbsp;&nbsp;"+data.trainKnd+"&nbsp;&nbsp;특실"
+   		   			);
+	   			}else{
+	   				$("#tcktInfo").html(
+   		   				"열차정보:&nbsp;&nbsp;"+data.startStatnValue+"("+data.startTm+")&nbsp;&nbsp;▶&nbsp;&nbsp;"
+   		   				+data.arvlStatnValue+"("+data.arvlTm+")&nbsp;&nbsp;"+data.trainNo+"&nbsp;&nbsp;"+data.trainKnd+"&nbsp;&nbsp;일반실"
+   		   			);
+	   			}
+	   			
+	   			/*그리드 내용*/				
+				$.ajax({
+					type:"POST",
+					url: "/member/tcktRoomInfo.do?opratCode="
+						+opratCode+"&prtclrRoomYN="+prtclrRoomYN,
+					Type:"JSON",
+					success : function(data) {
+						var i = 0; /* tr생성여부 */
+						$.each(data.tcktRoomInfoList, function(k, v){
+							if(i == 0){
+			   					$("#roomList tbody").append("<tr></tr>");
+			   				}
+							
+							/* 호실 생성 */
+							$($("#roomList tbody tr").get(($("#roomList tbody tr").size()-1))).append(
+								"<td onclick='setSeatNo(this, &quot;"+v.seatCo+"&quot;, &quot;"+searchCount+"&quot;);'>"+v.room+" 호실</td>"
+							);
+							
+							i++;
+							
+							if(i == 5){
+		   						i = 0; /* 호실이 5개이면 세로운 tr을 생성하기 위해 변수를 초기화 */
+		   					}
+						});
+						
+						$.each(data.seatNoList, function(k, v){
+							seatNoArray.push({
+								room:v.room+" 호실",
+								seatNo:v.seatNo
+							});
+						});
+						
+						/* 첫번째 호실 클릭 */
+						$("#roomList tbody :first-child :first").click();
+					}
+				});
+	   			
+	   			/*다이알로그*/
+   				$("#seatInfoDialog").dialog({
+   					modal: true,
+   					width: 890,
+					buttons: {
+						"예약": function() {
+							if($("#seatList .slt").size() < searchCount){
+								alert("모든 좌석을 선택하셔야 합니다.\n선택가능한 좌석수는 최대"+searchCount+"자리까지 선택가능합니다.");
+							}else{
+								var sltSeatNoList = new Array(); /* 선택된 좌석들 */
+								var jsonArray = new Array();	 /* json으로 변환할 배열 */
+								
+								for(var i = 0; i < $("#seatList .slt").size(); i++){
+									sltSeatNoList.push($($("#seatList .slt").get(i)).text());
+								}
+								
+								if(confirm("선택한 좌석("+sltSeatNoList+")으로 진행 하시겠습니까?")){
+									/* 금액 ex) 원본형식: ......999,999 원, replace: ......999999 */
+									var fare = data.fare.replace(",", "").split(" ")[0];
+									
+									/* 총 영수금액 */
+									$("#allRcptAmount").val((fare*sltSeatNoList.length));
+									/* 예약매수 */
+									$("#resveCo").val(sltSeatNoList.length);
+									/* 운행코드 */
+									$("#opratCode").val(opratCode);
+									
+									/* json */
+									for(var i = 0; i < sltSeatNoList.length; i++){
+										jsonArray.push({
+											opratCode:opratCode,
+											seatNo:sltSeatNoList[i],
+											roomKndCode:"ROOM_"+prtclrRoomYN,
+											psngrKndCode:psngrKndArray[i].psngrKndCode,
+											dspsnGradCode:psngrKndArray[i].dspsnGradCode,
+											room:$("#roomList .action").html().split(" ")[0],
+											frAmount:fare
+										});
+									}
+									$("#json").val(JSON.stringify({"detailResveList":jsonArray}));
+									
+									//$(this).dialog("close");
+									$("#resveAddForm").submit();
+								}
+							}
+						}
+					}	
+				});
+	   		}
+	   		
+	   		/* 선택한 호실의 좌석설정 */
+	   		function setSeatNo(obj, seatCo, searchCount){
+	   			var charCode = 65; /* 좌석번호에 들어갈 문자 현재문자: A */
+	   			
+	   			/* 스타일 */
+	   			$("#roomList td").removeClass("action");
+	   			$(obj).addClass("action");
+	   			
+	   			$("#seatList tbody").html(""); /* 초기화 */
+	   			
+	   			/* 좌석생성 */
+	   			for(var i = 0, x = 0; i < seatCo; i++, x++){
+	   				var tag = ""; /* 테그 */
+	   				
+	   				if(seatCo == 60 && x == 15){
+						x = 0;
+						charCode++;
+
+						if($("#seatList tbody tr").size() == 2){
+							$("#seatList tbody").append(
+								"<tr>"
+									+"<td colspan='15'><p class='non' style='color: #000000; background:#FFFFFF;'>통로</p></td>"
+								+"</tr>"
+							);
+						}
+					}else if(seatCo == 56 && x == 14){
+						x = 0;
+						charCode++;
+
+						if($("#seatList tbody tr").size() == 2){
+							$("#seatList tbody").append(
+								"<tr>"
+									+"<td colspan='14'><p class='non' style='color: #000000; background:#FFFFFF;'>통로</p></td>"
+								+"</tr>"
+							);
+						}
+					}else if(seatCo == 35 && x == 12){
+						x = 0;
+ 						charCode++;
+ 						
+ 						if($("#seatList tbody tr").size() == 1){
+							$("#seatList tbody").append(
+								"<tr>"
+									+"<td colspan='12'><p class='non' style='color: #000000; background:#FFFFFF;'>통로</p></td>"
+								+"</tr>"
+							);
+						}
+ 					}else if(seatCo == 26 && x == 9){
+ 						x = 0;
+ 						charCode++;	
+ 						
+ 						if($("#seatList tbody tr").size() == 1){
+							$("#seatList tbody").append(
+								"<tr>"
+									+"<td colspan='9'><p class='non' style='color: #000000; background:#FFFFFF;'>통로</p></td>"
+								+"</tr>"
+							);
+						}
+ 					}
+	   				
+	   				/* 구분선(통로) */
+	   				if(seatCo == 26 && $("#seatList tbody tr").size() == 3 && x == 8){
+	   					x = 0;
+ 						charCode++;
+ 						
+ 						$($("#seatList tbody tr").get($("#seatList tbody tr").size()-1)).append(
+ 								"<td style='bacground:non'></td>"
+		   				);
+					}else if(seatCo == 35 && $("#seatList tbody tr").size() == 3 && x == 11){
+						x = 0;
+ 						charCode++;
+ 						
+ 						$($("#seatList tbody tr").get($("#seatList tbody tr").size()-1)).append(
+		   					"<td style='bacground:non'></td>"
+		   				);
+					}
+	   				
+	   				if(x == 0){
+						$("#seatList tbody").append("<tr></tr>");
+					}
+	   				
+	   				/* 좌석생성 및 예약된 좌석 확인 */
+	   				if(x < 9){
+	   					tag = "<td onclick='setSeatNoSelect(this, &quot;"+searchCount+"&quot;);'>"
+	   								+"<input type='hidden' value='0'>"
+	   								+"<p class='def'>"+String.fromCharCode(charCode)+"0"+(x+1)+"</p>"
+	   							+"</td>";
+	   					
+	   					for(var i2 = 0; i2 < seatNoArray.length; i2++){
+	   						if(seatNoArray[i2].room == $(obj).html()){
+	   							if(seatNoArray[i2].seatNo == String.fromCharCode(charCode)+"0"+(x+1)){
+	   								tag = "<td>"
+	   										+"<p class='non'>"+String.fromCharCode(charCode)+"0"+(x+1)+"</p>"
+			   							+"</td>";
+		   							break;
+		   						}
+	   						}
+	   					}
+	   				}else{
+	   					tag = "<td onclick='setSeatNoSelect(this, &quot;"+searchCount+"&quot;);'>"
+	   								+"<input type='hidden' value='0'>"
+									+"<p class='def'>"+String.fromCharCode(charCode)+(x+1)+"</p>"
+								+"</td>";
+	   					
+	   					for(var i2 = 0; i2 < seatNoArray.length; i2++){
+	   						if(seatNoArray[i2].room == $(obj).html()){
+	   							if(seatNoArray[i2].seatNo == String.fromCharCode(charCode)+(x+1)){
+	   								tag = "<td>"
+	   										+"<p class='non'>"+String.fromCharCode(charCode)+(x+1)+"</p>"
+		   								+"</td>";
+		   							break;
+		   						}
+	   						} /* if end */
+	   					} /* for end */
+	   				} /* else end */
+
+	   				$($("#seatList tbody tr").get($("#seatList tbody tr").size()-1)).append(tag);
+	   			} /* for end */
+	   		}
+	   		
+	   		/* 좌석선택 여부 */
+	   		function setSeatNoSelect(obj, searchCount){
+	   			/* 좌석선택 여부 첫번째 클릭 : 좌석선택, 두번째 클릭 : 좌석선택 취소 */
+	   			if($(obj).children(":hidden").val() == 0){
+	   				if($("#seatList .slt").size() == searchCount){
+	   					alert("선택가능한 좌석수는 최대 "+searchCount+"자리까지만 선택가능합니다.");
+	   					return;
+	   				}else{
+	   					$(obj).children(":hidden").val(1);
+		   				/* 스타일 */
+		   				$(obj).children("p").removeClass("def");
+		   				$(obj).children("p").addClass("slt");
+	   				}
+	   			}else{
+	   				$(obj).children(":hidden").val(0);
+	   				/* 스타일 */
+	   				$(obj).children("p").removeClass("slt");
+	   				$(obj).children("p").addClass("def");
+	   			}
+	   		}
    		</script>
 	</head>
 	<body>
 		<div style="font-size: 35px; padding-bottom: 15px;">
-   			<strong>
+   			<strong style="float: left;">
    				${menuTree[3]}
    			</strong>
+   			<div style="float: right; vertical-align: bottom; background: #FFFFFF; border-radius: 7px;">
+   				<img src="/res/img/step_tck01_on.gif">
+   				<img src="/res/img/step_tck02.gif">
+   				<img src="/res/img/step_tck03.gif">
+   				<img src="/res/img/step_tck04.gif">
+   			</div>
    		</div>
 	
 		<!-- 사용방법 -->
-   		<div class="caption" style="margin-bottom: 0px;">
-			* 아이디 또는 성명으로 회원을 회원을 조회할 수 있습니다.
-			<br>
-			* 날짜검색을 통해 가입일 또는 개인정보 수정일을 조회할 수 있습니다.
-			<br>
-			* 모곡을 선택하여 회원정보를 삭제할 수 있습니다.
-			<br>
-			* 특정행을 선택하면 그 행에 대한 상세 정보를 볼 수 있습니다.
+   		<div style="clear: left; clear:  right;">
+			<div class="caption" style="margin-top: 40px; margin-bottom: 0px;">
+				* 아이디 또는 성명으로 회원을 회원을 조회할 수 있습니다.
+				<br>
+				* 날짜검색을 통해 가입일 또는 개인정보 수정일을 조회할 수 있습니다.
+				<br>
+				* 모곡을 선택하여 회원정보를 삭제할 수 있습니다.
+				<br>
+				* 특정행을 선택하면 그 행에 대한 상세 정보를 볼 수 있습니다.
+			</div>
    		</div>
    		
    		<!-- search-group -->
@@ -401,6 +729,7 @@
 	   									</c:choose>
 	   								</c:forEach>
 	   							</select>
+	   							<input type="hidden" value="PSNGR_2,null">
 	   						</td>
 	   						<td>
 	   							<select id="seatCoSelect2" style="width: 95%;">
@@ -408,6 +737,7 @@
 	   									<option value="${i}">장애 1~3 급 ${i}명</option>
 									</c:forEach>
 	   							</select>
+	   							<input type="hidden" value="PSNGR_3,DSPSN_GRAD_1">
 	   						</td>
 	   					</tr>
 	   					<tr>
@@ -417,6 +747,7 @@
 	   									<option value="${i}">어린이 ${i}명</option>
 	   								</c:forEach>
 	   							</select>
+	   							<input type="hidden" value="PSNGR_4,null">
 	   						</td>
 	   						<td>
 	   							<select id="seatCoSelect4" style="width: 95%;">
@@ -424,6 +755,7 @@
 	   									<option value="${i}">장애 4-6 급 ${i}명</option>
 	   								</c:forEach>
 	   							</select>
+	   							<input type="hidden" value="PSNGR_3,DSPSN_GRAD_2">
 	   						</td>
 	   					</tr>
 	   					<tr>
@@ -433,6 +765,7 @@
 	   									<option value="${i}">경로 ${i}명</option>
 	   								</c:forEach>
 	   							</select>
+	   							<input type="hidden" value="PSNGR_1,null">
 	   						</td>
 	   						<td></td>
 	   					</tr>
@@ -574,9 +907,44 @@
 			</div>
 		</div> <!-- statnDialog -->
 		
+		<div id="seatInfoDialog" title="좌석선택" style="display: none;">
+   			<!-- 선택한 승차권 정보 -->
+   			<strong id="tcktInfo"></strong>
+		
+			<!-- 호실 -->
+			<table id="roomList" style="margin: 0 auto; margin-top: 15px; margin-bottom: 15px;">
+				<tbody></tbody>
+			</table>
+			
+			<!-- 좌석 -->
+			<table id="seatList" style="margin: 0 auto;">
+				<tbody></tbody>
+			</table>
+			
+			<!-- 기타 -->
+			<div style="float: right; width: 320px; text-align: center; margin-top: 15px;">
+				<div style="border-radius: 7px; float: left; width: 80px; margin-right: 10px; padding: 10px; background: #65FF5E; font-size: 12px; font-weight: bold;">예약가능좌석</div>
+				<div style="border-radius: 7px; float: left; width: 80px; margin-right: 10px; padding: 10px; background: #515151; font-size: 12px; font-weight: bold;">예약된좌석</div>
+				<div style="border-radius: 7px; float: left; width: 80px; background: #6CC0FF; padding: 10px; font-size: 12px; font-weight: bold;">선택된좌석</div>
+			</div>
+		</div>
+		
+		<!-- 임시 데이터 -->
 		<div id="hiddenData">
 			<input id="rowData1" type="hidden">
 			<input id="rowData2" type="hidden">
 		</div>
+		
+		<!-- 등록할 데이터 -->
+		<form id="resveAddForm" action="/member/processResve.do" method="post">			
+			<input name="state" type="text" value="insert">
+			<input id="id" name="id" type="text" value="${id}">
+			<input id="opratCode" name="opratCode" type="text">
+			<input id="routetype" name="routeType" type="text" value="ROUTE_1">
+			<input id="resveCo" name="resveCo" type="text">
+			<input id="allRcptAmount" name="allRcptAmount" type="text">
+			<input id="register" name="register" type="text" value="${name}">
+			<input id="json" name="json" type="text">
+		</form>
 	</body>
 </html>

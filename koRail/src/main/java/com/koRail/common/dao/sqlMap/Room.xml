@@ -3,7 +3,7 @@
 	    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 	    
 <sqlMap namespace="Room">
-	<resultMap class="com.koRail.admin.to.RoomBean" id="roomResultMap">
+	<resultMap class="com.koRail.common.to.RoomBean" id="roomResultMap">
 	    <result property="roomCode" column="ROOM_CODE" />
 	    <result property="opratCode" column="OPRAT_CODE" />
 	    <result property="room" column="ROOM" />
@@ -22,8 +22,18 @@
 		WHERE	OPRAT_CODE = #OPRAT_CODE#
   	</select>
   	
+  	<!-- 예약을 위해 선택한 승차권에 대한 호실정보 조회 -->
+  	<select id="selectTcktRommList" resultClass="com.koRail.common.to.RoomBean" parameterClass="com.koRail.common.to.RoomBean">
+  		SELECT	ROOM			AS room			/*호실*/,
+				SEAT_CO			AS seatCo		/*좌석수*/,
+				PRTCLR_ROOM_YN	AS prtclrRoomYN	/*특실여부 : Y, N*/
+		FROM	ROOM			/*호실*/
+		WHERE	OPRAT_CODE = #opratCode#
+		AND		PRTCLR_ROOM_YN = #prtclrRoomYN#
+  	</select>
+  	
   	<!-- 호실 등록 -->
-  	<insert id="insertRoom" parameterClass="com.koRail.admin.to.RoomBean">
+  	<insert id="insertRoom" parameterClass="com.koRail.common.to.RoomBean">
 		INSERT INTO ROOM(
   	    	ROOM_CODE		/*호실코드*/,
 			OPRAT_CODE		/*운행종류*/,

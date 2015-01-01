@@ -1,6 +1,5 @@
-package com.koRail.admin.to;
+package com.koRail.common.to;
 
-import com.koRail.common.to.CommonBean;
 
 /*호실*/
 public class RoomBean extends CommonBean {
