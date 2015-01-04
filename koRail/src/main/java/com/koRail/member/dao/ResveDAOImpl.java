@@ -35,4 +35,14 @@ public class ResveDAOImpl implements ResveDAO {
 	public int insertResve(ResveBean resveBean){
 		return sqlMapClientTemplate.update("Resve.insertResve", resveBean);
 	}
+	
+	/*********************************
+	 * 결제할 예매 정보 조회
+	 * @param resveCode
+	 * @return
+	 ********************************/
+	@Override
+	public ResveBean selectResve(String resveCode){
+		return (ResveBean) sqlMapClientTemplate.queryForObject("Resve.selectResve", resveCode);
+	}
 }

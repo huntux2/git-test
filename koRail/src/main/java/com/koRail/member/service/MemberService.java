@@ -52,4 +52,11 @@ public interface MemberService {
 	 * @return
 	 *****************************************/
 	public String setResve(ResveBean resveBean, String json);
+
+	/*****************************************
+	 * 결제할 예매 정보 조회
+	 * @param resveCode
+	 * @return
+	 ****************************************/
+	public ResveBean getResve(String resveCode);
 }

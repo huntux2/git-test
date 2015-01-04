@@ -499,7 +499,7 @@
 									var fare = data.fare.replace(",", "").split(" ")[0];
 									
 									/* 총 영수금액 */
-									$("#allRcptAmount").val((fare*sltSeatNoList.length));
+									$("#allFrAmount").val((fare*sltSeatNoList.length));
 									/* 예약매수 */
 									$("#resveCo").val(sltSeatNoList.length);
 									/* 운행코드 */
@@ -938,13 +938,13 @@
 		<!-- 등록할 데이터 -->
 		<form id="resveAddForm" action="/member/processResve.do" method="post">			
 			<input name="state" type="text" value="insert">
-			<input id="id" name="id" type="text" value="${id}">
-			<input id="opratCode" name="opratCode" type="text">
-			<input id="routetype" name="routeType" type="text" value="ROUTE_1">
-			<input id="resveCo" name="resveCo" type="text">
-			<input id="allRcptAmount" name="allRcptAmount" type="text">
-			<input id="register" name="register" type="text" value="${name}">
-			<input id="json" name="json" type="text">
+			<input id="id" name="id" type="hidden" value="${id}">
+			<input id="opratCode" name="opratCode" type="hidden">
+			<input id="routetype" name="routeType" type="hidden" value="ROUTE_1">
+			<input id="resveCo" name="resveCo" type="hidden">
+			<input id="allFrAmount" name="allFrAmount" type="hidden">
+			<input id="register" name="register" type="hidden" value="${name}">
+			<input id="json" name="json" type="hidden">
 		</form>
 	</body>
 </html>

@@ -151,11 +151,18 @@ public class MemberController extends CommonController {
 			redirectAttributes.addFlashAttribute("resveCode", memberService.setResve(resveBean, json));
 			
 			return "redirect:resveAdd.html";
-		}else{
+		}else{			
 			return "json";
 		}
 	}
 	
+	/*********************************
+	 * 결제할 예매 정보 조회
+	 * @param model
+	 * @param request
+	 * @param resveCode
+	 * @return
+	 **********************************/
 	@RequestMapping(value="resveAdd.html")
 	public String findResveAddForm(Model model, HttpServletRequest request,
 			@RequestParam(value="resveCode", required=false) String resveCode) {
@@ -168,7 +175,10 @@ public class MemberController extends CommonController {
 		/*메뉴*/
 		super.getMenuTree(model, "resveAddForm");
 		
-        System.out.println(resveCode);
+		/* 결제할 예매 정보 */
+		model.addAttribute("resve", memberService.getResve(resveCode));
+		/*예약코드*/
+		model.addAttribute("resveCode", resveCode);
 		
 		return "/member/resve/resveAddForm";
 	}

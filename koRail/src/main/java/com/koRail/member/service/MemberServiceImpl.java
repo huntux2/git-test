@@ -141,4 +141,14 @@ public class MemberServiceImpl implements MemberService {
 		
 		return resveCode;
 	}
+	
+	/*****************************************
+	 * 결제할 예매 정보 조회
+	 * @param resveCode
+	 * @return
+	 ****************************************/
+	@Override
+	public ResveBean getResve(String resveCode){
+		return resveDAO.selectResve(resveCode);
+	}
 }

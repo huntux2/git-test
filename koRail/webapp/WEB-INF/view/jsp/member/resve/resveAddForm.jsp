@@ -89,31 +89,59 @@
 	   				scroll: 1,
 	   				rowNum : 'max',
 	   				pager: '#footer',
-	   				colNames:["객실등급", "좌석번호", "승객유형", "할인요금", "영수금액", "승차자명"],
+	   				colNames:["번호", "객실등급", "호실", "좌석번호", "승객유형", "운임요금", "할인요금", "영수금액", "승차자명"],
 	          		colModel : [
-						{ name : 'roomKndValue', width: 70, align:"center", sortable:false},
+						{ name : 'no', width: 20, align:"center", sortable:false},
+						{ name : 'roomKnd', width: 70, align:"center", sortable:false},
+						{ name : 'room', width: 70, align:"center", sortable:false},
 						{ name : 'seatNo', width: 70, align:"center", sortable:false},
-						{ name : 'psngrKndValue', width: 70, align:"center", sortable:false},
-						{ name : 'dscntAmount', width: 70, align:"right", sortable:false},
+						{ name : 'psngrKnd', width: 70, align:"center", sortable:false},
 						{ name : 'frAmount', width: 70, align:"right", sortable:false},
+						{ name : 'dscntAmount', width: 70, align:"right", sortable:false},
+						{ name : 'rcptAmount', width: 70, align:"right", sortable:false},
 						{ name : 'psngrNm', width: 70, align:"center", sortable:false}
 					]
 				}); /*jqGrid end*/
 				
-				for(var i = 0; i < 9; i++){
+				for(var i = 1; i < ($("#setleAddForm div").size()+1); i++){
+					var psngrNm = $("#dataGroup"+i+" .psngrNm").val();
+					
 					$("#gridBody").addRowData(
 						i,
 						{
-							roomKndValue:"일반실",
-							seatNo:"A15",
-							psngrKndValue:"장애 1 - 3 급",
-							dscntAmount:"26,000 원",
-							frAmount:"26,000 원",
-							psngrNm:"<input type='text' value='곽선진'>"
+							no:i,
+							roomKnd:$("#dataGroup"+i+" .roomKnd").val(),
+							room:$("#dataGroup"+i+" .room").val()+" 호실",
+							seatNo:$("#dataGroup"+i+" .seatNo").val(),
+							psngrKnd:$("#dataGroup"+i+" .psngrKnd").val(),
+							frAmount:$("#dataGroup"+i+" .frAmount").val()+" 원",
+							dscntAmount:$("#dataGroup"+i+" .dscntAmount").val()+" 원",
+							rcptAmount:$("#dataGroup"+i+" .rcptAmount").val()+" 원",
+							psngrNm:"<input id='gridPsngrNm"+i+"' type='text' value='"+psngrNm+"'>"
 						}
-					);	
-				}
+					);
+				} /* for end */
+				
+				/* 첫 행의 승차자명 자동입력 */
+				$("#gridPsngrNm1").val("${name}");
 	   		});
+   			
+   			function findSetleAddForm(){
+   				if(confirm("이 내용으로 결제를 진행 하시겠습니까?")){
+   					$("#setleAddForm").submit();
+   				}else{
+   					return;
+   				}
+   			}
+   			
+   			/* 예약취소 */
+   			function doResveDelete(){
+   				if(confirm("예약을 취소하시겠습니까?")){
+   					$("#deleteResveForm").submit();
+   				}else{
+   					return;
+   				}
+   			}
    		</script>
 	</head>
 	<body>
@@ -134,7 +162,7 @@
 			<div class="caption" style="margin-top: 40px; margin-bottom: 0px;">
 				* 죄회화면에서 선택한 정보들 입니다.
 				<br>
-				* 좌석정보의 승차자명은 미입력 및 수정이 가능합니다.
+				* 좌석정보의 승차자명은 변경이 가능하며 첫 좌석은 예약을 진행한 계정의 성명으로 자동입력 됩니다.
 				<br>
 				* 결제를 진행하지 않으시면 일정기간 경과 후 예약이 취소됩니다.
 			</div>
@@ -146,38 +174,44 @@
    			<div>
    				<table class="d-table">
    					<colgroup>
-   						<col width="25%">
-   						<col width="25%">
-   						<col width="25%">
-   						<col width="25%">
+   						<col width="20%">
+   						<col width="30%">
+   						<col width="20%">
+   						<col width="30%">
    					</colgroup>
    					<thead>
    						<tr><td colspan="4">승차권정보</td></tr>
    					</thead>
    					<tbody>
    						<tr>
-   							<td>열차번호</td>
-   							<td>2274</td>
-   							<td>열차종류</td>
-   							<td>세마을호</td>
+   							<td class="head">열차번호</td>
+   							<td>${resve.trainNo}</td>
+   							<td class="head">열차종류</td>
+   							<td>${resve.trainKnd}</td>
    						</tr>
    						<tr>
-   							<td>출발역</td>
-   							<td>서울</td>
-   							<td>출발시각</td>
-   							<td>2014-12-29 10:22</td>
+   							<td class="head">출발역</td>
+   							<td>${resve.startStatn}</td>
+   							<td class="head">출발시각</td>
+   							<td>${resve.startTm}</td>
    						</tr>
    						<tr>
-   							<td>도착역</td>
-   							<td>부산</td>
-   							<td>도착시각</td>
-   							<td>2014-12-29 13:22</td>
+   							<td class="head">도착역</td>
+   							<td>${resve.arvlStatn}</td>
+   							<td class="head">도착시각</td>
+   							<td>${resve.arvlTm}</td>
    						</tr>
    						<tr>
-   							<td>예매수</td>
-   							<td>2</td>
-   							<td>총 영수금액</td>
-   							<td>104,000 원</td>
+   							<td class="head">예매수</td>
+   							<td>${resve.resveCo} 매</td>
+   							<td class="head">총 운임금액</td>
+   							<td>${resve.allFrAmount} 원</td>
+   						</tr>
+   						<tr>
+   							<td class="head">총 할인금액</td>
+   							<td>${resve.allDscntAmount} 원</td>
+   							<td class="head">총 영수금액</td>
+   							<td>${resve.allRcptAmount} 원</td>
    						</tr>
    					</tbody>
    				</table>
@@ -194,19 +228,32 @@
    		</div>
    		
 		<div style="text-align: center; margin-top: 15px;">
-			<button type="button">결제</button>
-			<button type="button">예약 취소</button>
+			<button type="button" onclick="findSetleForm();">결제</button>
+			<button type="button" onclick="doResveDelete();">예약 취소</button>
 		</div>
    		
-		<!-- 임시 데이터 -->
-		<div id="hiddenData">
-			<input id="rowData1" type="hidden">
-			<input id="rowData2" type="hidden">
-		</div>
+		<!-- 좌석정보 그리드 데이터 -->
+		<form id="setleAddForm" action="/member/setleAdd.html" method="post">
+			<input name="resveCode" type="hidden" value="${resveCode}">
+			<c:forEach var="data" items="${resve.detailResveList}" varStatus="state">
+				<div id="dataGroup${state.count}">
+					<input class="detailResveCode" name="detailResveCode" type="hidden" value="${data.detailResveCode}">
+					<input class="roomKnd" type="hidden" value="${data.roomKndValue}">
+					<input class="room" type="hidden" value="${data.room}">
+					<input class="seatNo" type="hidden" value="${data.seatNo}">
+					<input class="psngrKnd" type="hidden" value="${data.psngrKndValue}">
+					<input class="frAmount" type="hidden" value="${data.frAmount}">
+					<input class="dscntAmount" type="hidden" value="${data.dscntAmount}">
+					<input class="rcptAmount" type="hidden" value="${data.rcptAmount}">
+					<input class="psngrNm" name="psngrNm" type="hidden" value="${data.psngrNm}">
+				</div>
+			</c:forEach>
+		</form>
 		
-		<!-- 등록할 데이터 -->
-		<form id="resveAddForm" action="/member/resveAdd.html" method="post">
-			<input type="hidden">
+		<!-- 예약취소 -->
+		<form id="deleteResveForm" action="/member/processResve.do" method="post">
+			<input name="state" type="hidden" value="delete">
+			<input name="resveCode" type="hidden" value="${resveCode}">
 		</form>
 	</body>
 </html>
