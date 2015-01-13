@@ -83,6 +83,13 @@
 				
 				/* 초기그리드 */
 				doGridInit();
+				
+				/*엔터*/
+				$("#dStatnName").keydown(function(e){
+					if(e.keyCode == 13){
+						$("#statnBtn").click();
+					}
+				});
 	   		});
 	   		
 	   		/* 년도 설정 : 년도는 현재년도와 다음년도를 선택할수 있다. */
@@ -937,7 +944,7 @@
 		
 		<!-- 등록할 데이터 -->
 		<form id="resveAddForm" action="/member/processResve.do" method="post">			
-			<input name="state" type="text" value="insert">
+			<input name="state" type="hidden" value="insert">
 			<input id="id" name="id" type="hidden" value="${id}">
 			<input id="opratCode" name="opratCode" type="hidden">
 			<input id="routetype" name="routeType" type="hidden" value="ROUTE_1">

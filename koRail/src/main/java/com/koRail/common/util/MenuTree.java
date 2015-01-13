@@ -124,6 +124,16 @@ public class MenuTree {
 				list.add(menu.get("tcktResve1"));
 				list.add(menu.get("tcktResve2"));
 				break;
+			case "setleForm":
+				list.add(menu.get("tckt"));
+				list.add(menu.get("tcktResve1"));
+				list.add(menu.get("setle"));
+				break;
+			case "setleSuccessForm":
+				list.add(menu.get("tckt"));
+				list.add(menu.get("tcktResve1"));
+				list.add(menu.get("getTckt"));
+				break;
 		}
 		
 		return list;

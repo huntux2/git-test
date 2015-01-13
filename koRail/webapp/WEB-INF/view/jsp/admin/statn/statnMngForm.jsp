@@ -171,7 +171,15 @@
 									); /*addRowData end*/
 								}); /*$.each end*/
 							} /*else end*/
-						} /*success end*/
+						}, /*success end*/
+						error : function(request, status, error){
+							if(request.status == 401){
+								alert("세션이 만료되었습니다.");
+								location.href = "/login.html";
+							}else{
+								alert("서버에러입니다.");
+							}
+						}
 					}); /*$.ajax end*/
 				} /*else end*/
 			} /*findStatnList end*/
@@ -215,6 +223,14 @@
 											alert("등록이 완료되었습니다.");
 										}else{
 											alert("등록실패");
+										}
+									}, /*success end*/
+									error : function(request, status, error){
+										if(request.status == 401){
+											alert("세션이 만료되었습니다.");
+											location.href = "/login.html";
+										}else{
+											alert("서버에러입니다.");
 										}
 									}
 								}); /* ajax end */
@@ -269,6 +285,14 @@
 											alert("수정이 완료되었습니다.");
 										}else{
 											alert("수정실패");
+										}
+									}, /*success end*/
+									error : function(request, status, error){
+										if(request.status == 401){
+											alert("세션이 만료되었습니다.");
+											location.href = "/login.html";
+										}else{
+											alert("서버에러입니다.");
 										}
 									}
 								}); /* ajax end */
@@ -337,7 +361,15 @@
 										}
 									}
 								}
-							} /* success end */
+							}, /*success end*/
+							error : function(request, status, error){
+								if(request.status == 401){
+									alert("세션이 만료되었습니다.");
+									location.href = "/login.html";
+								}else{
+									alert("서버에러입니다.");
+								}
+							}
 						}); /* ajax end */
 					} /* if end */
 				} /* else end */

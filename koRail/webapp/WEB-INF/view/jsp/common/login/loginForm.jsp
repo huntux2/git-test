@@ -13,9 +13,9 @@
 				var oldEtcMenu = $("#etcMenu").html();
 				
 				$("#loginBtn").click(function(){
-					var id = $("#idTxt").val().trim();
-					var pw = $("#pwTxt").val().trim();
-					var loginType = $("input[name=loginType]:checked").val().trim();
+					var id = $.trim($("#idTxt").val());
+					var pw = $.trim($("#pwTxt").val());
+					var loginType = $.trim($("input[name=loginType]:checked").val());
 					
 					if(id == "" || pw == ""){
 						alert("아이디 또는 비밀번호를 입력해야 합니다.");
@@ -38,7 +38,7 @@
 				
 				/*권한 선택에 따른 화면전환*/
 				$("input[type=radio]").click(function(){
-					var mode = $(this).val().trim();
+					var mode = $.trim($(this).val());
 					
 					if(mode == "admin"){
 						$("#etcMenu").html("");

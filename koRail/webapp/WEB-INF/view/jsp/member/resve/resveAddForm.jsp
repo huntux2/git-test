@@ -126,7 +126,8 @@
 				$("#gridPsngrNm1").val("${name}");
 	   		});
    			
-   			function findSetleAddForm(){
+   			/* 결제 */
+   			function findSetleForm(){
    				if(confirm("이 내용으로 결제를 진행 하시겠습니까?")){
    					$("#setleAddForm").submit();
    				}else{
@@ -232,9 +233,12 @@
 			<button type="button" onclick="doResveDelete();">예약 취소</button>
 		</div>
    		
-		<!-- 좌석정보 그리드 데이터 -->
-		<form id="setleAddForm" action="/member/setleAdd.html" method="post">
+		<!-- 좌석정보 그리드 데이터 및 파라미터 -->
+		<form id="setleAddForm" action="/member/setle.html" method="post">
 			<input name="resveCode" type="hidden" value="${resveCode}">
+			<input name="allFrAmount" type="hidden" value="${resve.allFrAmount}">
+			<input name="allDscntAmount" type="hidden" value="${resve.allDscntAmount}">
+			<input name="allRcptAmount" type="hidden" value="${resve.allRcptAmount}">
 			<c:forEach var="data" items="${resve.detailResveList}" varStatus="state">
 				<div id="dataGroup${state.count}">
 					<input class="detailResveCode" name="detailResveCode" type="hidden" value="${data.detailResveCode}">

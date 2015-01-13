@@ -17,10 +17,12 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import com.koRail.common.controller.CommonController;
 import com.koRail.common.service.CommonService;
 import com.koRail.common.to.CommonBean;
+import com.koRail.common.to.DetailResveBean;
 import com.koRail.common.to.MemberBean;
 import com.koRail.common.to.RoomBean;
 import com.koRail.member.service.MemberService;
 import com.koRail.member.to.ResveBean;
+import com.koRail.member.to.SetleBean;
 import com.koRail.member.to.TcktBean;
 
 @Controller(value="memberController")
@@ -73,6 +75,12 @@ public class MemberController extends CommonController {
 		return "redirect:login.html";
 	}
 	
+	@RequestMapping("tdyPint.do")
+	public String findTdyPint(Model model, @RequestParam("id") String id){
+		model.addAttribute("tdyPint", memberService.getTdyPint(id));
+		return "jsonView";
+	}
+	
 	/******************************************************
 	 	 					승차권
 	 ******************************************************/
@@ -85,8 +93,6 @@ public class MemberController extends CommonController {
 	 ***************************************/
 	@RequestMapping(value="tcktSearch.html")
 	public String findTcktSearchForm(Model model, HttpServletRequest request){
-		/*레이아웃 변경*/
-		super.setLayout(request, "stp");
 		/*메뉴*/
 		super.getMenuTree(model, "tcktSearchForm");
 		
@@ -181,5 +187,81 @@ public class MemberController extends CommonController {
 		model.addAttribute("resveCode", resveCode);
 		
 		return "/member/resve/resveAddForm";
+	}
+	
+	/************************************
+	 * 결제화면 이동
+	 * @param model
+	 * @param resveBean
+	 * @param detailResveBean
+	 * @return
+	 ************************************/
+	@RequestMapping(value="setle.html")
+	public String findsetleForm(Model model, @ModelAttribute ResveBean resveBean,
+			@ModelAttribute DetailResveBean detailResveBean){
+		/*메뉴*/
+		super.getMenuTree(model, "setleForm");
+		
+		/*카드종류 조회를 위한 코드설정*/
+		resveBean.setSeCode("CARD_KND");
+		/*카드종류*/
+		model.addAttribute("commonCodeList", commonService.getCommonCodeList(resveBean));
+		
+		/*예약코드*/
+		model.addAttribute("resveCode", resveBean.getResveCode());
+		/*총 운임금액*/
+		model.addAttribute("allFrAmount", resveBean.getAllFrAmount());
+		/*총 할인금액*/
+		model.addAttribute("allDscntAmount", resveBean.getAllDscntAmount());
+		/*총 영수금액*/
+		model.addAttribute("allRcptAmount", resveBean.getAllRcptAmount());
+		
+		return "/member/resve/setleForm";
+	}
+	
+	/********************************
+	 * 결제, 결제취소
+	 * @param setleBean
+	 * @return
+	 *********************************/
+	@RequestMapping(value="setleProcess.do")
+	public String processSetle(RedirectAttributes redirectAttributes,
+			@ModelAttribute SetleBean setleBean){
+		if("insert".equals(setleBean.getState())){
+			/*결제*/
+			memberService.setSetle(setleBean);
+			/* Redirect post type parameter setting */
+			redirectAttributes.addFlashAttribute("resveCode", setleBean.getResveCode());
+		}
+		
+		return "redirect:/member/setleSuccess.html";
+	}
+	
+	/*************************************
+	 * 
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="setleSuccess.html")
+	public String findSetleSuccessForm(Model model, HttpServletRequest request){
+		/* Redirect post type parameter */
+		Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+		
+		/*메뉴*/
+		super.getMenuTree(model, "setleSuccessForm");
+		
+		/*조회*/
+		model.addAttribute("tcktInfo", memberService.getDetailTcktRcrdList((String)flashMap.get("resveCode")));
+		
+		/*요청화면 : setleSuccess.html*/
+		model.addAttribute("requestForm", request.getRequestURI().split("/")[2]);
+		
+		return "/member/rcrd/detailResveRcrdForm";
+	}
+	
+	@RequestMapping(value="tcktRcrd.html")
+	public String findTcktRcrdForm(Model model){
+		return "/member/rcrd/tcktRcrdForom";
 	}
 }

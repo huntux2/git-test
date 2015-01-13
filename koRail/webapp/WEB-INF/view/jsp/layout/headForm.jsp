@@ -17,6 +17,9 @@
 		<!-- css -->
 		<link href="/res/css/koRail.css" rel="stylesheet">
 		
+		<!-- js -->
+		<script src="/res/js/koRail.js"></script>
+		
 		<!-- jquery -->
 		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 		

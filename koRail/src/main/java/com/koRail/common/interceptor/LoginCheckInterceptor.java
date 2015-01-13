@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springbyexample.web.servlet.view.tiles2.TilesUrlBasedViewResolver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.ModelAndViewDefiningException;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
@@ -18,7 +16,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	private TilesUrlBasedViewResolver tilesUrlBasedViewResolver;
 	
-	String formName = "common/login/loginForm";
+	String formName = "/login.html";
 	
 	/********************************
 	 * Login session check
@@ -55,9 +53,28 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 				logger.info("Login faile: "+type+"-"+id);
 			}
 			
+			/*템플릿 변경*/
 			tilesUrlBasedViewResolver.setTilesDefinitionName("nlg");
-			throw new ModelAndViewDefiningException(new ModelAndView(formName));
+			
+			/*
+			 * 일반적인 요청과 ajax형식의 요청을 구분한 에러 처리
+			 * 이 방법은 표준 header가 아닌 비 표춘 header를 이용한 방법입니다.
+			 * X-Requested-With의 접두사 "X"는 비 표준을 의미합니다. (Non-standard)
+			 * X-Requested-With필드에 XMLHttpRequest가 포함되어있습니다.
+			 * 사용가능 환경 : JQuery, Prototype
+			 */
+			if(request.getHeader("X-Requested-With".toLowerCase()) == null){
+				response.sendRedirect(formName);
+			}else{
+				response.sendError(401);
+			}
+			
+			//throw new ModelAndViewDefiningException(new ModelAndView(formName));
 		}else{
+			/* Layout 설정/변경 */
+			request.getSession().setAttribute("layoutName", "stp");	/*레이아웃 저장*/
+			tilesUrlBasedViewResolver.setTilesDefinitionName("stp");/*레이아웃 설정*/
+			
 			if(logger.isInfoEnabled()){
 				logger.info("Admin login success: "+type+"-"+id);
 			}

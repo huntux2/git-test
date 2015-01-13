@@ -47,9 +47,6 @@ public class AdminController extends CommonController {
 	@RequestMapping(value="tcktRcrd.html")
 	public String findTcktRcrdForm(Model model, HttpServletRequest request,
 			@ModelAttribute CommonBean commonBean){
-		/*레이아웃 변경*/
-		super.setLayout(request, "stp");
-		
 		/*메뉴*/
 		super.getMenuTree(model, "tcktRcrdForm");
 		
@@ -92,9 +89,6 @@ public class AdminController extends CommonController {
 	@RequestMapping(value="trainRcrd.html")
 	public String findTrainRcrdForm(Model model, HttpServletRequest request,
 			@ModelAttribute CommonBean commonBean){
-		/*레이아웃 변경*/
-		super.setLayout(request, "stp");
-		
 		/*메뉴*/
 		super.getMenuTree(model, "trainPssngrRcrdForm");
 		
@@ -136,9 +130,6 @@ public class AdminController extends CommonController {
 	@RequestMapping(value="statnMng.html")
 	public String findStationMngForm(HttpServletRequest request, Model model,
 			@ModelAttribute CommonBean commonBean){
-		/*레이아웃 변경*/
-		super.setLayout(request, "stp");
-		
 		/*메뉴*/
 		super.getMenuTree(model, "statnMngForm");
 		

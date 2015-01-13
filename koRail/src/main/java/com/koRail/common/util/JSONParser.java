@@ -24,13 +24,11 @@ public class JSONParser {
 	 * json의 형식 : {Name:[Array]}
 	 * @param json
 	 * @param getJSONName
-	 * @param beanFullName
+	 * @param class1
 	 * @return
 	 ************************************/
-	public List<?> processJSONToBean(String json, String getJSONName, String beanFullName) {
+	public List<?> processJSONToBean(String json, String getJSONName, Class<?> class1) {
 		try{
-			/* 입력받은 클레스명(페키지 포함) */
-			Class<?> className = Class.forName(beanFullName);
 			/* bean을 담을 List */
 			List<Object> beanList = new ArrayList<Object>();
 			/* 빈으로 만들 JSON을 JSONArray로 변환 */
@@ -40,7 +38,7 @@ public class JSONParser {
 			 /*JSONArray의 값이 존재한다면 반복문 실행*/
 			while (iterator.hasNext()) {
 				/* JSON값들을 Bean으로 변환 후 beanList에 추가 */
-				beanList.add(JSONObject.toBean((JSONObject)iterator.next(), className));
+				beanList.add(JSONObject.toBean((JSONObject)iterator.next(), class1));
 			}
 
 			/*while (iterator.hasNext()) {

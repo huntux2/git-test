@@ -15,9 +15,14 @@ import com.koRail.common.to.DetailResveBean;
 import com.koRail.common.to.MemberBean;
 import com.koRail.common.to.RoomBean;
 import com.koRail.common.util.JSONParser;
+import com.koRail.member.dao.PintDAO;
 import com.koRail.member.dao.ResveDAO;
 import com.koRail.member.dao.SeatNoInfoDAO;
+import com.koRail.member.dao.SetleDAO;
+import com.koRail.member.dao.TcktDAO;
+import com.koRail.member.to.DetailTcktRcrdBean1;
 import com.koRail.member.to.ResveBean;
+import com.koRail.member.to.SetleBean;
 import com.koRail.member.to.TcktBean;
 
 @Service(value="memberService")
@@ -26,6 +31,14 @@ public class MemberServiceImpl implements MemberService {
 	@Resource(name="memberDAO")
 	private MemberDAO memberDAO;
 	
+	/*포인트DAO*/
+	@Resource(name="pintDAO")
+	private PintDAO pintDAO;
+	
+	/*승차권DAO*/
+	@Resource(name="tcktDAO")
+	private TcktDAO tcktDAO;
+
 	/* 예약DAO */
 	@Resource(name="resveDAO")
 	private ResveDAO resveDAO;
@@ -41,6 +54,11 @@ public class MemberServiceImpl implements MemberService {
 	/* 좌석정보DAO */
 	@Resource(name="seatNoInfoDAO")
 	private SeatNoInfoDAO seatNoInfoDAO;
+	
+	/*결제DAO*/
+	@Resource(name="setleDAO")
+	private SetleDAO setleDAO;
+	
 	
 	/*****************************************
 					회원 게인정보
@@ -72,7 +90,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void setMember(MemberBean memberBean){
 		if("insert".equals(memberBean.getState())){
-			memberDAO.insertMember(memberBean);
+				memberDAO.insertMember(memberBean);
 		}else if("update".equals(memberBean.getState())){
 			System.out.println("u");
 		}else if("delete".equals(memberBean.getState())){
@@ -80,6 +98,20 @@ public class MemberServiceImpl implements MemberService {
 		}else{
 			return;
 		}
+	}
+	
+	/*****************************************
+						포인트
+	 ******************************************/
+	
+	/**************************
+	 * 현제포인트 조회
+	 * @param id
+	 * @return
+	 **************************/
+	@Override
+	public int getTdyPint(String id){
+		return pintDAO.selectTdyPint(id);
 	}
 	
 	/*****************************************
@@ -93,7 +125,7 @@ public class MemberServiceImpl implements MemberService {
 	 **********************************/
 	@Override
 	public List<TcktBean> getTcktList(TcktBean tcktBean){
-		return resveDAO.selectTcktList(tcktBean);
+		return tcktDAO.selectTcktList(tcktBean);
 	}
 
 	/***********************************************************
@@ -110,7 +142,7 @@ public class MemberServiceImpl implements MemberService {
 		
 		return map;
 	}
-
+	
 	/*****************************************
 	 * 예약 등록, 삭제
 	 * @param resveBean
@@ -126,7 +158,7 @@ public class MemberServiceImpl implements MemberService {
 			if(resveDAO.insertResve(resveBean) > 0){
 				/* 상세예약 리스트 */
 				@SuppressWarnings("unchecked")
-				List<DetailResveBean> detailResvList = (List<DetailResveBean>) JSONParser.getInstance().processJSONToBean(json, "detailResveList", "com.koRail.common.to.DetailResveBean");
+				List<DetailResveBean> detailResvList = (List<DetailResveBean>) JSONParser.getInstance().processJSONToBean(json, "detailResveList", DetailResveBean.class);
 				
 				/* 상세예약 등록 */
 				for(DetailResveBean detailResveBean : detailResvList){
@@ -143,6 +175,10 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	/*****************************************
+						결제
+	******************************************/
+	
+	/*****************************************
 	 * 결제할 예매 정보 조회
 	 * @param resveCode
 	 * @return
@@ -150,5 +186,35 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public ResveBean getResve(String resveCode){
 		return resveDAO.selectResve(resveCode);
+	}
+	
+	/******************************************
+	 * 결제, 결제취소
+	 * @param setleBean
+	 ******************************************/
+	@Override
+	public void setSetle(SetleBean setleBean){
+		/*결제*/
+		if("insert".equals(setleBean.getState())){
+			setleDAO.insertSetle(setleBean);
+		}
+		/*결제취소*/
+		else if("delete".equals(setleBean.getState())){			
+			System.out.println("d");
+		}
+	}
+	
+	/**********************************************
+	 					승차권 현황
+	 **********************************************/
+	
+	/*************************************
+	 * 결제가 완료된 승차권에 대한 상세정보 조회
+	 * @param resveCode
+	 * @return
+	 *************************************/
+	@Override
+	public DetailTcktRcrdBean1 getDetailTcktRcrdList(String resveCode){
+		return tcktDAO.selectDtailTcktRcrd(resveCode);
 	}
 }

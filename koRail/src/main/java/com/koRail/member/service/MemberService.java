@@ -5,7 +5,9 @@ import java.util.Map;
 
 import com.koRail.common.to.MemberBean;
 import com.koRail.common.to.RoomBean;
+import com.koRail.member.to.DetailTcktRcrdBean1;
 import com.koRail.member.to.ResveBean;
+import com.koRail.member.to.SetleBean;
 import com.koRail.member.to.TcktBean;
 
 public interface MemberService {
@@ -27,6 +29,17 @@ public interface MemberService {
 	 ********************************/
 	public void setMember(MemberBean memberBean);
 
+	/*****************************************
+					포인트
+	 ******************************************/
+	
+	/**************************
+	 * 현제포인트 조회
+	 * @param id
+	 * @return
+	 **************************/
+	public int getTdyPint(String id);
+	
 	/*****************************************
 						승차권
 	******************************************/
@@ -54,9 +67,30 @@ public interface MemberService {
 	public String setResve(ResveBean resveBean, String json);
 
 	/*****************************************
+						결제
+	 ******************************************/
+
+	/*****************************************
 	 * 결제할 예매 정보 조회
 	 * @param resveCode
 	 * @return
 	 ****************************************/
 	public ResveBean getResve(String resveCode);
+
+	/******************************************
+	 * 결제, 결제취소
+	 * @param setleBean
+	 ******************************************/
+	public void setSetle(SetleBean setleBean);
+
+	/*********************************************
+	 				승차권 현황
+	 *********************************************/
+	
+	/*************************************
+	 * 결제가 완료된 승차권에 대한 상세정보 조회
+	 * @param resveCode
+	 * @return
+	 *************************************/
+	public DetailTcktRcrdBean1 getDetailTcktRcrdList(String resveCode);
 }

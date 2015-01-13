@@ -235,10 +235,10 @@ public class AdminServieImpl implements AdminServie {
 			}else{
 				/* 상세운행일정 */
 				@SuppressWarnings("unchecked")
-				List<DetailOpratBean> detailOpratList = (List<DetailOpratBean>)JSONParser.getInstance().processJSONToBean(json[0], "detailOprat", "com.koRail.admin.to.DetailOpratBean");
+				List<DetailOpratBean> detailOpratList = (List<DetailOpratBean>)JSONParser.getInstance().processJSONToBean(json[0], "detailOprat", DetailOpratBean.class);
 				/* 호실정보 */
 				@SuppressWarnings("unchecked")
-				List<RoomBean> roomList = (List<RoomBean>)JSONParser.getInstance().processJSONToBean(json[1], "room", "com.koRail.admin.to.RoomBean");
+				List<RoomBean> roomList = (List<RoomBean>)JSONParser.getInstance().processJSONToBean(json[1], "room", RoomBean.class);
 				
 				/* 상세운행정보: insert, delete */
 				for(DetailOpratBean detailOpratBean : detailOpratList){
