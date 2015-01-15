@@ -182,6 +182,24 @@ public class MemberServiceImpl implements MemberService {
 		return resveCode;
 	}
 	
+	/**********************************
+	 * 승차자명 등록
+	 * @param json
+	 **********************************/
+	@Override
+	public void setPsngrNm(String json){
+		JSONParser jsonParser = JSONParser.getInstance();
+		/*Json to bean*/
+		@SuppressWarnings("unchecked")
+		List<DetailResveBean> detailResveList
+			= (List<DetailResveBean>)jsonParser.processJSONToBean(json, "detailResveList", DetailResveBean.class);
+		
+		/*승차자명 등록*/
+		for(DetailResveBean detailResveBean : detailResveList){
+			detailResveDAO.updatePsngrNm(detailResveBean);
+		}
+	}
+	
 	/*****************************************
 						결제
 	******************************************/

@@ -17,7 +17,6 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import com.koRail.common.controller.CommonController;
 import com.koRail.common.service.CommonService;
 import com.koRail.common.to.CommonBean;
-import com.koRail.common.to.DetailResveBean;
 import com.koRail.common.to.MemberBean;
 import com.koRail.common.to.RoomBean;
 import com.koRail.member.service.MemberService;
@@ -217,9 +216,12 @@ public class MemberController extends CommonController {
 	 ************************************/
 	@RequestMapping(value="setle.html")
 	public String findsetleForm(Model model, @ModelAttribute ResveBean resveBean,
-			@ModelAttribute DetailResveBean detailResveBean){
+			@RequestParam(value="json") String json){
 		/*메뉴*/
 		super.getMenuTree(model, "setleForm");
+		
+		/*승차자명 등록*/
+		memberService.setPsngrNm(json);
 		
 		/*카드종류 조회를 위한 코드설정*/
 		resveBean.setSeCode("CARD_KND");

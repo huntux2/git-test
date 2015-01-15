@@ -17,4 +17,10 @@ public interface DetailResveDAO {
 	 * @param detailResveBean
 	 ****************************/
 	public void insertDetailResve(DetailResveBean detailResveBean);
+
+	/******************************
+	 * 승차자명 등록
+	 * @param detailResveBean
+	 ******************************/
+	public void updatePsngrNm(DetailResveBean detailResveBean);
 }

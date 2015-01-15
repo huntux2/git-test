@@ -67,6 +67,12 @@ public interface MemberService {
 	 *****************************************/
 	public String setResve(ResveBean resveBean, String json);
 
+	/**********************************
+	 * 승차자명 등록
+	 * @param json
+	 **********************************/
+	public void setPsngrNm(String json);
+	
 	/*****************************************
 						결제
 	 ******************************************/

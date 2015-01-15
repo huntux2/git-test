@@ -83,4 +83,11 @@
 		AND		A.RESVE_CODE = #RESVE_CODE#
 		ORDER BY B.SEAT_NO
 	</select>
+	
+	<!-- 승차자명 등록 -->
+	<update id="updatePsngrNm" parameterClass="com.koRail.common.to.DetailResveBean">
+		UPDATE DETAIL_RESVE
+		SET	PSNGR_NM = #psngrNm#
+		WHERE DETAIL_RESVE_CODE = #detailResveCode#
+	</update>
 </sqlMap>

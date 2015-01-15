@@ -72,11 +72,10 @@
    			
 	   		$(document).ready(function(){
 	   			/*Action style*/
-				$($(".menu td").get(1)).addClass("set");
-				$($(".lmb tr").get(0)).children("td").addClass("set");
+				$(".menu td").eq(1).addClass("set");
+				$(".lmb tr").eq(0).children("td").addClass("set");
 				/*lmb img*/
 				$("#lmbImg").attr("src", "/res/img/tra_visual01.jpg");
-				
 				
 				/*그리드 초기화*/
 				$("#grid").html("<table id='gridBody'></table><div id='footer'></div>");
@@ -104,8 +103,6 @@
 				}); /*jqGrid end*/
 				
 				for(var i = 1; i < ($("#setleAddForm div").size()+1); i++){
-					var psngrNm = $("#dataGroup"+i+" .psngrNm").val();
-					
 					$("#gridBody").addRowData(
 						i,
 						{
@@ -117,7 +114,7 @@
 							frAmount:$("#dataGroup"+i+" .frAmount").val()+" 원",
 							dscntAmount:$("#dataGroup"+i+" .dscntAmount").val()+" 원",
 							rcptAmount:$("#dataGroup"+i+" .rcptAmount").val()+" 원",
-							psngrNm:"<input id='gridPsngrNm"+i+"' type='text' value='"+psngrNm+"'>"
+							psngrNm:"<input id='gridPsngrNm"+i+"' type='text'>"
 						}
 					);
 				} /* for end */
@@ -128,6 +125,20 @@
    			
    			/* 결제 */
    			function findSetleForm(){
+   				var jsonArray = new Array();
+   				/*승차자명 설정*/
+   				for(var i = 1; i < ($("#setleAddForm div").size()+1); i++){
+   					jsonArray.push(
+   						{
+   							detailResveCode:$("#dataGroup"+i+" .detailResveCode").val(),
+   							psngrNm:$("#gridPsngrNm"+i).val().replace(" ", "")
+   						}
+   					);
+   				}
+   				
+   				/*Array to json*/
+   				$("#json").val(JSON.stringify({"detailResveList":jsonArray}));
+   			
    				if(confirm("이 내용으로 결제를 진행 하시겠습니까?")){
    					$("#setleAddForm").submit();
    				}else{
@@ -204,7 +215,7 @@
    						</tr>
    						<tr>
    							<td class="head">예매수</td>
-   							<td>${resve.resveCo} 매</td>
+   							<td>${resve.resveCo} 장</td>
    							<td class="head">총 운임금액</td>
    							<td>${resve.allFrAmount} 원</td>
    						</tr>
@@ -235,6 +246,7 @@
    		
 		<!-- 좌석정보 그리드 데이터 및 파라미터 -->
 		<form id="setleAddForm" action="/member/setle.html" method="post">
+			<input id="json" name="json" type="hidden">
 			<input name="resveCode" type="hidden" value="${resveCode}">
 			<input name="allFrAmount" type="hidden" value="${resve.allFrAmount}">
 			<input name="allDscntAmount" type="hidden" value="${resve.allDscntAmount}">
@@ -249,7 +261,7 @@
 					<input class="frAmount" type="hidden" value="${data.frAmount}">
 					<input class="dscntAmount" type="hidden" value="${data.dscntAmount}">
 					<input class="rcptAmount" type="hidden" value="${data.rcptAmount}">
-					<input class="psngrNm" name="psngrNm" type="hidden" value="${data.psngrNm}">
+					<input class="psngrNm" name="psngrNm" type="hidden">
 				</div>
 			</c:forEach>
 		</form>

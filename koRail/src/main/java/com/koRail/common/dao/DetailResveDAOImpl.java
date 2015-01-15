@@ -32,5 +32,14 @@ public class DetailResveDAOImpl implements DetailResveDAO {
 	public void insertDetailResve(DetailResveBean detailResveBean) {
 		sqlMapClientTemplate.insert("DetailResve.insertDetailResve", detailResveBean);
 	}
+	
+	/******************************
+	 * 승차자명 등록
+	 * @param detailResveBean
+	 ******************************/
+	@Override
+	public void updatePsngrNm(DetailResveBean detailResveBean){
+		sqlMapClientTemplate.update("DetailResve.updatePsngrNm", detailResveBean);
+	}
 }
 

@@ -66,17 +66,17 @@
   	
   	<!-- 결제할 예매 정보 조회 -->
   	<select id="selectResve" resultMap="resveResultMap" parameterClass="String">
-  		SELECT	RESVE_CODE														 /*예약코드*/,
-				TRAIN_NO														 /*열차번호*/, 
-				TRAIN_KND														 /*열차종류*/, 
-	        	START_STATN														 /*출발역*/, 
-		        TO_CHAR(START_TM, 'YYYY-MM-DD HH24:MI')	AS START_TM				 /*출발시각*/, 
-		        ARVL_STATN														 /*도착역*/,
-		        TO_CHAR(ARVL_TM, 'YYYY-MM-DD HH24:MI')	AS ARVL_TM				 /*도착시각*/, 
-		        RESVE_CO														 /*좌석번호*/, 
-		        TO_CHAR(ALL_FR_AMOUNT, 'FM9,999,999,999') AS ALL_FR_AMOUNT		 /*총영수금액*/,
-		        TO_CHAR(ALL_DSCNT_AMOUNT, 'FM9,999,999,999') AS ALL_DSCNT_AMOUNT /*총영수금액*/,
-		        TO_CHAR(ALL_RCPT_AMOUNT, 'FM9,999,999,999') AS ALL_RCPT_AMOUNT	 /*총영수금액*/
+  		SELECT	RESVE_CODE																 /*예약코드*/,
+				TRAIN_NO																 /*열차번호*/, 
+				TRAIN_KND														 		 /*열차종류*/, 
+	        	START_STATN														 		 /*출발역*/, 
+		        TO_CHAR(START_TM, 'YYYY-MM-DD HH24:MI')	AS START_TM				 		 /*출발시각*/, 
+		        ARVL_STATN														 		 /*도착역*/,
+		        TO_CHAR(ARVL_TM, 'YYYY-MM-DD HH24:MI')	AS ARVL_TM				 		 /*도착시각*/, 
+		        RESVE_CO														 		 /*좌석번호*/, 
+		        TO_CHAR(ALL_FR_AMOUNT, 'FM9,999,999,999') AS ALL_FR_AMOUNT		 		 /*총영수금액*/,
+		        NVL(TO_CHAR(ALL_DSCNT_AMOUNT, 'FM9,999,999,999'), 0) AS ALL_DSCNT_AMOUNT /*총영수금액*/,
+		        TO_CHAR(ALL_RCPT_AMOUNT, 'FM9,999,999,999') AS ALL_RCPT_AMOUNT	 		 /*총영수금액*/
 		FROM TABLE(
 			PK_MEMBER_RESVE.FN_SLT_RESVE(#resveCode,mode=IN#)
 		)

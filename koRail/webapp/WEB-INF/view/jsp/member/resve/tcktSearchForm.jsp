@@ -324,7 +324,7 @@
 	   				alert("인원수는 최소 1명 이상 선택해야 합니다.");
 	   				return;
 	   			}else if(seatCo > 9){
-	   				alert("윈원수는 최대 9명까지 선택가능 합니다.");
+	   				alert("인원수는 최대 9명까지 선택가능 합니다.");
 	   				return;
 	   			}else if(startStatn == ""){
 	   				alert("출발역을 입력하셔야 합니다.");
