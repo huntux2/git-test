@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.koRail.common.service.CommonService;
 import com.koRail.common.to.AddrBean;
@@ -96,9 +97,17 @@ public class CommonController {
 	 ***************************************/
 	@RequestMapping(value="login.html")
 	public String findLoginForm(HttpServletRequest request){
-		request.getSession().invalidate(); /*모든세션 초기화*/
-		this.setLayout(request, "nlg"); /*레이아웃 제설정*/
-		return "/common/login/loginForm";
+		/* Redirect post type parameter */
+		Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+		
+		/*redirect check*/
+		if(flashMap == null){
+			request.getSession().invalidate(); /*모든세션 초기화*/
+			this.setLayout(request, "nlg"); /*레이아웃 제설정*/
+			return "/common/login/loginForm";
+		}else{
+			return "/common/login/loginForm";
+		}
 	}
 
 	/***************************************************

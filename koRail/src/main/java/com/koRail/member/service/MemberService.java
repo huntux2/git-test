@@ -7,6 +7,7 @@ import com.koRail.common.to.MemberBean;
 import com.koRail.common.to.RoomBean;
 import com.koRail.member.to.DetailTcktRcrdBean1;
 import com.koRail.member.to.ResveBean;
+import com.koRail.member.to.ResveRcrdBean;
 import com.koRail.member.to.SetleBean;
 import com.koRail.member.to.TcktBean;
 
@@ -86,6 +87,13 @@ public interface MemberService {
 	/*********************************************
 	 				승차권 현황
 	 *********************************************/
+	
+	/*********************************
+	 * 승차권 예매 현황 조회
+	 * @param id
+	 * @return
+	 **********************************/
+	public List<ResveRcrdBean> getResveRcrdList(String id);
 	
 	/*************************************
 	 * 결제가 완료된 승차권에 대한 상세정보 조회

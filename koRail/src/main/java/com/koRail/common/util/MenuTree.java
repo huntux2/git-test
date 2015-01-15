@@ -31,8 +31,8 @@ public class MenuTree {
 					menuMap.put("tcktResve2", "승차권 예매");
 					menuMap.put("setle", "결제");
 					menuMap.put("getTckt", "발권");
-				menuMap.put("tcktRcrd", "승차권 현황");
-					menuMap.put("dfTckt", "승차권 상세");
+				menuMap.put("resveRcrd", "승차권 현황");
+					menuMap.put("detailResveRcrd", "승차권 발권현황");
 			menuMap.put("admin", "관리자");
 				menuMap.put("rcrd", "현황");
 					menuMap.put("tcktRcrd", "승차권 발권 현황");
@@ -133,6 +133,15 @@ public class MenuTree {
 				list.add(menu.get("tckt"));
 				list.add(menu.get("tcktResve1"));
 				list.add(menu.get("getTckt"));
+				break;
+			case "resveRcrdForm":
+				list.add(menu.get("tckt"));
+				list.add(menu.get("resveRcrd"));
+				break;
+			case "detailResveRcrdForm":
+				list.add(menu.get("tckt"));
+				list.add(menu.get("resveRcrd"));
+				list.add(menu.get("detailResveRcrd"));
 				break;
 		}
 		

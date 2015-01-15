@@ -22,6 +22,7 @@ import com.koRail.common.to.MemberBean;
 import com.koRail.common.to.RoomBean;
 import com.koRail.member.service.MemberService;
 import com.koRail.member.to.ResveBean;
+import com.koRail.member.to.ResveRcrdBean;
 import com.koRail.member.to.SetleBean;
 import com.koRail.member.to.TcktBean;
 
@@ -64,17 +65,25 @@ public class MemberController extends CommonController {
 		return "jsonView";
 	}
 	
-	/********************************
+	/*******************************
 	 * 회원가입, 개인정보수정, 회원탈퇴
 	 * @param memberBean
+	 * @param redirectAttributes
 	 * @return
-	 *******************************/
+	 ********************************/
 	@RequestMapping(value="memberProcess.do")
-	public String processMember(@ModelAttribute MemberBean memberBean){
+	public String processMember(@ModelAttribute MemberBean memberBean,
+			RedirectAttributes redirectAttributes){
 		memberService.setMember(memberBean);
-		return "redirect:login.html";
+		return "redirect:/login.html";
 	}
 	
+	/********************************
+	 * 현재 사용가능한 포인트 조히
+	 * @param model
+	 * @param id
+	 * @return
+	 ********************************/
 	@RequestMapping("tdyPint.do")
 	public String findTdyPint(Model model, @RequestParam("id") String id){
 		model.addAttribute("tdyPint", memberService.getTdyPint(id));
@@ -148,7 +157,8 @@ public class MemberController extends CommonController {
 	 ***************************************/
 	@RequestMapping(value="processResve.do")
 	public String doTest(Model model, @ModelAttribute ResveBean resveBean,
-			@RequestParam(value="json") String json, RedirectAttributes redirectAttributes){
+			@RequestParam(value="json", required=false) String json, RedirectAttributes redirectAttributes){
+		/*등록*/
 		if("insert".equals(resveBean.getState())){
 			/* 
 				* 예약 등록
@@ -157,8 +167,17 @@ public class MemberController extends CommonController {
 			redirectAttributes.addFlashAttribute("resveCode", memberService.setResve(resveBean, json));
 			
 			return "redirect:resveAdd.html";
-		}else{			
-			return "json";
+		}
+		/*삭제*/
+		else if("delete".equals(resveBean.getState())){			
+			memberService.setResve(resveBean, json);
+			
+			model.addAttribute("rtCode", resveBean.getRtCode());
+			model.addAttribute("rtMsg", resveBean.getRtMsg());
+			
+			return "jsonView";
+		}else{
+			return "redirect:tcktSearch.html";
 		}
 	}
 	
@@ -220,7 +239,7 @@ public class MemberController extends CommonController {
 	}
 	
 	/********************************
-	 * 결제, 결제취소
+	 * 결제
 	 * @param setleBean
 	 * @return
 	 *********************************/
@@ -238,11 +257,11 @@ public class MemberController extends CommonController {
 	}
 	
 	/*************************************
-	 * 
+	 * 결제 결과 화면
 	 * @param model
 	 * @param request
 	 * @return
-	 */
+	 ***************************************/
 	@RequestMapping(value="setleSuccess.html")
 	public String findSetleSuccessForm(Model model, HttpServletRequest request){
 		/* Redirect post type parameter */
@@ -257,11 +276,50 @@ public class MemberController extends CommonController {
 		/*요청화면 : setleSuccess.html*/
 		model.addAttribute("requestForm", request.getRequestURI().split("/")[2]);
 		
-		return "/member/rcrd/detailResveRcrdForm";
+		return "/member/resve/detailResveRcrdForm";
 	}
 	
-	@RequestMapping(value="tcktRcrd.html")
-	public String findTcktRcrdForm(Model model){
-		return "/member/rcrd/tcktRcrdForom";
+	/********************************
+	 * 승차권 예매 현황
+	 * @param model
+	 * @param request
+	 * @return
+	 ********************************/
+	@RequestMapping(value="resveRcrd.html")
+	public String findResveRcrdForm(Model model, HttpServletRequest request){
+		/*메뉴*/
+		super.getMenuTree(model, "resveRcrdForm");
+		
+		/*현재 로그인되어있는 아이디*/
+		String id = (String)request.getSession().getAttribute("id");
+		/*조회*/
+		List<ResveRcrdBean> resveRcrdList = memberService.getResveRcrdList(id);
+		model.addAttribute("resveRcrdListSize", resveRcrdList.size());
+		model.addAttribute("resveRcrdList", resveRcrdList);
+		
+		return "/member/resve/resveRcrdForm";
+	}
+	
+	/*******************************
+	 * 승차권 발권현황 화면
+	 * @param model
+	 * @param request
+	 * @param resveCode
+	 * @return
+	 ********************************/
+	@RequestMapping(value="detailResveRcrd.html")
+	public String findDetailResveRcrdForm(Model model, HttpServletRequest request,
+			@RequestParam(value="resveCode") String resveCode){
+		/*메뉴*/
+		super.getMenuTree(model, "detailResveRcrdForm");
+		
+		/*조회*/
+		model.addAttribute("tcktInfo", memberService.getDetailTcktRcrdList(resveCode));
+		/*예약코드*/
+		model.addAttribute("resveCode", resveCode);
+		/*요청화면 : detailResveRcrd.html*/
+		model.addAttribute("requestForm", request.getRequestURI().split("/")[2]);
+		
+		return "/member/resve/detailResveRcrdForm";
 	}
 }

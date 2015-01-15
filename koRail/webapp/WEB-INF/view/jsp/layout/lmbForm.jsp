@@ -59,7 +59,7 @@
 								<td onclick="findForm('/member/tcktSearch.html')" style="border-radius: 7px 7px 0px 0px;">승차권 예약</td>
 							</tr>
 							<tr>
-								<td>승차권 현황</td>
+								<td onclick="findForm('/member/resveRcrd.html');">승차권 현황</td>
 							</tr>
    						</c:if>
    						<c:if test="${type2 == 'myInfo'}">

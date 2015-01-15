@@ -1,6 +1,10 @@
 package com.koRail.member.dao;
 
+import java.util.List;
+
+import com.koRail.common.to.CommonBean;
 import com.koRail.member.to.ResveBean;
+import com.koRail.member.to.ResveRcrdBean;
 
 public interface ResveDAO {
 	/********************************
@@ -16,4 +20,17 @@ public interface ResveDAO {
 	 * @return
 	 ********************************/
 	public ResveBean selectResve(String resveCode);
+
+	/***********************************
+	 * 승차권 예매 현황 조회
+	 * @param id
+	 * @return
+	 ***********************************/
+	public List<ResveRcrdBean> selectResveRcrdList(String id);
+	
+	/*****************************
+	 * 예매취소
+	 * @param commonBean
+	 *****************************/
+	public void deleteResve(CommonBean commonBean);
 }

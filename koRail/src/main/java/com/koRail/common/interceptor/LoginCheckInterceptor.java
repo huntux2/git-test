@@ -72,7 +72,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 			//throw new ModelAndViewDefiningException(new ModelAndView(formName));
 		}else{
 			/* Layout 설정/변경 */
-			request.getSession().setAttribute("layoutName", "stp");	/*레이아웃 저장*/
+			session.setAttribute("layoutName", "stp");	/*레이아웃 저장*/
 			tilesUrlBasedViewResolver.setTilesDefinitionName("stp");/*레이아웃 설정*/
 			
 			if(logger.isInfoEnabled()){

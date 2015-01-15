@@ -40,37 +40,16 @@
 				doGridInit();
 	   		});
 	   		
-	   		/* 년도 설정 : 년도는 현재년도와 다음년도를 선택할수 있다. */
+	   		/* 년도 자동선택 */
 	   		function setYear(dateTime){
 	   			var dateTime = new Date();
 	   			
 	   			/* 현재년도 선택 */
 	   			$("#year").children("option[value="+dateTime.getFullYear()+"]").attr("selected", "selected");
 	   			
-   				/* 날짜 설정 */
-   				setDateTime();
-   				
    				/* 현재날짜 자동선택 */
    				$("#month").children("option[value="+(dateTime.getMonth()+1)+"]").attr("selected", "selected");
-   				$("#date").children("option[value="+dateTime.getDate()+"]").attr("selected", "selected");
 	   		}
-	   		
-	   		/* 날짜 설정 */
-   			function setDateTime(){
-   				/* 년과 월에 대한 날짜 */
-				var dateSize = new Date($("#year").val(), $("#month").val(), "");
-   	   				
-   				/* HTML 초기화 */
-   				$("#date").html("");
-   	   				   				
-   				for(var i = 1; i <= dateSize.getDate(); i++){
-   					if(i < 10){
-   	   					$("#date").append('<option value="0'+i+'">0'+i+'</option>');   						
-   					}else{
- 	  					$("#date").append('<option value="'+i+'">'+i+'</option>');
-   					}
-   				}
-   			}
 	   		
 	   		/* 초기그리드 */
 	   		function doGridInit(){
@@ -118,7 +97,7 @@
 	   			/* 열차종류 */
 	   			var trainKndCode = $("#trainKndSelect").val();
 	   			/* 승차일자 */
-	   			var tcktTm = $("#year").val()+"-"+$("#month").val()+"-"+$("#date").val();
+	   			var tcktTm = $("#year").val()+"-"+$("#month").val();
 	   			
 	   			/* 검색조건 확인 */
 	   			if(trainKndCode == "non"){
@@ -173,6 +152,28 @@
 							
 							/* 데이터 추가 */
 							$.each(data.trainRcrdList, function(k, v){
+								var tag1 = "";
+								var tag2 = "";
+								var tag3 = "";
+								
+								if(v.usePint == null){
+									tag1 = "<div style='text-align: center;'>--</div>";
+								}else{
+									tag1 = v.usePint+" P";
+								}
+								if(v.dscntAmount == null){
+									tag2 = "<div style='text-align: center;'>--</div>";
+								}else{
+									tag2 = v.dscntAmount+" 원";
+								}
+								if(v.setleAmount == null){
+									tag3 = "<div style='text-align: center;'>--</div>";
+								}else{
+									tag3 = v.setleAmount+" 원";
+								}
+								
+								
+								
 								$("#gridBody").jqGrid('addRowData', k,
 									{
 										rowNum:(k+1),
@@ -182,9 +183,9 @@
 										resveCo:v.resveCo+" 명",
 										allRcptAmount:v.allRcptAmount+" 원",
 										setelSttus:v.setelSttus,
-										usePint:v.usePint+" P",
-										dscntAmount:v.dscntAmount+" 원",
-										setleAmount:v.setleAmount+" 원"
+										usePint:tag1,
+										dscntAmount:tag2,
+										setleAmount:tag3
 									}
 								);
 								
@@ -213,11 +214,12 @@
 	   			$($("#seatList tbody tr").get(0)).html("");
 	   			$($("#seatList tbody tr").get(1)).html("");
 	   			
-	   			for(var i = 0, i2 = 1; i < seatArray.length; i++, i2++){
+	   			for(var i = 0, i2 = 1; i < seatArray.length; i++){
 	   				if(seatArray[i].resveCode == resveCode){
 	   					count++;
+	   					i2++;
 	   					
-	   					if(i2 < 6){
+	   					if(i2 > 5){
 	   						if(seatArray[i].roomKndCode == "ROOM_Y"){
 	   							$($("#seatList tbody tr").get(0)).append(
    									"<td style='background: #65FF5E'>"+seatArray[i].room+"-"+seatArray[i].seatNo+"</td>"		
@@ -230,17 +232,17 @@
 		   				}else{
 		   					if($($("#seatList tbody tr").get(1)).children("td").size() == 2){
 		   						$($("#seatList tbody tr").get(1)).append("<td></td>");
-		   					}else{
+		   					}
 		   						if(seatArray[i].roomKndCode == "ROOM_Y"){
-		   							$($("#seatList tbody tr").get(0)).append(
+		   							$($("#seatList tbody tr").get(1)).append(
 	   									"<td style='background: #65FF5E'>"+seatArray[i].room+"-"+seatArray[i].seatNo+"</td>"		
 	   			   					);
 			   					}else{
-			   						$($("#seatList tbody tr").get(0)).append(
+			   						$($("#seatList tbody tr").get(1)).append(
 				   						"<td style='background: #6CC0FF'>"+seatArray[i].room+"-"+seatArray[i].seatNo+"</td>"		
 				   					);
 			   					}
-		   					}
+		   					
 		   				} /* else end */
 	   				} /* if end */
 	   			} /* for end */
@@ -294,7 +296,7 @@
 						</td>
 						<td>승차일자</td>
 						<td>
-							<select id="year" onchange="setDateTime();" style="width: 65px;">
+							<select id="year" style="width: 65px;">
    								<c:forEach var="i" begin="1980" end="2060" step="1">
    									<option value="${i}">${i}</option>
    								</c:forEach>
@@ -314,12 +316,6 @@
    							</select>
 						</td>
 						<td>월</td>
-						<td>
-							<select id="date" style="width: 55px;">
-   								<!-- script -->
-   							</select>
-						</td>
-						<td>일</td>
 						<td>
 							<button onclick="findTrainRcrdList();" type="button">조회</button>
 						</td>

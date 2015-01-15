@@ -22,6 +22,7 @@ import com.koRail.member.dao.SetleDAO;
 import com.koRail.member.dao.TcktDAO;
 import com.koRail.member.to.DetailTcktRcrdBean1;
 import com.koRail.member.to.ResveBean;
+import com.koRail.member.to.ResveRcrdBean;
 import com.koRail.member.to.SetleBean;
 import com.koRail.member.to.TcktBean;
 
@@ -111,7 +112,11 @@ public class MemberServiceImpl implements MemberService {
 	 **************************/
 	@Override
 	public int getTdyPint(String id){
-		return pintDAO.selectTdyPint(id);
+		try {
+			return pintDAO.selectTdyPint(id);
+		} catch (NullPointerException e) {
+			return 0;
+		}
 	}
 	
 	/*****************************************
@@ -153,6 +158,7 @@ public class MemberServiceImpl implements MemberService {
 	public String setResve(ResveBean resveBean, String json) {
 		String resveCode = null;
 		
+		/*등록*/
 		if("insert".equals(resveBean.getState())){
 			/* 예약이 등록되었다면 상세예약을 등록 */
 			if(resveDAO.insertResve(resveBean) > 0){
@@ -167,8 +173,10 @@ public class MemberServiceImpl implements MemberService {
 					resveCode = detailResveBean.getCode();
 				}
 			}
-		}else if("delete".equals(resveBean.getState())){
-			System.out.println("d");
+		}
+		/*삭제*/
+		else if("delete".equals(resveBean.getState())){
+			resveDAO.deleteResve(resveBean);
 		}
 		
 		return resveCode;
@@ -207,6 +215,16 @@ public class MemberServiceImpl implements MemberService {
 	/**********************************************
 	 					승차권 현황
 	 **********************************************/
+	
+	/*********************************
+	 * 승차권 예매 현황 조회
+	 * @param id
+	 * @return
+	 **********************************/
+	@Override
+	public List<ResveRcrdBean> getResveRcrdList(String id){
+		return resveDAO.selectResveRcrdList(id);
+	}
 	
 	/*************************************
 	 * 결제가 완료된 승차권에 대한 상세정보 조회
