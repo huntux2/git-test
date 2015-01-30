@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,11 +16,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.koRail.common.controller.CommonController;
+import com.koRail.common.exception.SQLExecutException;
 import com.koRail.common.service.CommonService;
 import com.koRail.common.to.CommonBean;
 import com.koRail.common.to.MemberBean;
 import com.koRail.common.to.RoomBean;
 import com.koRail.member.service.MemberService;
+import com.koRail.member.to.PintBean;
 import com.koRail.member.to.ResveBean;
 import com.koRail.member.to.ResveRcrdBean;
 import com.koRail.member.to.SetleBean;
@@ -66,15 +69,145 @@ public class MemberController extends CommonController {
 	
 	/*******************************
 	 * 회원가입, 개인정보수정, 회원탈퇴
+	 * @param model
 	 * @param memberBean
 	 * @param redirectAttributes
 	 * @return
 	 ********************************/
 	@RequestMapping(value="memberProcess.do")
-	public String processMember(@ModelAttribute MemberBean memberBean,
+	public String processMember(Model model, @ModelAttribute MemberBean memberBean,
 			RedirectAttributes redirectAttributes){
-		memberService.setMember(memberBean);
-		return "redirect:/login.html";
+		try{
+			/*정보 등록,수정,삭제*/
+			memberService.setMember(memberBean);
+			
+			/*상태에 따른 화면 변경*/
+			if("update".equals(memberBean.getState())){
+				if(memberBean.getPassword() == null){
+					return "redirect:/member/myInfo.html";
+				}else{
+					model.addAttribute("erCode", 0);
+					return "jsonView";
+				}
+			}else if("delete".equals(memberBean.getState())){
+				model.addAttribute("erCode", 0);
+				return "jsonView";
+			}else{
+				return "redirect:/login.html";
+			}
+		}catch(SQLExecutException e){
+			model.addAttribute("erCode", 1);
+			model.addAttribute("erMsg", e.getMessage());
+			return "jsonView";
+		}
+	}
+	
+	/*******************************************
+	 * 개인정보 조회
+	 * @param model
+	 * @param request
+	 * @return
+	 *******************************************/
+	@RequestMapping(value="myInfo.html")
+	public String doTest(Model model, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		/*session set parameter*/
+		session.setAttribute("type", "common");
+		session.setAttribute("type2", "myInfo");
+		
+		/*Set parameter*/
+		MemberBean memberBean = new MemberBean();
+		memberBean.setFormType("myInfoForm");
+		memberBean.setSrcText(session.getAttribute("id").toString());
+		
+		/*메뉴*/
+		super.getMenuTree(model, "myInfoMngForm");
+		
+		/*개인정보 조회 및 model 설정*/
+		model.addAttribute("member", memberService.getMember(memberBean));
+		/*포인트 조회 및 model 설정*/
+		model.addAttribute("pint", memberService.getPint(memberBean.getId()));
+		
+		return "/member/myInfo/myInfoMngForm";
+	}
+	
+	/*******************************
+	 * 개인정보 수정 화면
+	 * @param model
+	 * @param request
+	 * @return
+	 *******************************/
+	@RequestMapping(value="updateMember.html")
+	public String findUpdateUserForm(Model model, HttpServletRequest request){
+		/*Set parameter*/
+		HttpSession session = request.getSession();
+		MemberBean memberBean = new MemberBean();
+		memberBean.setFormType("myInfoForm");
+		memberBean.setSrcText(session.getAttribute("id").toString());
+		
+		/*메뉴*/
+		super.getMenuTree(model, "updateMemberForm");
+		
+		/*개인정보 조회 및 model 설정*/
+		model.addAttribute("member", memberService.getMember(memberBean));
+		
+		return "/member/myInfo/updateMemberForm";
+	}
+	
+	/***********************************
+	 * 이용 내역
+	 * @param model
+	 * @param request
+	 * @param redirectAttributes
+	 * @return
+	 ***********************************/
+	@RequestMapping(value="useHstr.html")
+	public String findUseHistoryForm(Model model, HttpServletRequest request,
+			RedirectAttributes redirectAttributes){
+		try{
+			HttpSession session = request.getSession();
+			
+			/*메뉴*/
+			super.getMenuTree(model, "useHistoryForm");
+			
+			/*로그인된 아이디로 포인트 조회*/
+			PintBean pintBean = memberService.getPint(session.getAttribute("id").toString());
+			model.addAttribute("pint", pintBean);
+			
+			return "/member/myInfo/useHistoryForm";
+		}catch(NullPointerException e){
+			return "redirect:/login.html";
+		}
+	}
+	
+	/********************************************
+	 * 사용내역 조회
+	 * @param model
+	 * @param request
+	 * @param commonBean
+	 * @return
+	 *********************************************/
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value="useHstrList.do")
+	public String findUseHistoryList(Model model, HttpServletRequest request,
+			@ModelAttribute CommonBean commonBean){
+		/*검색형식을 아이디로 설정*/
+		commonBean.setSrcType(request.getSession().getAttribute("id").toString());
+		
+		/*이용내역 정보*/
+		Map<String, ?> map = memberService.getUseHistoryMap(commonBean);
+		
+		/*승차권 예매 내역*/
+		List<ResveRcrdBean> resveRcrdList = (List<ResveRcrdBean>)map.get("resveRcrdList");
+		model.addAttribute("resveRcrdListSize", resveRcrdList.size());
+		model.addAttribute("resveRcrdList", resveRcrdList);
+		
+		/*포인트 사용 내역*/
+		List<PintBean> pintList = (List<PintBean>)map.get("pintList");
+		model.addAttribute("pintListSize", pintList.size());
+		model.addAttribute("pintList", pintList);
+		
+		return "jsonView";
 	}
 	
 	/********************************

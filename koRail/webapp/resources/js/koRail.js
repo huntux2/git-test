@@ -1,7 +1,13 @@
-/* 입력제한 숫자 */
+/*  
+ * 입력제한 숫자
+ * obj : 이벤트를 실행한 요소
+ * event
+ * length : 입력허용 범위
+ * paramFunction : 추가로 실행할 함수
+*/
 function doNumberCheck(obj, event, length, paramFunction){
 	/*문자열 치환*/
-	var value = $(obj).val().replace(" ", "");
+	var value = $(obj).val().replace(/ /gi, "");
 	
 	/*치환된 문자열 적용*/
 	$(obj).val(value);
@@ -40,21 +46,43 @@ function toCommaNumber(number) {
 	return string;
 }
 
-/* 입력제한 문자열 */
-function doStringCheck(obj, event, length){
+/*
+ * 입력제한 문자열
+ * obj : 이벤트를 실행한 요소
+ * event
+ * length : 입력허용 범위
+ * SkipDot : . 허용여부 
+*/
+function doStringCheck(obj, event, length, SkipDot){
 	/*문자열 치환*/
-	var value = $(obj).val().replace(" ", "");
+	var value = $(obj).val().replace(/ /gi, "");
 	
 	/*치환된 문자열 적용*/
 	$(obj).val(value);
 	
-	if(event.keyCode < 48){
+	if(event.keyCode == 190 && SkipDot == true){
+		event.returnValue = true;
+	}else if(event.keyCode < 48){
 		event.returnValue = true;
 	}else if(event.keyCode >= 48 && event.keyCode <= 105){
 		if(value.length >= length){
 			event.returnValue = false;
 		}
 	}else{
+		event.returnValue = false;
+	}
+}
+
+/*입력수 재한*/
+function setLimitLength(obj, event, length){
+	/*문자열 치환*/
+	var value = $(obj).val().replace(/ /gi, "");
+	
+	/*치환된 문자열 적용*/
+	$(obj).val(value);
+	if(event.keyCode < 48){
+		event.returnValue = true;
+	}else if(value.length >= length){
 		event.returnValue = false;
 	}
 }

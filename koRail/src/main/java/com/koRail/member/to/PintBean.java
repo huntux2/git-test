@@ -10,6 +10,7 @@ public class PintBean extends CommonBean {
 	private String allUsePint;	/*총 사용포인트*/
 	private String usePint;		/*사용포인트*/
 	private String svPint;		/*적립포인트*/
+	private String pintUseYn;	/*포인트사용 여부*/
 	private String useHistry;	/*사용내역*/
 	private String setleAmount;	/*결제금액*/
 	private String useDe;		/*사용일자*/
@@ -67,5 +68,11 @@ public class PintBean extends CommonBean {
 	}
 	public void setUseDe(String useDe) {
 		this.useDe = useDe;
+	}
+	public String getPintUseYn() {
+		return pintUseYn;
+	}
+	public void setPintUseYn(String pintUseYn) {
+		this.pintUseYn = pintUseYn;
 	}
 }

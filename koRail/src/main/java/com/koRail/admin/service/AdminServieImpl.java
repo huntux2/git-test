@@ -21,7 +21,7 @@ import com.koRail.admin.to.TrainBean;
 import com.koRail.admin.to.TrainRcrdBean;
 import com.koRail.common.dao.MemberDAO;
 import com.koRail.common.dao.RoomDAO;
-import com.koRail.common.exception.DataDeleteException;
+import com.koRail.common.exception.SQLExecutException;
 import com.koRail.common.to.CommonBean;
 import com.koRail.common.to.MemberBean;
 import com.koRail.common.to.RoomBean;
@@ -102,10 +102,10 @@ public class AdminServieImpl implements AdminServie {
 	 * 역 등록, 수정, 삭제
 	 * @param statnBean
 	 * @param deleteCodeArray
-	 * @throws DataDeleteException
+	 * @throws SQLExecutException
 	 *****************************/
 	@Override
-	public void setStatn(StatnBean statnBean, String[] deleteCodeArray) throws DataDeleteException{
+	public void setStatn(StatnBean statnBean, String[] deleteCodeArray) throws SQLExecutException{
 		/*등록*/
 		if("insert".equals(statnBean.getState())){
 			statnDAO.insertStatn(statnBean);
@@ -124,7 +124,7 @@ public class AdminServieImpl implements AdminServie {
 					statnDAO.deleteStatn(statnCode);
 				}
 			}catch(DataAccessException e){
-				throw new DataDeleteException(code);
+				throw new SQLExecutException(code);
 			}
 		}else{
 			return;
@@ -149,10 +149,10 @@ public class AdminServieImpl implements AdminServie {
 	 * 열차 등록, 수정, 삭제
 	 * @param trainBean
 	 * @param deleteCodeArray
-	 * @throws DataDeleteException
+	 * @throws SQLExecutException
 	 *******************************/
 	@Override
-	public void setTrain(TrainBean trainBean, String[] deleteCodeArray) throws DataDeleteException{
+	public void setTrain(TrainBean trainBean, String[] deleteCodeArray) throws SQLExecutException{
 		/*등록*/
 		if("insert".equals(trainBean.getState())){
 			trainDAO.insertTrain(trainBean);
@@ -171,7 +171,7 @@ public class AdminServieImpl implements AdminServie {
 					trainDAO.deleteTrain(trainCode);
 				}
 			}catch(DataAccessException e){
-				throw new DataDeleteException(code);
+				throw new SQLExecutException(code);
 			}
 		}else{
 			return;
@@ -204,9 +204,9 @@ public class AdminServieImpl implements AdminServie {
 	* 호실	 등록,삭제
 	* @param opratBean
 	* @param deleteCodeArray
-	* @throws DataDeleteException
+	* @throws SQLExecutException
 	********************************/
-	public void setOprat(OpratBean opratBean, String[] json, String[] deleteCodeArray) throws DataDeleteException {
+	public void setOprat(OpratBean opratBean, String[] json, String[] deleteCodeArray) throws SQLExecutException {
 		int rows = 0; /* insert, update, delete가 발생한 row 수 */
 		
 		if("insert".equals(opratBean.getState())){
@@ -307,10 +307,10 @@ public class AdminServieImpl implements AdminServie {
 	/*******************************
 	 * 회원 삭제
 	 * @param deleteCodeArray
-	 * @throws DataDeleteException
+	 * @throws SQLExecutException
 	 *******************************/
 	@Override
-	public void setMember(String[] deleteCodeArray) throws DataDeleteException{
+	public void setMember(String[] deleteCodeArray) throws SQLExecutException{
 		String id = null;
 		try{
 			for(String value : deleteCodeArray){
@@ -318,7 +318,7 @@ public class AdminServieImpl implements AdminServie {
 				memberDAO.deleteMember(value);
 			}
 		}catch(DataAccessException e){
-			throw new DataDeleteException(id);
+			throw new SQLExecutException(id);
 		}
 	}
 }

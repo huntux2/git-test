@@ -33,10 +33,17 @@ public interface MemberDAO {
 	public void insertMember(MemberBean memberBean);
 	
 	/***********************************
+	 * 만료되지 않은 승차권 예매 수
+	 * @param id
+	 * @return
+	 ************************************/
+	public int selectResveCount(String id);
+	
+	/***********************************
 	 * 회원 수정
 	 * @param memberBean
 	 **********************************/
-	public void deleteMember(MemberBean memberBean);
+	public void updateMember(MemberBean memberBean);
 	
 	/***********************************
 	 * 회원 삭제

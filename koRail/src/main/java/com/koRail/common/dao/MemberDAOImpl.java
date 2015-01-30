@@ -56,14 +56,22 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 	
 	/***********************************
+	 * 만료되지 않은 승차권 예매 수
+	 * @param id
+	 * @return
+	 ************************************/
+	public int selectResveCount(String id){
+		return (Integer)sqlMapClientTemplate.queryForObject("Member.selectResveCount", id);
+	}
+	
+	/***********************************
 	 * 회원 수정
 	 * @param memberBean
 	 **********************************/
 	@Override
-	public void deleteMember(MemberBean memberBean){
-		System.out.println("delete");
+	public void updateMember(MemberBean memberBean){
+		sqlMapClientTemplate.delete("Member.updateMember", memberBean);
 	}
-	
 	
 	/***********************************
 	 * 회원 삭제
@@ -71,6 +79,6 @@ public class MemberDAOImpl implements MemberDAO {
 	 ***********************************/
 	@Override
 	public void deleteMember(String id){
-		sqlMapClientTemplate.delete("Member.deleteMember", id);
+		sqlMapClientTemplate.delete("Member.deleteMember", id);			
 	}
 }

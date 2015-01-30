@@ -18,7 +18,7 @@ import com.koRail.admin.to.TcktRcrdBean;
 import com.koRail.admin.to.TrainBean;
 import com.koRail.admin.to.TrainRcrdBean;
 import com.koRail.common.controller.CommonController;
-import com.koRail.common.exception.DataDeleteException;
+import com.koRail.common.exception.SQLExecutException;
 import com.koRail.common.service.CommonService;
 import com.koRail.common.to.CommonBean;
 import com.koRail.common.to.MemberBean;
@@ -177,7 +177,7 @@ public class AdminController extends CommonController {
 			adminServie.setStatn(statnBean, deleteCodeArray);
 			model.addAttribute("errorCode", 0);
 			model.addAttribute("errorMsg", null);
-		}catch(DataDeleteException e){
+		}catch(SQLExecutException e){
 			model.addAttribute("errorCode", 1);
 			model.addAttribute("errorMsg", e.getMessage());
 		}
@@ -244,7 +244,7 @@ public class AdminController extends CommonController {
 			adminServie.setTrain(trainBean, deleteCodeArray);
 			model.addAttribute("errorCode", 0);
 			model.addAttribute("errorMsg", null);
-		}catch(DataDeleteException e){
+		}catch(SQLExecutException e){
 			model.addAttribute("errorCode", 1);
 			model.addAttribute("errorMsg", e.getMessage());
 		}
@@ -360,7 +360,7 @@ public class AdminController extends CommonController {
 			}else{
 				return "redirect:opratMng.html";				
 			}
-		}catch(DataDeleteException e){
+		}catch(SQLExecutException e){
 			model.addAttribute("errorCode", 1);
 			model.addAttribute("errorMsg", e.getMessage());
 			return "jsonView";
@@ -414,7 +414,7 @@ public class AdminController extends CommonController {
 		
 			model.addAttribute("errorCode", 0);
 			model.addAttribute("errorMsg", null);
-		}catch(DataDeleteException e){
+		}catch(SQLExecutException e){
 			model.addAttribute("errorCode", 1);
 			model.addAttribute("errorMsg", e.getMessage());
 		}

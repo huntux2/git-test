@@ -8,6 +8,8 @@ import java.util.Map;
 public class MenuTree {
 	private static MenuTree menuTree = null;
 	
+	private MenuTree(){}
+	
 	public static MenuTree getInstance(){
 		if(menuTree == null){
 			menuTree = new MenuTree();
@@ -47,7 +49,7 @@ public class MenuTree {
 			menuMap.put("myInfo", "내 정보");
 				menuMap.put("myInfoMng", "개인정보 관리");
 					menuMap.put("myInfoUpdate", "개인정보 수정");
-				menuMap.put("hstr", "이용 내역");
+					menuMap.put("hstr", "이용 내역");
 		
 		menuMap.put("memberAdd", "회원 가입");
 		
@@ -107,12 +109,12 @@ public class MenuTree {
 				list.add(menu.get("opratUpdate"));
 				break;
 			
-			/*회원*/
+			/*회원관리*/
 			case "memberMngForm":
 				list.add(menu.get("mng"));
 				list.add(menu.get("memberMng"));
 				break;
-				
+			
 			/* 승차권 예매 */
 			case "tcktSearchForm":
 				list.add(menu.get("tckt"));
@@ -142,6 +144,21 @@ public class MenuTree {
 				list.add(menu.get("tckt"));
 				list.add(menu.get("resveRcrd"));
 				list.add(menu.get("detailResveRcrd"));
+				break;
+			
+			/*내 정보*/
+			case "myInfoMngForm":
+				list.add(menu.get("myInfo"));
+				list.add(menu.get("myInfoMng"));
+				break;
+			case "updateMemberForm":
+				list.add(menu.get("myInfo"));
+				list.add(menu.get("myInfoMng"));
+				list.add(menu.get("myInfoUpdate"));
+				break;
+			case "useHistoryForm":
+				list.add(menu.get("myInfo"));
+				list.add(menu.get("hstr"));
 				break;
 		}
 		

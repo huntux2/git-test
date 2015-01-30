@@ -15,9 +15,16 @@
    			function findForm(url){
    				location.href = url;
    			}
+   			/*세션 체크*/
+   			function doSessionCheck(){
+   				if("${type}" == "" || "${type2}" == ""){
+	   				alert("잘못된 접근입니다.");
+   					location.href = "/main.html";
+   				}
+   			}
    		</script>
    	</head>
-   	<body>
+   	<body onload="doSessionCheck();">
    		<div style="margin-bottom: 10px;">
    			<img id="lmbImg" style="width: 165px; height: 140px; border: 1px solid black; border-radius: 7px;">
    		</div>
@@ -64,10 +71,10 @@
    						</c:if>
    						<c:if test="${type2 == 'myInfo'}">
    							<tr>
-								<td style="border-radius: 7px 7px 0px 0px;">개인정보 관리</td>
+								<td style="border-radius: 7px 7px 0px 0px;" onclick="findForm('/member/myInfo.html');">개인정보 관리</td>
 							</tr>
 							<tr>
-								<td>이용 내역</td>
+								<td onclick="findForm('/member/useHstr.html');">이용 내역</td>
 							</tr>
    						</c:if>
    					</c:if>

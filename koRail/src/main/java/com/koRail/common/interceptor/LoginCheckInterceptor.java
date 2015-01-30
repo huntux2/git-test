@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springbyexample.web.servlet.view.tiles2.TilesUrlBasedViewResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndViewDefiningException;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
@@ -16,7 +18,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	private TilesUrlBasedViewResolver tilesUrlBasedViewResolver;
 	
-	String formName = "/login.html";
+	String formName = "redirect:/login.html";
 	
 	/********************************
 	 * Login session check
@@ -64,12 +66,11 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 			 * 사용가능 환경 : JQuery, Prototype
 			 */
 			if(request.getHeader("X-Requested-With".toLowerCase()) == null){
-				response.sendRedirect(formName);
+				throw new ModelAndViewDefiningException(new ModelAndView(formName));
+				//response.sendRedirect(formName);
 			}else{
 				response.sendError(401);
 			}
-			
-			//throw new ModelAndViewDefiningException(new ModelAndView(formName));
 		}else{
 			/* Layout 설정/변경 */
 			session.setAttribute("layoutName", "stp");	/*레이아웃 저장*/

@@ -11,7 +11,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
-<html>
+<html class="html-style">
 	<body class="body-style">
 		<div id="head">
 			<tiles:insertAttribute name="head" />	

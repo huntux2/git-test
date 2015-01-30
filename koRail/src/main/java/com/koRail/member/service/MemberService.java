@@ -3,9 +3,12 @@ package com.koRail.member.service;
 import java.util.List;
 import java.util.Map;
 
+import com.koRail.common.exception.SQLExecutException;
+import com.koRail.common.to.CommonBean;
 import com.koRail.common.to.MemberBean;
 import com.koRail.common.to.RoomBean;
 import com.koRail.member.to.DetailTcktRcrdBean1;
+import com.koRail.member.to.PintBean;
 import com.koRail.member.to.ResveBean;
 import com.koRail.member.to.ResveRcrdBean;
 import com.koRail.member.to.SetleBean;
@@ -24,15 +27,37 @@ public interface MemberService {
 	 **************************/
 	public Map<String, String> doIdCheck(String id);
 	
+	/*********************************
+	 * 개인정보 조회
+	 * @param memberBean
+	 * @return
+	 **********************************/
+	public MemberBean getMember(MemberBean memberBean);
+	
 	/**********************************
 	 * 회원가입, 개인정보수정, 회원탈퇴
 	 * @param memberBean
 	 ********************************/
-	public void setMember(MemberBean memberBean);
+	public void setMember(MemberBean memberBean) throws SQLExecutException ;
 
+	/*********************************
+	 * 이용내역 조회
+	 * (사용내역, 포인트, 포인트 이용내역)
+	 * @param commonBean
+	 * @return
+	 **********************************/
+	public Map<String, ?> getUseHistoryMap(CommonBean commonBean);
+	
 	/*****************************************
 					포인트
 	 ******************************************/
+	
+	/*********************
+	 * 포인트 조회
+	 * @param id
+	 * @return
+	 *********************/
+	public PintBean getPint(String id);
 	
 	/**************************
 	 * 현제포인트 조회

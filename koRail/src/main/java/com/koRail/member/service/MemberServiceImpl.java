@@ -6,11 +6,14 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.koRail.common.dao.DetailResveDAO;
 import com.koRail.common.dao.MemberDAO;
 import com.koRail.common.dao.RoomDAO;
+import com.koRail.common.exception.SQLExecutException;
+import com.koRail.common.to.CommonBean;
 import com.koRail.common.to.DetailResveBean;
 import com.koRail.common.to.MemberBean;
 import com.koRail.common.to.RoomBean;
@@ -21,6 +24,7 @@ import com.koRail.member.dao.SeatNoInfoDAO;
 import com.koRail.member.dao.SetleDAO;
 import com.koRail.member.dao.TcktDAO;
 import com.koRail.member.to.DetailTcktRcrdBean1;
+import com.koRail.member.to.PintBean;
 import com.koRail.member.to.ResveBean;
 import com.koRail.member.to.ResveRcrdBean;
 import com.koRail.member.to.SetleBean;
@@ -84,26 +88,80 @@ public class MemberServiceImpl implements MemberService {
 		return stringMap;
 	}
 	
+	/*********************************
+	 * 개인정보 조회
+	 * @param memberBean
+	 * @return
+	 **********************************/
+	@Override
+	public MemberBean getMember(MemberBean memberBean){
+		return memberDAO.selectMember(memberBean);
+	}
+	
 	/**********************************
 	 * 회원가입, 개인정보수정, 회원탈퇴
 	 * @param memberBean
 	 **********************************/
 	@Override
-	public void setMember(MemberBean memberBean){
+	public void setMember(MemberBean memberBean) throws SQLExecutException {
 		if("insert".equals(memberBean.getState())){
-				memberDAO.insertMember(memberBean);
+			memberDAO.insertMember(memberBean);
 		}else if("update".equals(memberBean.getState())){
-			System.out.println("u");
+			memberDAO.updateMember(memberBean);
 		}else if("delete".equals(memberBean.getState())){
-			System.out.println("d");
+			try{
+				/*승차권 예약 만료기간 체크*/
+				if(memberDAO.selectResveCount(memberBean.getId()) == 0){
+					/*아이디 설정*/
+					ResveBean resveBean = new ResveBean();
+					resveBean.setId(memberBean.getId());
+					/*예약정보 삭제*/
+					resveDAO.deleteResve(resveBean);
+				}
+				
+				/*회원정보 삭제*/
+				memberDAO.deleteMember(memberBean.getId());
+			}catch(DataAccessException e){
+				/*메세지 설정*/
+				StringBuffer stringBuffer = new StringBuffer();
+				stringBuffer.append("예약이 만료되지 않은 승차권 또는 결제가 진행중인 승차권이 존재합니다.\n");
+				stringBuffer.append("작업을 진행하시려면 해당 승차권의 예약을 취소하셔야 합니다.");
+				
+				throw new SQLExecutException(stringBuffer.toString());
+			}
 		}else{
 			return;
 		}
 	}
 	
+	/*********************************
+	 * 이용내역 조회
+	 * (사용내역, 포인트, 포인트 이용내역)
+	 * @param commonBean
+	 * @return
+	 **********************************/
+	public Map<String, ?> getUseHistoryMap(CommonBean commonBean){
+		Map<String, Object> map = new HashMap<String, Object>();
+		/*승차권 예매 내역*/
+		map.put("resveRcrdList", resveDAO.selectResveRcrdList(commonBean));
+		/*포인트 이용 내역*/
+		map.put("pintList", pintDAO.selectPintInfoList(commonBean));
+		return map;
+	}
+	
 	/*****************************************
 						포인트
 	 ******************************************/
+	
+	/*********************
+	 * 포인트 조회
+	 * @param id
+	 * @return
+	 *********************/
+	@Override
+	public PintBean getPint(String id){
+		return pintDAO.selectPint(id);
+	}
 	
 	/**************************
 	 * 현제포인트 조회
@@ -241,7 +299,10 @@ public class MemberServiceImpl implements MemberService {
 	 **********************************/
 	@Override
 	public List<ResveRcrdBean> getResveRcrdList(String id){
-		return resveDAO.selectResveRcrdList(id);
+		CommonBean commonBean = new CommonBean();
+		/*아이디를 검색형식으로 설정*/
+		commonBean.setSrcType(id);
+		return resveDAO.selectResveRcrdList(commonBean);
 	}
 	
 	/*************************************

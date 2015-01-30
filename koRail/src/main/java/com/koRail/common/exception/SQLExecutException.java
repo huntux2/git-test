@@ -1,10 +1,10 @@
 package com.koRail.common.exception;
 
 /*******************************************
- * 데이터 삭제 중 FK 무결성 제약조건 위배 시 발생
+ * SQL 실행중 발생한 에러메세지 출력
  * @author Administrator
  *******************************************/
-public class DataDeleteException extends Exception {
+public class SQLExecutException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	private String msg = null; /* 메세지 */
@@ -13,7 +13,7 @@ public class DataDeleteException extends Exception {
 	 * 메세지를 입력받음
 	 * @param msg
 	 **********************/
-	public DataDeleteException(String msg){
+	public SQLExecutException(String msg){
 		this.msg = msg;
 	}
 	

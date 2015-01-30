@@ -23,14 +23,14 @@ public interface ResveDAO {
 
 	/***********************************
 	 * 승차권 예매 현황 조회
-	 * @param id
+	 * @param commonBean
 	 * @return
 	 ***********************************/
-	public List<ResveRcrdBean> selectResveRcrdList(String id);
+	public List<ResveRcrdBean> selectResveRcrdList(CommonBean commonBean);
 	
 	/*****************************
 	 * 예매취소
-	 * @param commonBean
+	 * @param resveBean
 	 *****************************/
-	public void deleteResve(CommonBean commonBean);
+	public void deleteResve(ResveBean resveBean);
 }

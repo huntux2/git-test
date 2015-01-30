@@ -7,7 +7,7 @@ import com.koRail.admin.to.StatnBean;
 import com.koRail.admin.to.TcktRcrdBean;
 import com.koRail.admin.to.TrainBean;
 import com.koRail.admin.to.TrainRcrdBean;
-import com.koRail.common.exception.DataDeleteException;
+import com.koRail.common.exception.SQLExecutException;
 import com.koRail.common.to.CommonBean;
 import com.koRail.common.to.MemberBean;
 
@@ -45,9 +45,9 @@ public interface AdminServie {
 	 * 역 등록, 수정, 삭제
 	 * @param statnBean
 	 * @param deleteCodeArray
-	 * @throws DataDeleteException
+	 * @throws SQLExecutException
 	 *******************************/
-	public void setStatn(StatnBean statnBean, String[] deleteCodeArray) throws DataDeleteException;
+	public void setStatn(StatnBean statnBean, String[] deleteCodeArray) throws SQLExecutException;
 
 	/*************************************
 				열차 관리
@@ -64,9 +64,9 @@ public interface AdminServie {
 	 * 열차 등록, 수정, 삭제
 	 * @param trainBean
 	 * @param deleteCodeArray
-	 * @throws DataDeleteException
+	 * @throws SQLExecutException
 	 ********************************/
-	public void setTrain(TrainBean trainBean, String[] deleteCodeArray) throws DataDeleteException;
+	public void setTrain(TrainBean trainBean, String[] deleteCodeArray) throws SQLExecutException;
 	
 	/*************************************
 				운행일정 관리
@@ -86,9 +86,9 @@ public interface AdminServie {
 	 * @param opratBean
 	 * @param json
 	 * @param deleteCodeArray
-	 * @throws DataDeleteException
+	 * @throws SQLExecutException
 	 ************************************/
-	public void setOprat(OpratBean opratBean, String[] json, String[] deleteCodeArray) throws DataDeleteException;
+	public void setOprat(OpratBean opratBean, String[] json, String[] deleteCodeArray) throws SQLExecutException;
 
 	/*****************************************
 						회원
@@ -104,7 +104,7 @@ public interface AdminServie {
 	/*******************************
 	 * 회원 삭제
 	 * @param deleteCodeArray
-	 * @throws DataDeleteException
+	 * @throws SQLExecutException
 	 *******************************/
-	public void setMember(String[] deleteCodeArray) throws DataDeleteException;
+	public void setMember(String[] deleteCodeArray) throws SQLExecutException;
 }

@@ -65,7 +65,7 @@
 	    						<strong>승차권</strong>
 	    					</td>
 			   				<td>
-			   					<strong>내 정보</strong>
+			   					<strong onclick="findForm('/member/myInfo.html');">내 정보</strong>
 			   				</td>
 			   			</c:if>
     				</tr>

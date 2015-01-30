@@ -89,7 +89,7 @@
   	</select>
   	
   	<!-- 승차권 예매 현황 -->
-  	<select id="selectResveRcrdList" resultMap="resveRcrdResultMap" parameterClass="String">
+  	<select id="selectResveRcrdList" resultMap="resveRcrdResultMap" parameterClass="com.koRail.common.to.CommonBean">
   		SELECT	RESVE_CODE															/*예약코드*/, 
   				TRAIN_NO															/*열차번호*/, 
   				TRAIN_KND															/*열차종류*/, 
@@ -102,8 +102,13 @@
 				SETLE_STTUS_VALUE													/*결제상태 값*/, 
 				NVL(TO_CHAR(SETLE_AMOUNT, 'FM9,999,999,999'), 0) AS SETLE_AMOUNT	/*결제금액*/
 		FROM TABLE(
-			PK_MEMBER_RESVE.FN_SLT_RESVE_RCRD(#id,mode=IN#)
+			PK_MEMBER_RESVE.FN_SLT_RESVE_RCRD(#srcType,mode=IN#)
 		)
+		<!-- 검색기간이 존재할 경우 -->
+		<isNotNull property="srcDate1">
+			WHERE	START_TM >= TO_DATE(#srcDate1#, 'YYYY-MM')
+			AND		ARVL_TM &lt;= TO_DATE(#srcDate2#, 'YYYY-MM')
+		</isNotNull>
 		
 		/**********************************************************
 	    * 이름      : FN_SLT_RESVE_RCRD
@@ -113,17 +118,18 @@
   	</select>
   	
   	<!-- 예매 취소 -->
-  	<procedure id="deleteResve" parameterClass="com.koRail.common.to.CommonBean">
+  	<procedure id="deleteResve" parameterClass="com.koRail.member.to.ResveBean">
   		{ CALL PK_MEMBER_RESVE.SP_DEL_RESVE(
-			#code,mode=IN#,
+			#resveCode,mode=IN#,
+			#id,mode=IN#,
 			#rtCode,mode=OUT,jdbcType=VARCHAR#,
 			#rtMsg,mode=OUT,jdbcType=VARCHAR#
 		) }
 		
-		/**********************************************************
+		/***************************************************************
 	    * 이름      : SP_DEL_RESVE
 	    * 설명      : 예매 취소
-	    * 파라미터  : 아아디, 에러 코드(0 : 성공, 1 : 에러), 에러 메세지
-	    **********************************************************/
+	    * 파라미터  : 예약코드, 아아디, 에러 코드(0 : 성공, 1 : 에러), 에러 메세지
+	    ***************************************************************/
   	</procedure>
 </sqlMap>

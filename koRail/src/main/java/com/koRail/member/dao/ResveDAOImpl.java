@@ -39,20 +39,20 @@ public class ResveDAOImpl implements ResveDAO {
 	
 	/***********************************
 	 * 승차권 예매 현황 조회
-	 * @param id
+	 * @param commonBean
 	 * @return
 	 ***********************************/
 	@Override
-	public List<ResveRcrdBean> selectResveRcrdList(String id){
-		return sqlMapClientTemplate.queryForList("Resve.selectResveRcrdList", id);
+	public List<ResveRcrdBean> selectResveRcrdList(CommonBean commonBean){
+		return sqlMapClientTemplate.queryForList("Resve.selectResveRcrdList", commonBean);
 	}
 	
 	/*****************************
 	 * 예매취소
-	 * @param commonBean
+	 * @param resveBean
 	 *****************************/
 	@Override
-	public void deleteResve(CommonBean commonBean){
-		sqlMapClientTemplate.delete("Resve.deleteResve", commonBean);
+	public void deleteResve(ResveBean resveBean){
+		sqlMapClientTemplate.delete("Resve.deleteResve", resveBean);
 	}
 }

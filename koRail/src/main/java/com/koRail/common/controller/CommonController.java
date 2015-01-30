@@ -136,6 +136,8 @@ public class CommonController {
 			request.getSession().setAttribute("type", type);
 			/*로그인한 아이디*/
 			request.getSession().setAttribute("id", id);
+			/*로그인한 아이디의 비밀번호*/
+			request.getSession().setAttribute("password", pw);
 			/*로그인한 사용자 명*/
 			request.getSession().setAttribute("name", map.get("name"));
 		}
