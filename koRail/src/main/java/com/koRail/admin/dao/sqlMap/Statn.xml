@@ -31,7 +31,7 @@
         FROM	TABLE(
 					PK_ADMIN_STATN.FN_SLT_STATN(#srcType,mode=IN#, #srcText,mode=IN#)
 				)
-		ORDER BY STATN_CODE
+		ORDER BY STATN_NM
 		
 		/*******************************************************************
 	    * 이름	: FN_SLT_STATN

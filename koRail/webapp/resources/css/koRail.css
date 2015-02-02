@@ -29,13 +29,14 @@
 /* button */
 button {
 	background: #515151;
-	border-color: #515151;
+	border-color: #000000;
 	border-radius: 7px;
 	color: #FFFFFF;
 }
 
 button:HOVER {
 	background: #FFFFFF;
+	border-color: #000000;
 	color: #000000;
 }
 
@@ -47,6 +48,7 @@ button:ACTIVE {
 /* menu */
 .menu {
 	border-radius: 7px;
+	border-collapse: collapse;
 	background: #000000 url("/res/img/ui-bg_loop_25_000000_21x21.png") 50% 50% repeat;
 }
 
@@ -74,18 +76,17 @@ button:ACTIVE {
 	font-weight: bolder;
 	text-align: center;
 	width: 167px;
-	height: 450px;
+	height: 441px;
 	border-radius: 7px;
 	background: #000000 url("/res/img/ui-bg_loop_25_000000_21x21.png") 50% 50% repeat;
+	border-collapse: collapse;
 }
 
 .lmb td {
 	width: 167px;
 	height: 40px;
 	border: 1px;
-	border-top-style: solid;
-	border-top: #A6A6A6;
-	border-bottom-style: solid;
+	border-bottom-style: double;
 	border-bottom-color: #A6A6A6;
 }
 

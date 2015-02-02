@@ -29,6 +29,7 @@
 		FROM TABLE(
 			PK_CMMN.FN_SLT_CMMN(#seCode,mode=IN#, #cmmnCodeValue,mode=IN#)
 		)
+		ORDER BY CMMN_CODE_VALUE
   	    
 		/*******************************************************************
 	    * 이름		: FN_SLT_CMMN
