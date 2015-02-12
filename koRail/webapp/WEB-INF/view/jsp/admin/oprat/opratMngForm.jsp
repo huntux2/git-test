@@ -12,10 +12,10 @@
 	<head>
    		<script type="text/javascript">
    			var viewState = false;	/*그리드가 화면에 보여지는 상태(true : 보임 , false : 숨김)*/
-   			var viewState2 = false;	/*viewState와 같은 역활이며 상세운행정보에 대한 상태이다*/
+   			var viewState2 = false;	/*viewState와 같은 역활이며 경유지에 대한 상태이다*/
    			var viewState3 = false;	/*viewState와 같은 역활이며 호실정보에 대한 상태이다*/
    			var opratArray;			/*운행정보*/
-   			var detailOpratArray;	/*상세운행정보*/
+   			var detailOpratArray;	/*경유지*/
    			var roomArray;			/*호시렁보*/
    			
 	   		$(document).ready(function(){
@@ -39,6 +39,9 @@
 				});
 	   			
 				doGridInit("all"); /*그리드 초기화*/
+				
+				/* 전채검색 */
+				$("#trainKndBtn").click();
 	   		});
    			
 	   		/*그리드 초기상태*/
@@ -58,19 +61,20 @@
 	   				
 	   				$("#gridBody").jqGrid({
 						datatype: "LOCAL",
-		   				caption:"운행일정 정보",
+		   				caption:"운행일정",
 		   				width: 500,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer',
-		   				colNames:["열차번호", "열차종류", "출발역", "도착역"],
+		   				colNames:["번호", "열차번호", "열차종류", "출발역", "도착역"],
 		          		colModel : [
-							{ name : "trainNo", align:"center", width: 60, height : 200, sortable:false,
+							{ name : "no", align:"center", width: 40, sortable:false,
 								cellattr: function(rowId, value, rowObject, colModel, arrData) {
-									return ' colspan=4';
+									return ' colspan=5';
 								}
 							},
+							{ name : 'trainNo', width: 60, align:"center", sortable:false},
 							{ name : 'trainKnd', width: 70, align:"center", sortable:false},
 							{ name : 'startStatn', width: 70, align:"center", sortable:false},
 							{ name : 'arvlStatn', width: 70, align:"center", sortable:false}
@@ -78,7 +82,7 @@
 					}); /*jqGrid end*/
 					
 	   				/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-					$("#gridBody").jqGrid('addRowData', 1, {trainNo:"조회조건을 선택/입력하여 조회를 하십시오."});
+					$("#gridBody").jqGrid('addRowData', 1, {no:"조회된 결과가 존재하지 않습니다."});
 	   			}
 	   			
 	   			/*상세운행일정*/
@@ -90,31 +94,30 @@
 	   				
 					$("#gridBody2").jqGrid({
 						datatype: "LOCAL",
-		   				caption:"상세운행일정 정보",
+		   				caption:"경유지",
 		   				width: 845,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer2',
-		   				colNames:["출발역", "출발시각", "도착역", "도착시각", "이전역", "이전역 거리", "다음역", "다음역 거리"],
+		   				colNames:["번호", "출발역", "출발시각", "도착역", "도착시각", "이전역", "다음역"],
 		          		colModel : [
-							{ name : 'startStatnValue', width: 70, align:"center", sortable:false,
+							{ name : 'no', width: 40, align:"center", sortable:false,
 								cellattr: function(rowId, value, rowObject, colModel, arrData) {
-									return ' colspan=8';
+									return ' colspan=9';
 								}
 							},
+							{ name : 'startStatnValue', width: 70, align:"center", sortable:false},
 							{ name : 'startTm', width: 70, align:"center", sortable:false},
 							{ name : 'arvlStatnValue', width: 70, align:"center", sortable:false},
 							{ name : 'arvlStatnTm', width: 70, align:"center", sortable:false},
 							{ name : 'prvStatnValue', width: 70, align:"center", sortable:false},
-							{ name : 'prvStatnDistnc', width: 70, align:"center", sortable:false},
-							{ name : 'nxtStatnValue', width: 70, align:"center", sortable:false},
-							{ name : 'nxtStatnDistnc', width: 70, align:"center", sortable:false}
+							{ name : 'nxtStatnValue', width: 70, align:"center", sortable:false}
 						]
 					}); /*jqGrid end*/
 					
 					/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-					$("#gridBody2").jqGrid('addRowData', 1, {startStatnValue:"운행일정을 선택하십시오."});
+					$("#gridBody2").jqGrid('addRowData', 1, {no:"운행일정을 선택하십시오."});
 	   			}
 	   			
 	   			if(mode == "room" || allInit){
@@ -125,26 +128,27 @@
 	   				
 					$("#gridBody3").jqGrid({
 						datatype: "LOCAL",
-		   				caption:"호실정보",
+		   				caption:"호실",
 		   				width: 550,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer3',
-		   				colNames:["호실", "좌석수", "특실여부"],
+		   				colNames:["번호", "호실", "좌석수", "특실여부"],
 		          		colModel : [
-							{ name : "room", width: 70, align:"center", sortable:false,
+							{ name : "no", width: 40, align:"center", sortable:false,
 								cellattr: function(rowId, value, rowObject, colModel, arrData) {
-									return ' colspan=3';
+									return ' colspan=4';
 								}
 							},
+							{ name : "room", width: 70, align:"center", sortable:false},
 							{ name : "seatCo", width: 70, align:"center", sortable:false},
 							{ name : "prtclrRoomYN", width: 30, align:"center", sortable:false}
 						]
 					}); /*jqGrid end*/
 					
 					/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-					$("#gridBody3").jqGrid('addRowData', 1, {room:"운행일정을 선택하십시오."});
+					$("#gridBody3").jqGrid('addRowData', 1, {no:"운행일정을 선택하십시오."});
 	   			}
    			} /* doGridInit end */
 	   		
@@ -161,14 +165,15 @@
 					$("#gridBody").jqGrid({
 						datatype: "LOCAL",
 		   				multiselect: true,
-		   				caption:"운행일정 정보",
+		   				caption:"운행일정",
 		   				width: 500,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer',
-		   				colNames:["code", "열차번호", "열차종류", "출발역", "도착역"],
+		   				colNames:["번호", "code", "열차번호", "열차종류", "출발역", "도착역"],
 		          		colModel : [
+							{ name : "no", width: 40, align:"right", sortable:false},
 							{ name : "opratCode", hidden:true},
 							{ name : "trainNo", align:"center", width: 60, height : 200, sortable:false},
 							{ name : 'trainKnd', width: 70, align:"center", sortable:false},
@@ -180,9 +185,8 @@
 							/* 운행일정을 수정할 code를 선택한 opratCode로 설정한다. */
 							$("#opratCode").val($(this).getRowData(rowId).opratCode);
 							/*버튼 활성화*/
-							$("#updateBtn").remove();
-							$("#updateGroup").append("<button id='updateBtn' style='width: 90px;' onclick='updateOprat();'>수정</button>");
-							$("#updateBtn").button();
+							$("#updateBtn").removeAttr("disabled");
+							$("#updateBtn").removeClass("b-disabled");
 							
 							/*운행정보에 정보 설정*/
 							setOpratTable(rowId);
@@ -193,7 +197,7 @@
 						}
 					}); /*jqGrid end*/
 	   			}
-	   			/*상세운행정보*/
+	   			/*경유지*/
 	   			else if(mode == "detailOprat"){
 	   				/*그리드가 화면에 보여지는 상태(true : 보임 , false : 숨김)*/
 					viewState2 = true;
@@ -203,22 +207,21 @@
 					
 					$("#gridBody2").jqGrid({
 						datatype: "LOCAL",
-		   				caption:"상세운행일정 정보",
+		   				caption:"결유지",
 		   				width: 845,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer2',
-		   				colNames:["출발역", "출발시각", "도착역", "도착시각", "이전역", "이전역 거리", "다음역", "다음역 거리"],
+		   				colNames:["번호", "출발역", "출발시각", "도착역", "도착시각", "이전역", "다음역"],
 		          		colModel : [
+							{ name : "no", width: 40, align:"right", sortable:false},
 							{ name : 'startStatnValue', width: 70, align:"center", sortable:false},
 							{ name : 'startTm', width: 120, align:"center", sortable:false},
 							{ name : 'arvlStatnValue', width: 70, align:"center", sortable:false},
 							{ name : 'arvlTm', width: 120, align:"center", sortable:false},
 							{ name : 'prvStatnValue', width: 70, align:"center", sortable:false},
-							{ name : 'prvDistnc', width: 70, align:"center", sortable:false},
-							{ name : 'nxtStatnValue', width: 70, align:"center", sortable:false},
-							{ name : 'nxtDistnc', width: 70, align:"center", sortable:false}
+							{ name : 'nxtStatnValue', width: 70, align:"center", sortable:false}
 						]
 					}); /*jqGrid end*/
 	   			}
@@ -232,14 +235,15 @@
 	   				
 					$("#gridBody3").jqGrid({
 						datatype: "LOCAL",
-		   				caption:"호실정보",
+		   				caption:"호실",
 		   				width: 550,
 		   				height: 160,
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer3',
-		   				colNames:["호실", "좌석수", "특실여부"],
+		   				colNames:["번호", "호실", "좌석수", "특실여부"],
 		          		colModel : [
+							{ name : "no", width: 40, align:"right", sortable:false},
 							{ name : "room", width: 70, align:"center", sortable:false},
 							{ name : "seatCo", width: 70, align:"center", sortable:false},
 							{ name : "prtclrRoomYN", width: 30, align:"center", formatter:"checkbox", sortable:false}
@@ -250,8 +254,6 @@
 	   		
 	   		/*리스트*/
 			function findOpratList(mode){
-				var vUrl = ""; /*url*/
-				
 				/*초기화*/
 				opratArray = new Array();
 				detailOpratArray = new Array();
@@ -279,24 +281,17 @@
 				$("#opratCode").val("");
 				
 				/*버튼 비활성화*/
-				$("#updateBtn").remove();
-				$("#updateGroup").append("<button id='updateBtn' onclick='updateOprat();' disabled='disabled' style='width: 90px;'>수정</button>");
-				$("#updateBtn").button();
+				$("#updateBtn").attr("disabled", "disabled");
+				$("#updateBtn").removeClass("b-disabled");
+				$("#updateBtn").addClass("b-disabled");
 				
 				/*검색조건*/
-	   			var trainKnd = $("#trainKndSelect").val().trim();	/*열차종류*/
-	   			var trainNo = $("#trainNoText").val().trim();		/*열차번호*/
+	   			var trainKnd = $.trim($("#trainKndSelect").val());	/*열차종류*/
+	   			var trainNo = $.trim($("#trainNoText").val());		/*열차번호*/
 	   			
 	   			/*열차종류로 검색*/
 				if(mode == "knd"){
-					if(trainKnd == "선택"){
-						alert("조회조건을 선택해야 합나디다.");
-						return;
-					}else{
-						/* 삭제할 시 제검색 유형 설정 */
-		   				$("#deleteType").val("knd");
-						vUrl = "/admin/opratList.do?srcType="+trainKnd;
-					}
+					trainNo = "";
 				}
 				/*열차번호로 검색*/
 				else{
@@ -304,22 +299,15 @@
 						alert("조회조건을 입력해야 합나디다.");
 						return;
 					}else{
-						/* 삭제할 시 제검색 유형 설정 */
-		   				$("#deleteType").val("normal");
-						vUrl = "/admin/opratList.do?srcText="+encodeURIComponent(trainNo);
+						trainKnd = "";
 					}
 				}
 				
-				/* 미입력 처리 */
-				if(vUrl == ""){
-					return;
-				}
-				/*그리드 내용*/
-				else{
-					$.ajax({
-						type:"GET",
-						url: vUrl,
+	   			$.ajax({
+						type:"POST",
+						url: "/admin/opratList.do",
 						Type:"JSON",
+						data:{srcType:trainKnd, srcText:trainNo},
 						success : function(data) {
 							if(data.opratListSize == 0){
 								alert("결과가 존재하지 않습니다.");
@@ -337,6 +325,7 @@
 									/*운행정보들*/
 									opratArray.push(
 										{
+											no:k+1,
 											trainNo:v.trainNo+"",
 											trainKnd:v.trainKndValue+"",
 											startStatn:v.startStatnValue+"",
@@ -344,7 +333,6 @@
 											arvlStatn:v.arvlStatnValue+"",
 											arvlTm:v.arvlTm+"",
 											route:v.routeValue+"",
-											distnc:v.distnc+"",
 											fare:v.fare+"",
 											register:v.register+"",
 											rgsde:v.rgsde+"",
@@ -353,19 +341,18 @@
 										}
 									);
 									
-									/*상세운행정보 데이터 삽입*/
+									/*경유지 데이터 삽입*/
 									$.each(v.detailOpratList, function(k2,v2){
 										detailOpratArray.push(
 											{
+												no:k+1,
 												opratCode:v2.opratCode+"",
 												startStatnValue:v2.startStatnValue+"",
 												startTm:v2.startTm+"",
 												arvlStatnValue:v2.arvlStatnValue+"",
 												arvlTm:v2.arvlTm+"",
 												prvStatnValue:v2.prvStatnValue+"",
-												prvDistnc:v2.prvDistnc+" km",
-												nxtStatnValue:v2.nxtStatnValue+"",
-												nxtDistnc:v2.nxtDistnc+" km"
+												nxtStatnValue:v2.nxtStatnValue+""
 											}
 										);
 									}); /*$.each end*/
@@ -374,6 +361,7 @@
 									$.each(v.roomList, function(k2,v2){
 										roomArray.push(
 											{
+												no:k+1,
 												opratCode:v2.opratCode+"",
 												room:v2.room+" 호실",
 												seatCo:v2.seatCo+" 석",
@@ -383,8 +371,9 @@
 									}); /*$.each end*/
 									
 									/*운행정보 리스트에 보여질 항목*/
-									$("#gridBody").jqGrid('addRowData', k+1,
+									$("#gridBody").addRowData(k+1,
 										{
+											no:k+1,
 											opratCode:v.opratCode+"",
 											trainNo:v.trainNo+"",
 											trainKnd:v.trainKndValue+"",
@@ -394,9 +383,16 @@
 									); /*addRowData end*/
 								}); /*$.each end*/
 							} /*else end*/
-						} /*success end*/
+						}, /*success end*/
+						error : function(request, status, error){
+							if(request.status == 401){
+								alert("세션이 만료되었습니다.");
+								location.href = "/logout.do";
+							}else{
+								alert("서버에러입니다.");
+							}
+						}
 					}); /*$.ajax end*/
-				} /*else end*/
 			} /*findOpratList end*/
 			
 			/*운행정보리스트에서 선택한 항목에 대한 운행정보를 보여준다.*/
@@ -408,7 +404,6 @@
 				$("#arvlStatn").html(opratArray[rowId-1].arvlStatn);
 				$("#arvlTm").html(opratArray[rowId-1].arvlTm);
 				$("#route").html(opratArray[rowId-1].route);
-				$("#distnc").html(opratArray[rowId-1].distnc+" km");
 				$("#fare").html(opratArray[rowId-1].fare+" 원");
 				$("#register").html(opratArray[rowId-1].register);
 				$("#rgsde").html(opratArray[rowId-1].rgsde);
@@ -416,9 +411,9 @@
 				$("#updde").html(opratArray[rowId-1].updde);
 			}
 			
-			/*상세운행정보*/
+			/*경유지*/
 			function setDetailOprat(rowId){
-				var exceptionCount = 0; /*선택한 운행정보의 상세운행정보가 아닌 row 수*/
+				var exceptionCount = 0; /*선택한 운행정보의 경유지가 아닌 row 수*/
 				
 				if(!viewState2){
 					setGrid("detailOprat");
@@ -427,9 +422,9 @@
 				/*그리드 비우기*/
 				$("#gridBody2").jqGrid('clearGridData');
 				
-				/*상세운행정보*/
+				/*경유지*/
 				for(var i = 0; i< detailOpratArray.length; i++){
-					/*선택한 운행정보에 대한 상세운행정보*/
+					/*선택한 운행정보에 대한 경유지*/
 					if($("#gridBody").getRowData(rowId).opratCode == detailOpratArray[i].opratCode){
 						/*운행정보 리스트에 보여질 항목*/
 						$("#gridBody2").jqGrid('addRowData', i+1, detailOpratArray[i]); /*addRowData end*/
@@ -443,7 +438,7 @@
 					/*그리드 메세지*/
 					doGridInit("detailOprat");
 					$("#gridBody2").jqGrid('clearGridData');
-					$("#gridBody2").jqGrid('addRowData', 1, {startStatnValue:"검색된 결과가 없습니다."});
+					$("#gridBody2").jqGrid('addRowData', 1, {no:"등록된 경유지가 없습니다."});
 				}
 			}
 			
@@ -458,9 +453,9 @@
 				/*그리드 비우기*/
 				$("#gridBody3").jqGrid('clearGridData');
 				
-				/*상세운행정보*/
+				/*경유지*/
 				for(var i = 0; i< roomArray.length; i++){
-					/*선택한 운행정보에 대한 상세운행정보*/
+					/*선택한 운행정보에 대한 경유지*/
 					if($("#gridBody").getRowData(rowId).opratCode == roomArray[i].opratCode){
 						/*운행정보 리스트에 보여질 항목*/
 						$("#gridBody3").jqGrid('addRowData', i+1, roomArray[i]); /*addRowData end*/
@@ -596,7 +591,7 @@
 						</td>
    						<td style="width: 100px; padding-left: 0px;">
    							<select id="trainKndSelect" style="width: 100%; height: 25px">
-   								<option value="선택">선택</option>
+   								<option value="ALL">전채</option>
    								<c:forEach var="value" items="${commonCodeList}">
 	   								<option value="${value.cmmnCode}">${value.cmmnCodeValue}</option>
    								</c:forEach>
@@ -647,7 +642,7 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<td colspan="4" class="t-radius" style="text-align: center; border: none;">
+						<td colspan="4" class="t-radius">
 							<strong>운행일정</strong>
 						</td>
 					</tr>
@@ -674,12 +669,8 @@
 					<tr>
 						<td class="head">노선</td>
 						<td id="route">--</td>
-						<td class="head">거리</td>
-						<td id="distnc">--</td>
-					</tr>
-					<tr>
 						<td class="head">요금</td>
-						<td id="fare" colspan="3">--</td>
+						<td id="fare">--</td>
 					</tr>
 					<tr>
 						<td class="head">등록자</td>
@@ -688,16 +679,16 @@
 						<td id="rgsde">--</td>
 					</tr>
 					<tr>
-						<td class="b-l-radius head" style="border: none;">수정자</td>
+						<td class="head b-l-radius">수정자</td>
 						<td id="updUsr">--</td>
 						<td class="head">수정일</td>
-						<td id="updde" class="b-r-radius" style="border: none;">--</td>
+						<td id="updde" class="b-r-radius">--</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 		
-		<!-- 상세운행정보 -->
+		<!-- 경유지 -->
 		<div id="grid2" style="margin: 0 auto; margin-top: 15px; width: 845px;">
    			<table id="gridBody2"></table>
 	   		<div id="footer2"></div>
@@ -711,7 +702,7 @@
    		
    		<!-- 수정 -->
    		<div id="updateGroup" style="margin: 0 auto; margin-top: 15px; width: 90px;">
-			<button id="updateBtn" style="width: 90px;" disabled="disabled">수정</button>
+			<button id="updateBtn" class="b-disabled" onclick="updateOprat();" style="width: 90px;" disabled="disabled">수정</button>
    			
 			<form id="updateForm" action="/admin/opratUpdate.html" method="post">
 				<input id="opratCode" name="code" type="hidden">

@@ -13,6 +13,13 @@ public interface TrainDAO {
 	 *************************/
 	public List<TrainBean> selectTrainList(CommonBean commonBean);
 	
+	/**************************
+	 * 열차번호검색
+	 * @param trainNo
+	 * @return
+	 ****************************/
+	public int selectTrainNo(String trainNo);
+	
 	/******************************
 	 * 열차 등록
 	 * @param trainBean

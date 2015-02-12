@@ -31,7 +31,7 @@
         FROM	TABLE(
 					PK_ADMIN_TRAIN.FN_SLT_TRAIN(#srcType,mode=IN#, #srcText,mode=IN#)
 				)
-		ORDER BY TRAIN_CODE
+		ORDER BY TO_NUMBER(TRAIN_NO)
 		
 		/*******************************************************************
 	    * 이름	: FN_SLT_TRAIN
@@ -39,6 +39,11 @@
 	    * 파라미터: 열차종류, 열차명
 	    ******************************************************************/
 	</procedure>
+	
+	<!-- 열차번호검사 -->
+	<select id="selectTrainNo" parameterClass="String" resultClass="Integer">
+		SELECT COUNT(*) FROM TRAIN WHERE TRAIN_NO = #trainNo#
+	</select>
 	
   	<!-- 열차 등록 -->
   	<insert id="insertTrain" parameterClass="com.koRail.admin.to.TrainBean">

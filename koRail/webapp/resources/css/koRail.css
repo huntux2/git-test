@@ -45,11 +45,29 @@ button:ACTIVE {
     background-color: #000000;
 }
 
+.b-disabled {
+	background-color: #A2A2A2;
+	border: none;
+	padding: 2px;
+}
+
+.b-disabled:HOVER {
+	background-color: #A2A2A2;
+	border: none;
+	color: #FFFFFF;
+}
+
+.b-disabled:ACTIVE {
+	background-color: #A2A2A2;
+	border: none;
+	color: #FFFFFF;
+}
+
 /* menu */
 .menu {
+	background: #000000 url("/res/img/ui-bg_loop_25_000000_21x21.png") 50% 50% repeat;
 	border-radius: 7px;
 	border-collapse: collapse;
-	background: #000000 url("/res/img/ui-bg_loop_25_000000_21x21.png") 50% 50% repeat;
 }
 
 .menu td:FIRST-CHILD:HOVER {
@@ -92,6 +110,8 @@ button:ACTIVE {
 
 .lmb td:HOVER{
 	color: #FFFFFF;
+	cursor:pointer;
+	cursor:hand;
 }
 
 /* action */
@@ -144,7 +164,10 @@ button:ACTIVE {
 	margin-top: 15px;
 	font-weight: bolder;
 	text-align: center;
-	border-collapse: collapse;
+	border: 1px black solid;
+	border-spacing: 1px;
+	border-radius: 7px;
+	background-color: #747474;
 	color: #FFFFFF;
 }
 
@@ -159,9 +182,6 @@ button:ACTIVE {
 }
 
 .d-table td {
-	border: 1px;
-	border-style: solid;
-	border-color: #747474;
 	background: #000000 url("/res/img/ui-bg_loop_25_000000_21x21.png") 50% 50% repeat;
 }
 

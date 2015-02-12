@@ -72,6 +72,15 @@ public class CommonController {
 		model.addAttribute("menuTree", MenuTree.getInstance().getMenu(formName));
 	}
 	
+	/***************************************
+	 * 세션만료화면
+	 * @return
+	 *************************************/
+	@RequestMapping(value="sessionOut.html")
+	public String findSessionTimeOutForm(){
+		return "/error/sessionTimeOutForm";
+	}
+	
 	/*********************************************************
 								main
 	*********************************************************/

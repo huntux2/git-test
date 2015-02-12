@@ -7,43 +7,44 @@
 */
 function doNumberCheck(obj, event, length, paramFunction){
 	/*문자열 치환*/
-	var value = $(obj).val().replace(/ /gi, "");
+	var value = obj.value.replace(/\s/gi, "");
 	
 	/*치환된 문자열 적용*/
-	$(obj).val(value);
-	
-	/* exc function */
-	paramFunction;
+	obj.value = value;
 	
 	if(event.keyCode < 48){
 		event.returnValue = true;
 	}else if(event.keyCode >= 48 && event.keyCode <= 57){
 		if(value.length >= length){
-			event.returnValue = false;
+			event.preventDefault();
 		}
 	}else if(event.keyCode >= 96 && event.keyCode <= 105){
 		if(value.length >= length){
-			event.returnValue = false;
+			event.preventDefault();
 		}
 	}else{
-		event.returnValue = false;
+		event.preventDefault();
 	}
+	
+	/* exc function */
+	paramFunction;
 }
 
 /*
+ * obj : 이벤트가 발생한 객체
  * 숫자형식 변환
  * 형식 : 000,000 ex) 123,456
  * 사용가능 기호 : +, -
  */
-function toCommaNumber(number) {
+function toCommaNumber(obj) {
 	var reg = /(^[+-]?\d+)(\d{3})/;	// 정규식
-	var string = number.toString();	// 숫자를 문자열로 변환
+	var string = obj.value.replace(/,/gi, "").toString();	// 숫자를 문자열로 변환
 
 	while (reg.test(string)){
 		string = string.replace(reg, '$1' + ',' + '$2');
 	}
 
-	return string;
+	obj.value = string;	/*객체에 값 설정*/
 }
 
 /*
@@ -55,10 +56,10 @@ function toCommaNumber(number) {
 */
 function doStringCheck(obj, event, length, SkipDot){
 	/*문자열 치환*/
-	var value = $(obj).val().replace(/ /gi, "");
+	var value = obj.value.replace(/\s/gi, "");
 	
 	/*치환된 문자열 적용*/
-	$(obj).val(value);
+	obj.value = value;
 	
 	if(event.keyCode == 190 && SkipDot == true){
 		event.returnValue = true;
@@ -66,23 +67,24 @@ function doStringCheck(obj, event, length, SkipDot){
 		event.returnValue = true;
 	}else if(event.keyCode >= 48 && event.keyCode <= 105){
 		if(value.length >= length){
-			event.returnValue = false;
+			event.preventDefault();
 		}
 	}else{
-		event.returnValue = false;
+		event.preventDefault();
 	}
 }
 
 /*입력수 재한*/
 function setLimitLength(obj, event, length){
 	/*문자열 치환*/
-	var value = $(obj).val().replace(/ /gi, "");
+	var value = obj.value.replace(/\s/gi, "");
 	
 	/*치환된 문자열 적용*/
-	$(obj).val(value);
+	obj.value = value;
+	
 	if(event.keyCode < 48){
 		event.returnValue = true;
 	}else if(value.length >= length){
-		event.returnValue = false;
+		event.preventDefault();
 	}
 }

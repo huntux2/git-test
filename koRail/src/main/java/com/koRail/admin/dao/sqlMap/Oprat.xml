@@ -63,6 +63,7 @@
 		FROM TABLE(	
 			PK_ADMIN_OPRAT.FN_SLT_OPRAT(#srcType,mode=IN#, #srcText,mode=IN#, #code,mode=IN#)
 		)
+		ORDER BY TO_NUMBER(TRAIN_NO)
 		
 		/**********************************************************
 	    * 이름        : FN_SLT_OPRAT

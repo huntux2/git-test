@@ -11,7 +11,7 @@ import com.koRail.common.to.CommonBean;
 
 @Repository(value="trainDAO")
 @SuppressWarnings({ "unchecked", "deprecation" })
-public class TarinDAOImpl implements TrainDAO {
+public class TrainDAOImpl implements TrainDAO {
 	@Autowired
 	SqlMapClientTemplate sqlMapClientTemplate;
 	
@@ -23,6 +23,16 @@ public class TarinDAOImpl implements TrainDAO {
 	@Override
 	public List<TrainBean> selectTrainList(CommonBean commonBean){
 		return sqlMapClientTemplate.queryForList("Train.selectTrain", commonBean);
+	}
+	
+	/**************************
+	 * 열차번호검색
+	 * @param trainNo
+	 * @return
+	 ****************************/
+	@Override
+	public int selectTrainNo(String trainNo){
+		return (Integer)sqlMapClientTemplate.queryForObject("Train.selectTrainNo", trainNo);
 	}
 	
 	/******************************

@@ -50,7 +50,7 @@
    				/*그리드 초기상태*/
 				$("#gridBody").jqGrid({
 					datatype: "LOCAL",
-	   				caption:"역 정보",
+	   				caption:"역",
 	   				width: 845,
 	   				height: 221,
 	   				scroll: 1,
@@ -117,7 +117,7 @@
 									$("#gridBody").jqGrid({
 										datatype: "LOCAL",
 						   				multiselect: true,
-						   				caption:"역 정보",
+						   				caption:"역",
 						   				width: 845,
 						   				height: 221,
 						   				scroll: 1,
@@ -190,7 +190,7 @@
 							/*미입력 처리*/
 							if(area.val() == "선택"){
 								alert("역을 선택해야합니다.");
-							}else if(statnNm.val().trim() == ""){
+							}else if($.trim(statnNm.val()) == ""){
 								alert("역명은 필수입력 사항입니다.");
 							}
 							/*conForm 생성(확인 : 등록, 취소 : 상태유지)*/
@@ -254,7 +254,7 @@
 							/*미입력 처리*/
 							if(area.val() == "선택"){
 								alert("역을 선택해야합니다.");
-							}else if(statnNm.val().trim() == ""){
+							}else if($.trim(statnNm.val()) == ""){
 								alert("역명은 필수입력 사항입니다.");
 							}
 							/*conForm 생성(확인 : 수정, 취소 : 상태유지)*/

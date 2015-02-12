@@ -155,11 +155,21 @@ public class AdminServieImpl implements AdminServie {
 	public void setTrain(TrainBean trainBean, String[] deleteCodeArray) throws SQLExecutException{
 		/*등록*/
 		if("insert".equals(trainBean.getState())){
-			trainDAO.insertTrain(trainBean);
+			/*열차번호 검사*/
+			if(trainDAO.selectTrainNo(trainBean.getTrainNo()) == 0){
+				trainDAO.insertTrain(trainBean);				
+			}else{
+				throw new SQLExecutException(trainBean.getTrainNo());
+			}
 		}
 		/*수정*/
 		else if("update".equals(trainBean.getState())){
-			trainDAO.updateTrain(trainBean);
+			/*열차번호 검사*/
+			if(trainDAO.selectTrainNo(trainBean.getTrainNo()) == 0){
+				trainDAO.updateTrain(trainBean);
+			}else{
+				throw new SQLExecutException(trainBean.getTrainNo());
+			}
 		}
 		/*삭제*/
 		else if("delete".equals(trainBean.getState())){
@@ -245,13 +255,6 @@ public class AdminServieImpl implements AdminServie {
 					if("insert".equals(detailOpratBean.getState())){
 						/* 등록자 설정 */
 						detailOpratBean.setRegister(opratBean.getupdUsr());
-						
-						/* 이전역, 다음역 거리 재설정 (parmType: number km -> resetTyp: number) */
-						String[] prvDistnc = detailOpratBean.getPrvDistnc().split(" ");
-						detailOpratBean.setPrvDistnc(prvDistnc[0].trim());
-						
-						String[] nxtDistnc = detailOpratBean.getNxtDistnc().split(" ");
-						detailOpratBean.setNxtDistnc(nxtDistnc[0].trim());
 						
 						/* 상세운행 등록 */
 						detailopratDAO.insertDetailOprat(detailOpratBean);

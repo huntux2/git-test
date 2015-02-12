@@ -35,6 +35,9 @@
 	   			
 	   			/* 그리드 초기화 */
 				doGridInit();
+	   			
+	   			/*전체검색*/
+	   			findTrainList("knd");
 	   		});
 	   		
 	   		/*그리드 초기화*/
@@ -47,50 +50,42 @@
 	   			/*그리드 초기상태*/
 				$("#gridBody").jqGrid({
 					datatype: "LOCAL",
-	   				caption:"열차정보",
+	   				caption:"열차",
 	   				width: 845,
-	   				height: 230,
+	   				height: 221,
 	   				scroll: 1,
 	   				rowNum : 'max',
 	   				pager: '#footer',
-	   				colNames:["수정", "열차코드", "열차종류", "열차번호", "등록자", "등록일", "수정자", "수정일"],
+	   				colNames:["수정", "번호", "열차번호", "열차종류", "등록자", "등록일", "수정자", "수정일", "열차코드"],
 	          		colModel : [
 						{ name : "update", align:"center", width: 60, height : 200, sortable:false,
 							cellattr: function(rowId, value, rowObject, colModel, arrData) {
-								return ' colspan=8';
+								return ' colspan=9';
 							}
 						},
-						{ name : 'trainCode', width: 70, sortable:false},
-						{ name : 'trainKnd', width: 70, align:"center", sortable:false},
+						{ name : 'no', width: 40, align:"right", sortable:false},
 						{ name : 'trainNo', width: 70, align:"center", sortable:false},
+						{ name : 'trainKnd', width: 70, align:"center", sortable:false},
 						{ name : 'register', width: 70, align:"center", sortable:false}, 
 						{ name : 'rgsde', width: 110, align:"center", sortable:false},
 						{ name : 'updUser', width: 70, align:"center", sortable:false},
-						{ name : 'updde', width: 110, align:"center", sortable:false}
+						{ name : 'updde', width: 110, align:"center", sortable:false},
+						{ name : 'trainCode', hidden:true}
 					]
 				}); /*jqGrid end*/
 				/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-				$("#gridBody").jqGrid('addRowData', 1, {update:"조회조건을 선택/입력하여 조회를 하십시오."});
+				$("#gridBody").jqGrid('addRowData', 1, {update:"결과가 존재하지 않습니다."});
    			}
    			
 	   		/*리스트*/
 			function findTrainList(mode){
-				var vUrl = ""; /*url*/
-				
 				/*검색조건*/
-	   			var trainKnd = $("#trainKndSelect").val().trim();	/*열차종류*/
-	   			var trainNo = $("#trainNoText").val().trim();		/*열차번호*/
+	   			var trainKnd = $.trim($("#trainKndSelect").val());	/*열차종류*/
+	   			var trainNo = $.trim($("#trainNoText").val());		/*열차번호*/
 	   			
 	   			/*열차종류로 검색*/
 				if(mode == "knd"){
-					if(trainKnd == "선택"){
-						alert("조회조건을 선택해야 합나디다.");
-						return;
-					}else{
-						/* 삭제할 시 제검색 유형 설정 */
-		   				$("#deleteType").val("knd");
-						vUrl = "/admin/trainList.do?srcType="+trainKnd;
-					}
+					trainNo = "";
 				}
 				/*열차번호로 검색*/
 				else{
@@ -98,82 +93,85 @@
 						alert("조회조건을 입력해야 합나디다.");
 						return;
 					}else{
-						/* 삭제할 시 제검색 유형 설정 */
-		   				$("#deleteType").val("trinNo");
-						vUrl = "/admin/trainList.do?srcText="+encodeURIComponent(trainNo);
+						trainKnd = "";
 					}
 				}
 				
-				/* 미입력 처리 */
-				if(vUrl == ""){
-					return;
-				}
 				/*그리드 내용*/
-				else{
-					$.ajax({
-						type:"GET",
-						url: vUrl,
-						Type:"JSON",
-						success : function(data) {
-							if(data.trainListSize == 0){
-								alert("결과가 존재하지 않습니다.");
-							}else{
-								/*그리드 재생성*/
-								if(!viewState){
-									/*그리드가 화면에 보여지는 상태(true : 보임 , false : 숨김)*/
-									viewState = true;
-									
-									/*그리드 초기화*/
-									$("#grid").html("<table id='gridBody'></table><div id='footer'></div>");
-									
-									$("#gridBody").jqGrid({
-										datatype: "LOCAL",
-						   				multiselect: true,
-						   				caption:"열차정보",
-						   				width: 845,
-						   				height: 230,
-						   				scroll: 1,
-						   				rowNum : 'max',
-						   				pager: '#footer',
-						   				colNames:["수정", "열차코드", "열차종류", "열차번호", "등록자", "등록일", "수정자", "수정일"],
-						          		colModel : [
-											{ name : "update", align:"center", width: 60, height : 200, sortable:false},
-											{ name : 'trainCode', width: 120, sortable:false},
-											{ name : 'trainKnd', width: 70, align:"center", sortable:false},
-											{ name : 'trainNo', width: 70, align:"center", sortable:false},
-											{ name : 'register', width: 70, align:"center", sortable:false}, 
-											{ name : 'rgsde', width: 110, align:"center", sortable:false},
-											{ name : 'updUsr', width: 70, align:"center", sortable:false},
-											{ name : 'updde', width: 110, align:"center", sortable:false}
-										]
-									}); /*jqGrid end*/
-								} /*if end*/
+				$.ajax({
+					type:"POST",
+					url: "/admin/trainList.do",
+					Type:"JSON",
+					data:{srcType:trainKnd, srcText:trainNo},
+					success : function(data) {
+						if(data.trainListSize == 0){
+							alert("결과가 존재하지 않습니다.");
+						}else{
+							/*그리드 재생성*/
+							if(!viewState){
+								/*그리드가 화면에 보여지는 상태(true : 보임 , false : 숨김)*/
+								viewState = true;
 								
-								/*그리드 비우기*/
-								$("#gridBody").jqGrid('clearGridData');
+								/*그리드 초기화*/
+								$("#grid").html("<table id='gridBody'></table><div id='footer'></div>");
 								
-								/*데이터 삽입*/
-								$.each(data.trainList, function(k,v){
-									$("#gridBody").jqGrid('addRowData', k+1,
-										{
-											update:"<button type='button'"
-													+"style='margin-top: 2px;"
-													+"margin-bottom: 3px;'"
-													+"onclick=updateTrain('"+v.trainCode+"','"+v.trainKndCode+"','"+v.trainNo+"')>수정</button>",
-											trainCode:v.trainCode+"",
-											trainKnd:v.trainKndValue+"",
-											trainNo:v.trainNo+"",
-											register:v.register+"",
-											rgsde:v.rgsde+"",
-											updUsr:v.updUsr+"",
-											updde:v.updde+""
-										}
-									); /*addRowData end*/
-								}); /*$.each end*/
-							} /*else end*/
-						} /*success end*/
-					}); /*$.ajax end*/
-				} /*else end*/
+								$("#gridBody").jqGrid({
+									datatype: "LOCAL",
+					   				multiselect: true,
+					   				caption:"열차",
+					   				width: 845,
+					   				height: 221,
+					   				scroll: 1,
+					   				rowNum : 'max',
+					   				pager: '#footer',
+					   				colNames:["수정", "번호", "열차번호", "열차종류", "등록자", "등록일", "수정자", "수정일", "열차코드"],
+					          		colModel : [
+										{ name : "update", align:"center", width: 60, height : 200, sortable:false},
+										{ name : 'no', width: 40, align:"right", sortable:false},
+										{ name : 'trainNo', width: 70, align:"center", sortable:false},
+										{ name : 'trainKnd', width: 70, align:"center", sortable:false},
+										{ name : 'register', width: 70, align:"center", sortable:false}, 
+										{ name : 'rgsde', width: 110, align:"center", sortable:false},
+										{ name : 'updUsr', width: 70, align:"center", sortable:false},
+										{ name : 'updde', width: 110, align:"center", sortable:false},
+										{ name : 'trainCode', hidden:true}
+									]
+								}); /*jqGrid end*/
+							} /*if end*/
+							
+							/*그리드 비우기*/
+							$("#gridBody").jqGrid('clearGridData');
+							
+							/*데이터 삽입*/
+							$.each(data.trainList, function(k,v){
+								$("#gridBody").addRowData(k,
+									{
+										update:"<button type='button'"
+												+"style='margin-top: 2px;"
+												+"margin-bottom: 3px;'"
+												+"onclick=updateTrain('"+v.trainCode+"','"+v.trainKndCode+"','"+v.trainNo+"')>수정</button>",
+										no:k+1+"",
+										trainNo:v.trainNo+"",
+										trainKnd:v.trainKndValue+"",
+										register:v.register+"",
+										rgsde:v.rgsde+"",
+										updUsr:v.updUsr+"",
+										updde:v.updde+"",
+										trainCode:v.trainCode+""
+									}
+								); /*addRowData end*/
+							}); /*$.each end*/
+						} /*else end*/
+					}, /*success end*/
+					error : function(request, status, error){
+						if(request.status == 401){
+							alert("세션이 만료되었습니다.");
+							location.href = "/logout.do";
+						}else{
+							alert("서버에러입니다.");
+						}
+					}
+				}); /*$.ajax end*/
 			} /*findTrainList end*/
 			
 			/*등록 다이알로그 */
@@ -192,34 +190,43 @@
 						"등록": function() {
 							/*미입력 처리*/
 							if(trainKnd.val() == "선택"){
-								alert("열차를 선택해야합니다.");
-							}else if(trainNo.val().replace(" ") == ""){
-								alert("모든 항목은 필수입력 사항입니다.");
+								alert("열차종류를 선택해야합니다.");
+							}else if(trainNo.val().replace(/\s/gi, "") == ""){
+								alert("열차번호는 필수입력 사항입니다.");
 							}
 							/*conForm 생성(확인 : 등록, 취소 : 상태유지)*/
-							else if(confirm("이 열차정보를 등록하시겠습니까?")){
+							else if(confirm("열차정보를 등록하시겠습니까?")){
 								$.ajax({
 									type:"POST",
-									url: "/admin/trainProcess.do?state=insert&trainKndCode="
-											+encodeURIComponent(trainKnd.val())+"&trainNo="
-											+encodeURIComponent(trainNo.val().replace(" "))+"&register="
-											+encodeURIComponent("${name}"),
+									url: "/admin/trainProcess.do",
 									Type:"JSON",
+									data:{
+										state:"insert",
+										trainKndCode:trainKnd.val(),
+										trainNo:trainNo.val().replace(/\s/gi, ""),
+										register:"${name}"
+									},
 									success : function(data) {
 										if(data.errorCode == 0){
-											/* 재검색 */
-											if($("#deleteType").val() != ""){
-												findTrainList($("#deleteType").val());
-											}
-											
 											alert("등록이 완료되었습니다.");
+											
+											/* 등록한 열차종류로 자동 검색 */
+											$("#trainKndSelect option[value='"+trainKnd.val()+"']").attr("selected", "selected");
+											findTrainList("knd");
+											$("#addDialog").dialog("close");
 										}else{
-											alert("등록실패");
+											alert(trainNo.val()+"는(은) 이미 사용중인 열차번호 입니다.");
+										}
+									}, /*success end*/
+									error : function(request, status, error){
+										if(request.status == 401){
+											alert("세션이 만료되었습니다.");
+											location.href = "/logout.do";
+										}else{
+											alert("서버에러입니다.");
 										}
 									}
 								}); /* ajax end */
-								
-								$(this).dialog("close");
 							}
 						},
 						"취소": function() {
@@ -243,33 +250,45 @@
 					buttons: {
 						"수정": function() {
 							/*미입력 처리*/
-							if(trainKnd.val() == "선택" || trainNo.val().replace(" ") == ""){
-								alert("모든 항목은 필수입력 사항입니다.");
+							if(trainKnd.val() == "선택"){
+								alert("열차종류를 선택해야합니다.");
+							}else if(trainNo.val().replace(/\s/gi, "") == ""){
+								alert("열차번호는 필수입력 사항입니다.");
 							}
-							/*conForm 생성(확인 : 등록, 취소 : 상태유지)*/
-							else if(confirm("이 열차정보를 등록시겠습니까?")){
+							/*conForm 생성(확인 : 수정, 취소 : 상태유지)*/
+							else if(confirm("열차정보를 수정시겠습니까?")){
 								$.ajax({
 									type:"POST",
-									url: "/admin/trainProcess.do?state=update&trainCode="
-											+encodeURIComponent(trainCode)+"&trainKndCode="
-											+encodeURIComponent(trainKnd.val())+"&trainNo="
-											+encodeURIComponent(trainNo.val().replace(" "))+"&updUsr="
-											+encodeURIComponent("${name}"),
+									url: "/admin/trainProcess.do",
 									Type:"JSON",
+									data:{
+										state:"update",
+										trainCode:trainCode,
+										trainKndCode:trainKnd.val(),
+										trainNo:trainNo.val().replace(/\s/gi, ""),
+										updUsr:"${name}"
+									},
 									success : function(data) {
 										if(data.errorCode == 0){
-											/* 재검색 */
-											if($("#deleteType").val() != ""){
-												findTrainList($("#deleteType").val());
-											}
 											alert("수정이 완료되었습니다.");
+											
+											/* 수정한 열차종류로 자동 검색 */
+											$("#trainKndSelect option[value='"+trainKnd.val()+"']").attr("selected", "selected");
+											findTrainList("knd");
+											$("#updateDialog").dialog("close");
 										}else{
-											alert("수정실패");
+											alert(trainNo.val()+"는(은) 이미 사용중인 열차번호 입니다.");
+										}
+									}, /*success end*/
+									error : function(request, status, error){
+										if(request.status == 401){
+											alert("세션이 만료되었습니다.");
+											location.href = "/logout.do";
+										}else{
+											alert("서버에러입니다.");
 										}
 									}
 								}); /* ajax end */
-								
-								$(this).dialog("close");
 							}
 						},
 						"취소": function() {
@@ -320,7 +339,7 @@
 										if($("#gridBody").getGridParam("records") == 0){
 											doGridInit();
 										}else{
-											findTrainList($("#deleteType").val());
+											findTrainList("knd");
 										}
 									}
 									
@@ -329,11 +348,19 @@
 									/* 삭제되지 않은 ROW를 보여줌 */
 									for(var i = 0; i < rowIds.length; i++){
 										if($("#gridBody").getRowData(rowIds[i]).trainCode == data.errorMsg){
-											alert(data.errorMsg+": "+$("#gridBody").getRowData(rowIds[i]).trainNo+"는 현재 사용중인 열차입니다.");
+											alert($("#gridBody").getRowData(rowIds[i]).trainNo+"("+$("#gridBody").getRowData(rowIds[i]).trainKnd+")는 현재 사용중인 열차입니다.");
 										}
 									}
 								}
-							} /* success end */
+							}, /*success end*/
+							error : function(request, status, error){
+								if(request.status == 401){
+									alert("세션이 만료되었습니다.");
+									location.href = "/logout.do";
+								}else{
+									alert("서버에러입니다.");
+								}
+							}
 						}); /* ajax end */
 					}
 				}
@@ -349,15 +376,11 @@
    		
    		<!-- 사용방법 -->
    		<div class="caption">
-			* 열차종류를 선택한 후 조회버튼을 이용해 열차정보를 조회할 수 있습니다.
-			<br>
-			* 열차번호를 입력한 후 조회버튼을 이용해 열차정보를 조회할 수 있습니다.
-			<br>
-			* 등록버튼을 이용하여 열차를 등록할 수 있습니다.
-			<br>
-			* 삭제할 열차정보를 체크박스로 선택한 후 석제버튼을 이용하여 열차정보를 삭제할 수 있습니다.
-			<br>
-			* 수정버튼을 이용하여 열차정보를 수정할 수 있습니다.
+			<div>* 열차종류를 선택한 후 조회버튼을 이용해 열차정보를 조회할 수 있습니다.</div>
+			<div>* 열차번호를 입력한 후 조회버튼을 이용해 열차정보를 조회할 수 있습니다.</div>
+			<div>* 등록버튼을 이용하여 열차를 등록할 수 있습니다.</div>
+			<div>* 삭제할 열차정보를 체크박스로 선택한 후 석제버튼을 이용하여 열차정보를 삭제할 수 있습니다.</div>
+			<div>* 수정버튼을 이용하여 열차정보를 수정할 수 있습니다.</div>
    		</div>
    		
    		<!-- search -->
@@ -371,7 +394,7 @@
 						</td>
    						<td style="width: 100px; padding-left: 0px;">
    							<select id="trainKndSelect" style="width: 100%; height: 25px">
-   								<option value="선택">선택</option>
+   								<option value="ALL">전체</option>
    								<c:forEach var="value" items="${commonCodeList}">
 	   								<option value="${value.cmmnCode}">${value.cmmnCodeValue}</option>
    								</c:forEach>
@@ -435,7 +458,7 @@
 							<strong>열차번호</strong>
 						</td>
 						<td>
-							<input id="addTrainNoText" name="trainNo" type="text" style="width: 163px;">
+							<input id="addTrainNoText" name="trainNo" type="text" onkeydown="doNumberCheck(this, event, 30);" style="width: 163px;">
 						</td>
 					</tr>
 				</tbody> <!-- tbody end -->
@@ -467,7 +490,7 @@
 							<strong>열차번호</strong>
 						</td>
 						<td>
-							<input id="updateTrainNoText" name="trainNo" type="text" style="width: 163px;">
+							<input id="updateTrainNoText" name="trainNo" type="text" onkeydown="doNumberCheck(this, event, 30);" style="width: 163px;">
 						</td>
 					</tr>
 				</tbody> <!-- tbody end -->

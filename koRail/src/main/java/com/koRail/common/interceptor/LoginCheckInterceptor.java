@@ -18,7 +18,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	private TilesUrlBasedViewResolver tilesUrlBasedViewResolver;
 	
-	String formName = "redirect:/login.html";
+	String formName = "redirect:/sessionOut.html";
 	
 	/********************************
 	 * Login session check
