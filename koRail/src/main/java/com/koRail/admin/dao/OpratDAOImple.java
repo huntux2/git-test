@@ -57,11 +57,10 @@ public class OpratDAOImple implements OpratDAO {
 
 	/**************************
 	 * 운행일정 삭제
-	 * @param opratCode
-	 * @return
+	 * @param opratBean
 	 ************************/
 	@Override
-	public void deleteOprat(String opratCode) {
-		sqlMapClientTemplate.update("Oprat.deleteOprat", opratCode);			
+	public void deleteOprat(OpratBean opratBean){
+		sqlMapClientTemplate.update("Oprat.deleteOprat", opratBean);			
 	}
 }

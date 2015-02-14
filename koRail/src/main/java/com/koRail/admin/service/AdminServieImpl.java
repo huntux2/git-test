@@ -216,8 +216,9 @@ public class AdminServieImpl implements AdminServie {
 	* @param deleteCodeArray
 	* @throws SQLExecutException
 	********************************/
-	public void setOprat(OpratBean opratBean, String[] json, String[] deleteCodeArray) throws SQLExecutException {
-		int rows = 0; /* insert, update, delete가 발생한 row 수 */
+	@Override
+	public void setOprat(OpratBean opratBean, String[] json, String[] deleteCodeArray) throws SQLExecutException{
+		int rows = 0; /* insert, update 발생한 row 수 */
 		
 		if("insert".equals(opratBean.getState())){
 			rows = opratDAO.insertOprat(opratBean);
@@ -225,12 +226,16 @@ public class AdminServieImpl implements AdminServie {
 			rows = opratDAO.updateOprat(opratBean);
 		}else if("delete".equals(opratBean.getState()) && deleteCodeArray != null){
 			for(String opratCode : deleteCodeArray){
-				/* 운행에 대한 모든 상세운행 삭제 */
-				detailopratDAO.deleteDetailOpratAll(opratCode);
-				/* 운행에 대한 모든 호실 삭제 */
-				roomDAO.deleteRoomAll(opratCode);
+				/*삭제할 운행일정 설정*/
+				OpratBean oprat = new OpratBean();
+				oprat.setOpratCode(opratCode);
 				/* 운행 삭제 */
-				opratDAO.deleteOprat(opratCode);
+				opratDAO.deleteOprat(oprat);
+				/*rtCode (0 : 성공, 1 : 에러)*/
+				/*삭제 실패 시 exception 발생*/
+				if("1".equals(oprat.getRtCode())){
+					throw new SQLExecutException(opratCode);
+				}
 			}
 		}else{
 			return;

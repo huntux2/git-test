@@ -14,10 +14,4 @@ public interface DetailOpratDAO {
 	 * @param detailOpratCode
 	 **************************************/
 	public void deleteDetailOprat(String detailOpratCode);
-	
-	/**************************************
-	 * 운행에 대한 모든 상세운행정보 삭제
-	 * @param opratCode
-	 **************************************/
-	public void deleteDetailOpratAll(String opratCode);
 }

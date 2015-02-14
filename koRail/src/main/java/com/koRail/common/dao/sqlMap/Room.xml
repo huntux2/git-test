@@ -70,9 +70,4 @@
   	<delete id="deleteRoom" parameterClass="String">
   	    DELETE FROM ROOM WHERE ROOM_CODE = #roomCode#
   	</delete>
-  	
-  	<!-- 운행정보에 대한 모든 호실 삭제 -->
-  	<delete id="deleteRoomAll" parameterClass="String">
-  	    DELETE FROM ROOM WHERE OPRAT_CODE = #opratCode#
-  	</delete>
 </sqlMap>

@@ -358,7 +358,7 @@ public class AdminController extends CommonController {
 				
 				return "jsonView";
 			}else{
-				return "redirect:opratMng.html";				
+				return "redirect:opratMng.html";
 			}
 		}catch(SQLExecutException e){
 			model.addAttribute("errorCode", 1);

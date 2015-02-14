@@ -100,7 +100,7 @@
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer2',
-		   				colNames:["번호", "출발역", "출발시각", "도착역", "도착시각", "이전역", "다음역"],
+		   				colNames:["번호", "출발역", "출발일시", "도착역", "도착일시", "이전역", "다음역"],
 		          		colModel : [
 							{ name : 'no', width: 40, align:"center", sortable:false,
 								cellattr: function(rowId, value, rowObject, colModel, arrData) {
@@ -213,7 +213,7 @@
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer2',
-		   				colNames:["번호", "출발역", "출발시각", "도착역", "도착시각", "이전역", "다음역"],
+		   				colNames:["번호", "출발역", "출발일시", "도착역", "도착일시", "이전역", "다음역"],
 		          		colModel : [
 							{ name : "no", width: 40, align:"right", sortable:false},
 							{ name : 'startStatnValue', width: 70, align:"center", sortable:false},
@@ -345,7 +345,7 @@
 									$.each(v.detailOpratList, function(k2,v2){
 										detailOpratArray.push(
 											{
-												no:k+1,
+												no:k2+1,
 												opratCode:v2.opratCode+"",
 												startStatnValue:v2.startStatnValue+"",
 												startTm:v2.startTm+"",
@@ -361,7 +361,7 @@
 									$.each(v.roomList, function(k2,v2){
 										roomArray.push(
 											{
-												no:k+1,
+												no:k2+1,
 												opratCode:v2.opratCode+"",
 												room:v2.room+" 호실",
 												seatCo:v2.seatCo+" 석",
@@ -371,7 +371,8 @@
 									}); /*$.each end*/
 									
 									/*운행정보 리스트에 보여질 항목*/
-									$("#gridBody").addRowData(k+1,
+									$("#gridBody").addRowData(
+										k+1,
 										{
 											no:k+1,
 											opratCode:v.opratCode+"",
@@ -506,9 +507,9 @@
 						
 						$.ajax({
 							type:"POST",
-							url: "/admin/opratProcess.do?state=delete&deleteCodeArray="
-									+$("input[name=deleteCodeArray]").val(),
+							url: "/admin/opratProcess.do",
 							Type:"JSON",
+							data:{state:"delete", deleteCodeArray:$("input[name=deleteCodeArray]").val()},
 							success : function(data) {
 								/* 선택된 row들 */
 								var rowIds = $("#gridBody").getGridParam('selarrrow');
@@ -540,7 +541,7 @@
 											
 											$("#opratCode").val("");
 										}else{
-											findOpratList($("#deleteType").val());
+											findOpratList("knd");
 										}
 									}
 									
@@ -548,12 +549,24 @@
 								}else{
 									/* 삭제되지 않은 ROW를 보여줌 */
 									for(var i = 0; i < rowIds.length; i++){
-										if($("#gridBody").getRowData(rowIds[i]).trainCode == data.errorMsg){
-											alert(data.errorMsg+": "+$("#gridBody").getRowData(rowIds[i]).trainNo+"는 현재 사용중인 열차입니다.");
+										if($("#gridBody").getRowData(rowIds[i]).opratCode == data.errorMsg){
+											alert(
+												$("#gridBody").getRowData(rowIds[i]).trainNo
+												+"-"+$("#gridBody").getRowData(rowIds[i]).trainKnd
+												+"는 현재 사용중인 열차입니다."
+											);
 										}
 									}
 								}
-							} /* success end */
+							}, /*success end*/
+							error : function(request, status, error){
+								if(request.status == 401){
+									alert("세션이 만료되었습니다.");
+									location.href = "/logout.do";
+								}else{
+									alert("서버에러입니다.");
+								}
+							}
 						}); /* ajax end */
 					}
 				}
@@ -569,15 +582,12 @@
    		
    		<!-- 사용방법 -->
    		<div class="caption">
-			* 열차종류를 선택한 후 조회버튼을 이용해 운행일정을 조회할 수 있습니다.
-			<br>
-			* 열차번호를 입력한 후 조회버튼을 이용해 운행일정을 조회할 수 있습니다.
-			<br>
-			* 조회한 리스트의 특정 항목을 선택하여 상세정보들을 보실 수 있습니다.
-			<br>
-			* 등록버튼을 이용하여 운행일정을 등록할 수 있습니다.
-			<br>
-			* 삭제할 운행일정을 체크박스로 선택한 후 석제버튼을 이용하여 운행일정을 삭제할 수 있습니다.
+   			<div>* 열차종류를 선택한 후 조회버튼을 이용해 운행일정을 조회할 수 있습니다.</div>
+			<div>* 열차번호를 입력한 후 조회버튼을 이용해 운행일정을 조회할 수 있습니다.</div>
+			<div>* 조회한 리스트의 특정 항목을 선택하여 상세정보들을 보실 수 있습니다.</div>
+			<div>* 등록버튼을 이용하여 운행일정을 등록할 수 있습니다.</div>
+			<div>* 수정할 운행일정을 선택한 후 호실목록 하단의 수정버튼을 이용하여 운행일정을 수정할 수 있습니다.</div>
+			<div>* 삭제할 운행일정을 체크박스로 선택한 후 석제버튼을 이용하여 운행일정을 삭제할 수 있습니다.</div>
    		</div>
    		
    		<!-- search -->
@@ -657,13 +667,13 @@
 					<tr>
 						<td class="head">출발역</td>
 						<td id="startStatn">--</td>
-						<td class="head">출발시각</td>
+						<td class="head">출발일시</td>
 						<td id="startTm">--</td>
 					</tr>
 					<tr>
 						<td class="head">도착역</td>
 						<td id="arvlStatn">--</td>
-						<td class="head">도착시각</td>
+						<td class="head">도착일시</td>
 						<td id="arvlTm">--</td>
 					</tr>
 					<tr>

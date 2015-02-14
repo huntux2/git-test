@@ -37,7 +37,7 @@ public interface OpratDAO {
 	
 	/**************************
 	 * 운행일정 삭제
-	 * @param opratCode
+	 * @param opratBean
 	 ************************/
-	public void deleteOprat(String opratCode);
+	public void deleteOprat(OpratBean opratBean);
 }

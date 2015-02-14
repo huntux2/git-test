@@ -97,80 +97,80 @@
 				}
 				
 				/*그리드 내용*/
-					$.ajax({
-						type:"GET",
-						Type:"JSON",
-						url: "/admin/statnList.do?",
-						data:{srcType:area, srcText:statnNm},
-						success : function(data) {
-							if(data.statnListSize == 0){
-								alert("결과가 존재하지 않습니다.");
-							}else{
-								/*그리드 재생성*/
-								if(!viewState){
-									/*그리드가 화면에 보여지는 상태(true : 보임 , false : 숨김)*/
-									viewState = true;
-									
-									/*그리드 초기화*/
-									$("#grid").html("<table id='gridBody'></table><div id='footer'></div>");
-									
-									$("#gridBody").jqGrid({
-										datatype: "LOCAL",
-						   				multiselect: true,
-						   				caption:"역",
-						   				width: 845,
-						   				height: 221,
-						   				scroll: 1,
-						   				rowNum : 'max',
-						   				pager: '#footer',
-						   				colNames:["수정", "번호", "지역", "역 명", "등록자", "등록일", "수정자", "수정일", "역 코드"],
-						          		colModel : [
-											{ name : "update", align:"center", width: 40, height : 200, sortable:false},
-											{ name : "no", width: 40, align:"right", sortable:false},
-											{ name : "areaName", width: 70, align:"center", sortable:false},
-											{ name : "statnNm", width: 70, align:"center", sortable:false},
-											{ name : "register", width: 70, align:"center", sortable:false}, 
-											{ name : "rgsde", width: 110, align:"center", sortable:false},
-											{ name : "updUsr", width: 70, align:"center", sortable:false},
-											{ name : "updde", width: 110, align:"center", sortable:false},
-											{ name : "statnCode", hidden:true}
-										]
-									}); /*jqGrid end*/
-								} /*if end*/
+				$.ajax({
+					type:"GET",
+					Type:"JSON",
+					url: "/admin/statnList.do?",
+					data:{srcType:area, srcText:statnNm},
+					success : function(data) {
+						if(data.statnListSize == 0){
+							alert("결과가 존재하지 않습니다.");
+						}else{
+							/*그리드 재생성*/
+							if(!viewState){
+								/*그리드가 화면에 보여지는 상태(true : 보임 , false : 숨김)*/
+								viewState = true;
 								
-								/*그리드 비우기*/
-								$("#gridBody").jqGrid('clearGridData');
+								/*그리드 초기화*/
+								$("#grid").html("<table id='gridBody'></table><div id='footer'></div>");
 								
-								/*데이터 삽입*/
-								$.each(data.statnList, function(k,v){
-									$("#gridBody").addRowData(k,
-										{
-											update:"<button type='button'"
-													+"style='margin-top: 2px;"
-													+"margin-bottom: 3px;'"
-													+"onclick=updateStatn('"+v.statnCode+"','"+v.areaCode+"','"+v.statnNm+"')>수정</button>",
-											no:k+1,
-											areaName:v.areaName+"",
-											statnNm:v.statnNm+"",
-											register:v.register+"",
-											rgsde:v.rgsde+"",
-											updUsr:v.updUsr+"",
-											updde:v.updde+"",
-											statnCode:v.statnCode
-										}
-									); /*addRowData end*/
-								}); /*$.each end*/
-							} /*else end*/
-						}, /*success end*/
-						error : function(request, status, error){
-							if(request.status == 401){
-								alert("세션이 만료되었습니다.");
-								location.href = "/logout.do";
-							}else{
-								alert("서버에러입니다.");
-							}
+								$("#gridBody").jqGrid({
+									datatype: "LOCAL",
+					   				multiselect: true,
+					   				caption:"역",
+					   				width: 845,
+					   				height: 221,
+					   				scroll: 1,
+					   				rowNum : 'max',
+					   				pager: '#footer',
+					   				colNames:["수정", "번호", "지역", "역 명", "등록자", "등록일", "수정자", "수정일", "역 코드"],
+					          		colModel : [
+										{ name : "update", align:"center", width: 40, height : 200, sortable:false},
+										{ name : "no", width: 40, align:"right", sortable:false},
+										{ name : "areaName", width: 70, align:"center", sortable:false},
+										{ name : "statnNm", width: 70, align:"center", sortable:false},
+										{ name : "register", width: 70, align:"center", sortable:false}, 
+										{ name : "rgsde", width: 110, align:"center", sortable:false},
+										{ name : "updUsr", width: 70, align:"center", sortable:false},
+										{ name : "updde", width: 110, align:"center", sortable:false},
+										{ name : "statnCode", hidden:true}
+									]
+								}); /*jqGrid end*/
+							} /*if end*/
+							
+							/*그리드 비우기*/
+							$("#gridBody").jqGrid('clearGridData');
+							
+							/*데이터 삽입*/
+							$.each(data.statnList, function(k,v){
+								$("#gridBody").addRowData(k,
+									{
+										update:"<button type='button'"
+												+"style='margin-top: 2px;"
+												+"margin-bottom: 3px;'"
+												+"onclick=updateStatn('"+v.statnCode+"','"+v.areaCode+"','"+v.statnNm+"')>수정</button>",
+										no:k+1,
+										areaName:v.areaName+"",
+										statnNm:v.statnNm+"",
+										register:v.register+"",
+										rgsde:v.rgsde+"",
+										updUsr:v.updUsr+"",
+										updde:v.updde+"",
+										statnCode:v.statnCode
+									}
+								); /*addRowData end*/
+							}); /*$.each end*/
+						} /*else end*/
+					}, /*success end*/
+					error : function(request, status, error){
+						if(request.status == 401){
+							alert("세션이 만료되었습니다.");
+							location.href = "/logout.do";
+						}else{
+							alert("서버에러입니다.");
 						}
-					}); /*$.ajax end*/
+					}
+				}); /*$.ajax end*/
 			} /*findStatnList end*/
 			
 			/*등록 다이알로그 */

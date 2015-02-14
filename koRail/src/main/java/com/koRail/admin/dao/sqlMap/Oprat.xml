@@ -51,11 +51,11 @@
 				TRAIN_KND_VALUE												/*열차종류코드 값*/, 
 				START_STATN_VALUE											/*출발역코드 값*/, 
 				ARVL_STATN_VALUE											/*도착역코드 값*/, 
-				TO_CHAR(START_TM, 'YYYY-MM-DD HH24:MI') AS START_TM			/*출발시각*/, 
-				TO_CHAR(ARVL_TM, 'YYYY-MM-DD HH24:MI')  AS ARVL_TM			/*도착시각*/, 
+				TO_CHAR(START_TM, 'YYYY-MM-DD HH24:MI') 		AS START_TM	/*출발시각*/, 
+				TO_CHAR(ARVL_TM, 'YYYY-MM-DD HH24:MI') 			AS ARVL_TM	/*도착시각*/, 
 				ROUTE_VALUE													/*노선코드 값*/, 
 				DISTNC														/*거리*/, 
-				FARE														/*요금*/, 
+				TO_CHAR(FARE, 'FM9,999,999,999') 				AS FARE		/*요금*/, 
 				REGISTER													/*등록자*/, 
 				TO_CHAR(RGSDE, 'YYYY-MM-DD HH24:MI')			AS RGSDE	/*등록일*/,
 				NVL(UPDUSR, '--') 							 	AS UPDUSR	/*수정자*/,
@@ -88,7 +88,7 @@
 				ROUTE_CODE													/*노선코드*/, 
 				ROUTE_VALUE													/*노선코드 값*/, 
 				DISTNC														/*거리*/, 
-				FARE														/*요금*/, 
+				TO_CHAR(FARE, 'FM9,999,999,999') 				AS FARE		/*요금*/, 
 				REGISTER													/*등록자*/, 
 				TO_CHAR(RGSDE, 'YYYY-MM-DD HH24:MI')			AS RGSDE	/*등록일*/,
 				NVL(UPDUSR, '--') 							  	AS UPDUSR	/*수정자*/,
@@ -157,7 +157,17 @@
   	</update>
   	
   	<!-- 운행 삭제 -->
-  	<delete id="deleteOprat" parameterClass="String">
-  	    DELETE FROM OPRAT WHERE OPRAT_CODE = #opratCode#
-  	</delete>
+  	<procedure id="deleteOprat" parameterClass="com.koRail.admin.to.OpratBean">
+  	    { CALL PK_ADMIN_OPRAT.SP_DLT_OPRAT(
+			#opratCode,mode=IN#,
+			#rtCode,mode=OUT,jdbcType=VARCHAR#,
+			#rtMsg,mode=OUT,jdbcType=VARCHAR#
+		) }
+		
+		/*******************************************************************
+	    * 이름		: SP_DLT_OPRAT
+	    * 설명		: 운행일정 삭제
+	    * 파라미터	: 운행일정 코드, 에러 코드(0 : 성공, 1 : 에러), 에러 메세지
+	    ******************************************************************/
+	</procedure>
 </sqlMap>

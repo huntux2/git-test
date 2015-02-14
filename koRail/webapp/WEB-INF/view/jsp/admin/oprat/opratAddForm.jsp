@@ -38,6 +38,7 @@
 					}
 				});
 				
+				/*호실 radio style*/
 				$("input[name=prtclrRoomYN]").click(function(){
 					if($(this).val() == "Y"){
 						$("#seatCo1").parent().css("background", "#FF8224");
@@ -339,7 +340,7 @@
    					modal: true,
    					width: 430,
 					buttons: {
-						"등록": function() {
+						"확인": function() {
 							if($("#rowData1").val() == ""){
 								alert("열차를 선택해야 합니다.");
 							}else{
@@ -471,15 +472,24 @@
    					modal: true,
    					width: 390,
 					buttons: {
-						"등록": function() {
+						"확인": function() {
 							if($("#rowData1").val() == ""){
 								alert("역을 선택해야 합니다.");
 							}else{
 								if($("#startStatnCode").val() == $("#rowData1").val()){
 									alert("이미 사용중인 역 입니다.");
 									return;
+								/*경유지 등록의 도착역 또는 다음역이 운행일정의 도착역과 동일한 경우*/
 								}else if(type1 == "dialog" && $("#arvlStatnCode").val() == $("#rowData1").val()){
-									
+									if(type2 == "arvl" || type2 == "nxt"){
+										$("#arvlStatnCode2").val($("#rowData1").val());
+										$("#arvlStatnValue2").val($("#rowData2").val());
+										$("#nxtStatnCode").val($("#rowData1").val());
+										$("#nxtStatnValue").val($("#rowData2").val());
+									}else{
+										alert("이미 사용중인 역 입니다.");
+										return;
+									}
 								}else if($("#arvlStatnCode").val() == $("#rowData1").val()){
 									alert("이미 사용중인 역 입니다.");
 									return;
@@ -487,6 +497,18 @@
 									if(type1 == "text"){
 										/* 출발역 */
 										if(type2 == "start"){
+											for(var i = 0; i < $("#gridBody").getGridParam("records"); i++){
+												/*경유지의 출발역*/
+												var startStatn = $("#gridBody").getRowData(i).startStatnCode;
+												/*경유지의 도착역*/
+												var arvlStatn = $("#gridBody").getRowData(i).arvlStatnCode;
+												
+												if(startStatn == $("#rowData1").val() || arvlStatn == $("#rowData1").val()){
+													alert("경유지에 등로된 역은 사용하실 수 없습니다.");
+													return;
+												}
+											}
+											
 											$("#startStatnCode").val($("#rowData1").val());
 											$("#startStatnValue").val($("#rowData2").val());
 											
@@ -503,6 +525,16 @@
 										}
 										/* 도착역 */
 										else if(type2 == "arvl"){
+											for(var i = 0; i < $("#gridBody").getGridParam("records"); i++){
+												/*경유지의 출발역*/
+												var startStatn = $("#gridBody").getRowData(i).startStatnCode;
+												
+												if(startStatn == $("#rowData1").val()){
+													alert("경유지에 등로된 역은 사용하실 수 없습니다.");
+													return;
+												}
+											}
+											
 											$("#arvlStatnCode").val($("#rowData1").val());
 											$("#arvlStatnValue").val($("#rowData2").val());
 										}
@@ -512,20 +544,11 @@
 											$("#startStatnCode2").val($("#rowData1").val());
 											$("#startStatnValue2").val($("#rowData2").val());
 										}
-										/* 도착역 */
-										else if(type2 == "arvl"){
-											$("#arvlStatnCode2").val($("#rowData1").val());
-											$("#arvlStatnValue2").val($("#rowData2").val());
-											$("#nxtStatnCode").val($("#rowData1").val());
-											$("#nxtStatnValue").val($("#rowData2").val());
-										}
 										/* 이전역 */
 										else if(type2 == "prv"){
 											$("#prvStatnCode").val($("#rowData1").val());
 											$("#prvStatnValue").val($("#rowData2").val());
-										}
-										/* 다음역 */
-										else if(type2 == "nxt"){
+										}else if(type2 == "arvl" || type2 == "nxt"){
 											$("#arvlStatnCode2").val($("#rowData1").val());
 											$("#arvlStatnValue2").val($("#rowData2").val());
 											$("#nxtStatnCode").val($("#rowData1").val());
@@ -756,7 +779,7 @@
 		   				modal: true,
 		   				width: 550,
 						buttons: {
-							"등록": function() {
+							"확인": function() {
 								/* 경유지 등록의 입력 값들 */
 								var input = $("#detailOpratDialog input");
 								/*출발역*/
@@ -872,7 +895,7 @@
    					modal: true,
    					width: 300,
 					buttons: {
-						"등록": function() {
+						"확인": function() {
 							/*호실번호*/
 							var room = $("#room").val().replace(/\s/gi, "");
 							/*특실여부*/
@@ -1003,8 +1026,6 @@
 	   			/* 출발일시, 도착일시 설정 날짜형식 ) YYYY-MM-DD HH24:MI */
 				$("#startTm").val($("#year1").val()+"-"+$("#month1").val()+"-"+$("#date1").val()+" "+$("#hh241").val()+":"+$("#mi1").val());
 				$("#arvlTm").val($("#year2").val()+"-"+$("#month2").val()+"-"+$("#date2").val()+" "+$("#hh242").val()+":"+$("#mi2").val());
-   				/*replace*/
-   				$("input[name=fare]").val($("input[name=fare]").val().replace(/,/gi, ""));
    				
    				/* 미입력 검사 */
 				for(var i = 0; i < $("#addForm tbody input").size(); i++){
@@ -1046,7 +1067,9 @@
 		   			$("#json2").val(jsonArray[1]);	
 				
 		   			if(confirm("이 운행정보를 등록하시겠습니까?")){
-						$("input[name=fare]").val($("input[name=fare]").val().replace(/,/gi, ""));
+		   				/*replace*/
+		   				$("input[name=fare]").val($("input[name=fare]").val().replace(/,/gi, ""));
+		   				
 		   				$("#addForm").submit();
 					}
 				} /* else end */
@@ -1468,7 +1491,7 @@
 		</div> <!-- detailOpratDialog -->
 		
 		<div id="roomDialog" title="호실정보 등록" style="display: none;">
-			<table class="d-table" style="width:100%; margin: 0 auto; border-collapse: collapse;">
+			<table class="d-table" style="width:100%; margin: 0 auto;">
 				<colgroup>
 					<col width="30%">
 					<col width="35%">
@@ -1476,13 +1499,13 @@
 				</colgroup>
 				<tbody>
 					<tr>
-						<td class="head">호실</td>
-						<td colspan="2" style="width: 60px;">
+						<td class="head t-l-radius">호실</td>
+						<td class="t-r-radius" colspan="2" style="width: 60px;">
 							<input id="room" type="text" dir="rtl" onkeydown="doNumberCheck(this, event, 5)" style="width: 98%;">
 						</td>
 					</tr>
 					<tr>
-						<td class="head" rowspan="2">조석수</td>
+						<td class="head" rowspan="2">좌석수</td>
 						<td>
 							<label>특실<input type="radio" name="prtclrRoomYN" value="Y"></label>
 						</td>
@@ -1491,14 +1514,14 @@
 						</td>
 					</tr>
 					<tr>
-						<td>
+						<td class="b-l-radius">
 							<select id="seatCo1" style="width: 99%;">
 								<option value="non">선택</option>
 								<option value="26">26</option>
 								<option value="30">30</option>
 							</select>
 						</td>
-						<td>
+						<td class="b-r-radius">
 							<select id="seatCo2" style="width: 99%;">
 								<option value="non">선택</option>
 								<option value="52">52</option>
