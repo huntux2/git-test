@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.koRail.common.dao.DetailResveDAO;
@@ -109,19 +108,11 @@ public class MemberServiceImpl implements MemberService {
 		}else if("update".equals(memberBean.getState())){
 			memberDAO.updateMember(memberBean);
 		}else if("delete".equals(memberBean.getState())){
-			try{
-				/*승차권 예약 만료기간 체크*/
-				if(memberDAO.selectResveCount(memberBean.getId()) == 0){
-					/*아이디 설정*/
-					ResveBean resveBean = new ResveBean();
-					resveBean.setId(memberBean.getId());
-					/*예약정보 삭제*/
-					resveDAO.deleteResve(resveBean);
-				}
-				
-				/*회원정보 삭제*/
-				memberDAO.deleteMember(memberBean.getId());
-			}catch(DataAccessException e){
+			/*회원정보 삭제*/
+			memberDAO.deleteMember(memberBean);
+			
+			/*삭제 실패 시*/
+			if("1".equals(memberBean.getRtCode())){
 				/*메세지 설정*/
 				StringBuffer stringBuffer = new StringBuffer();
 				stringBuffer.append("예약이 만료되지 않은 승차권 또는 결제가 진행중인 승차권이 존재합니다.\n");

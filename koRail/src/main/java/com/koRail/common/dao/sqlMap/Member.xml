@@ -25,6 +25,12 @@
 			#rtCode,mode=OUT,jdbcType=VARCHAR#,
 			#rtMsg,mode=OUT,jdbcType=VARCHAR#
 		) }
+		
+		/*************************************************************
+	    * 이름     : SP_ID_CHECK
+	    * 설명     : 회원 삭제
+	    * 파라미터 : 아이디, 에러 코드(0 : 성공, 1 : 에러), 에러 메세지
+	    *************************************************************/
 	</procedure>
 
 	<!-- 공통 SQL -->
@@ -49,19 +55,26 @@
 	<!-- 회원 조회 -->
 	<select id="selectMember" resultMap="memberResultMap" parameterClass="com.koRail.common.to.MemberBean">
 		<include refid="memberTmp"/>
+		<isEqual property="srcType" compareValue="ALL">
+			ORDER BY ID
+		</isEqual>
 		<isEqual property="srcType" compareValue="id">
 			WHERE ID LIKE '%' || #srcText# || '%'
+			ORDER BY ID
 		</isEqual>
 		<isEqual property="srcType" compareValue="nm">
 			WHERE NM LIKE '%' || #srcText# || '%'
+			ORDER BY NM
 		</isEqual>
 		<isEqual property="srcType" compareValue="rgsde">
 			WHERE RGSDE >= TO_DATE(#srcDate1#, 'YYYY-MM-DD')
         	AND	  RGSDE &lt;= TO_DATE(#srcDate2#, 'YYYY-MM-DD')
+        	ORDER BY RGSDE
 		</isEqual>
 		<isEqual property="srcType" compareValue="updde">
 			WHERE UPDDE >= TO_DATE(#srcDate1#, 'YYYY-MM-DD')
         	AND	  UPDDE &lt;= TO_DATE(#srcDate2#, 'YYYY-MM-DD')
+        	ORDER BY UPDDE
 		</isEqual>
 		<isNull property="srcType">
 			<isNotNull property="formType">
@@ -122,16 +135,18 @@
 		</isNotNull>
 	</update>
 	
-	<!-- 만료되지 않은 승차권 예매 수 -->
-	<select id="selectResveCount" parameterClass="String" resultClass="Integer">
-		SELECT COUNT(*)
-		FROM RESVE
-		WHERE RGSDE >= SYSDATE
-		AND ID = #id#
-	</select>
-	
 	<!-- 회원 삭제 -->
-	<delete id="deleteMember" parameterClass="String">
-		DELETE FROM MEMBER WHERE ID = #id#
-	</delete>
+	<procedure id="deleteMember" parameterClass="com.koRail.common.to.MemberBean">
+		{ CALL PK_ADMIN_MEMBER_MNG.SP_DLT_MEMBER(
+			#id,mode=IN#,
+			#rtCode,mode=OUT,jdbcType=VARCHAR#,
+			#rtMsg,mode=OUT,jdbcType=VARCHAR#
+		) }
+		
+		/*************************************************************
+	    * 이름     : SP_DLT_MEMBER
+	    * 설명     : 회원 삭제
+	    * 파라미터 : 아이디, 에러 코드(0 : 성공, 1 : 에러), 에러 메세지
+	    *************************************************************/
+	</procedure>
 </sqlMap>

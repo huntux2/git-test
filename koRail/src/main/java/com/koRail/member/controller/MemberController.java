@@ -191,9 +191,6 @@ public class MemberController extends CommonController {
 	@RequestMapping(value="useHstrList.do")
 	public String findUseHistoryList(Model model, HttpServletRequest request,
 			@ModelAttribute CommonBean commonBean){
-		/*검색형식을 아이디로 설정*/
-		commonBean.setSrcType(request.getSession().getAttribute("id").toString());
-		
 		/*이용내역 정보*/
 		Map<String, ?> map = memberService.getUseHistoryMap(commonBean);
 		

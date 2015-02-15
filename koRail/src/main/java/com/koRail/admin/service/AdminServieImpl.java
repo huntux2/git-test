@@ -319,14 +319,16 @@ public class AdminServieImpl implements AdminServie {
 	 *******************************/
 	@Override
 	public void setMember(String[] deleteCodeArray) throws SQLExecutException{
-		String id = null;
-		try{
-			for(String value : deleteCodeArray){
-				id = value;
-				memberDAO.deleteMember(value);
+		for(String value : deleteCodeArray){
+			/*아이디 설정 후 회원삭제*/
+			MemberBean memberBean = new MemberBean();
+			memberBean.setId(value);
+			memberDAO.deleteMember(memberBean);
+			
+			/*삭제 실패 시*/
+			if("1".equals(memberBean.getRtCode())){
+				throw new SQLExecutException(value);
 			}
-		}catch(DataAccessException e){
-			throw new SQLExecutException(id);
 		}
 	}
 }

@@ -181,7 +181,7 @@
    					$.ajax({
    						type:"POST",
    						url: "/member/useHstrList.do",
-   						data: {srcDate1:startTm, srcDate2:arvlTm},
+   						data: {srcType:"${id}", srcDate1:startTm, srcDate2:arvlTm},
    						Type:"JSON",
    						success : function(data) {
    							/* 승차권 예매 내역 */
