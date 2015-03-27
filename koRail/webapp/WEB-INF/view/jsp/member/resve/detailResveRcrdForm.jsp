@@ -32,7 +32,7 @@
 			$(document).ready(function(){
 				/*Action style*/
 				$(".menu td").eq(1).addClass("set");
-				$(".lmb tr").eq(0).children("td").addClass("set");
+				$(".lmb tr").eq(1).children("td").addClass("set");
 				
 				/*화면에따른 img*/
 				if("${requestForm}" == "setleSuccess.html"){

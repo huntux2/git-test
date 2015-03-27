@@ -160,11 +160,11 @@ public class MemberServiceImpl implements MemberService {
 	 * @return
 	 **************************/
 	@Override
-	public int getTdyPint(String id){
+	public String getTdyPint(String id){
 		try {
 			return pintDAO.selectTdyPint(id);
 		} catch (NullPointerException e) {
-			return 0;
+			return "0";
 		}
 	}
 	

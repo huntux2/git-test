@@ -285,7 +285,7 @@
 			
 			/*주소검색*/
 			function findAddrList(){
-				var umd = $("#umd").val().replace(" ");
+				var umd = $("#umd").val().replace(/\s/gi, "");
 				
 				if(umd == ""){
 					alert("검색할 읍 / 면 / 동을 입력하셔야 합니다.");
@@ -294,8 +294,9 @@
 					/*그리드 내용*/				
 					$.ajax({
 						type:"POST",
-						url: "/addrList.do?umd="+umd,
+						url: "/addrList.do?",
 						Type:"JSON",
+						data:{umd:umd},
 						success : function(data) {
 							if(data.addrListSize == 0){
 								alert("존재하지 않는 주소 입니다.");

@@ -8,12 +8,13 @@ import com.koRail.common.to.DetailResveBean;
 /* 열차별 승객 현황 */
 public class TrainRcrdBean extends CommonBean {
 	private String resveCode;					/* 예약코드 */
+	private String trainKnd;					/* 열차종류 */
 	private String register;					/* 예예약자명 */
 	private String eldrlyCo;					/* 경로우대 대상자 */
 	private String dspsnCo;						/* 장애인 */
 	private String chldCo;						/* 어린이 수 */
-private String resveCo;							/* 총 인원수 */
-	private String allRcptAmount;				/* 영수금액 */
+	private String resveCo;						/* 총 인원수 */
+	private String allFrAmount;					/* 영수금액 */
 	private String setelSttus;					/* 결제상태 */
 	private String usePint;						/* 사용포인트 */
 	private String dscntAmount;					/* 할인금액 */
@@ -57,12 +58,6 @@ private String resveCo;							/* 총 인원수 */
 	public void setResveCo(String resveCo) {
 		this.resveCo = resveCo;
 	}
-	public String getAllRcptAmount() {
-		return allRcptAmount;
-	}
-	public void setAllRcptAmount(String allRcptAmount) {
-		this.allRcptAmount = allRcptAmount;
-	}
 	public String getSetelSttus() {
 		return setelSttus;
 	}
@@ -92,5 +87,17 @@ private String resveCo;							/* 총 인원수 */
 	}
 	public void setSeatList(List<DetailResveBean> seatList) {
 		this.seatList = seatList;
+	}
+	public String getTrainKnd() {
+		return trainKnd;
+	}
+	public void setTrainKnd(String trainKnd) {
+		this.trainKnd = trainKnd;
+	}
+	public String getAllFrAmount() {
+		return allFrAmount;
+	}
+	public void setAllFrAmount(String allFrAmount) {
+		this.allFrAmount = allFrAmount;
 	}
 }

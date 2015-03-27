@@ -126,7 +126,7 @@ public class MemberController extends CommonController {
 		/*개인정보 조회 및 model 설정*/
 		model.addAttribute("member", memberService.getMember(memberBean));
 		/*포인트 조회 및 model 설정*/
-		model.addAttribute("pint", memberService.getPint(memberBean.getId()));
+		model.addAttribute("pint", memberService.getPint(memberBean.getSrcText()));
 		
 		return "/member/myInfo/myInfoMngForm";
 	}

@@ -56,25 +56,25 @@
 	<select id="selectMember" resultMap="memberResultMap" parameterClass="com.koRail.common.to.MemberBean">
 		<include refid="memberTmp"/>
 		<isEqual property="srcType" compareValue="ALL">
-			ORDER BY ID
+			ORDER BY RGSDE DESC
 		</isEqual>
 		<isEqual property="srcType" compareValue="id">
 			WHERE ID LIKE '%' || #srcText# || '%'
-			ORDER BY ID
+			ORDER BY RGSDE DESC
 		</isEqual>
-		<isEqual property="srcType" compareValue="nm">
+		<isEqual property="srcType" compareValue="name">
 			WHERE NM LIKE '%' || #srcText# || '%'
-			ORDER BY NM
+			ORDER BY RGSDE DESC
 		</isEqual>
 		<isEqual property="srcType" compareValue="rgsde">
-			WHERE RGSDE >= TO_DATE(#srcDate1#, 'YYYY-MM-DD')
-        	AND	  RGSDE &lt;= TO_DATE(#srcDate2#, 'YYYY-MM-DD')
-        	ORDER BY RGSDE
+			WHERE TO_CHAR(RGSDE, 'YYYY-MM-DD') >= #srcDate1#
+        	AND	  TO_CHAR(RGSDE, 'YYYY-MM-DD') &lt;= #srcDate2#
+        	ORDER BY RGSDE DESC
 		</isEqual>
 		<isEqual property="srcType" compareValue="updde">
-			WHERE UPDDE >= TO_DATE(#srcDate1#, 'YYYY-MM-DD')
-        	AND	  UPDDE &lt;= TO_DATE(#srcDate2#, 'YYYY-MM-DD')
-        	ORDER BY UPDDE
+			WHERE TO_CHAR(UPDDE, 'YYYY-MM-DD') >= #srcDate1#
+        	AND	  TO_CHAR(UPDDE, 'YYYY-MM-DD') &lt;= #srcDate2#
+        	ORDER BY UPDDE DESC
 		</isEqual>
 		<isNull property="srcType">
 			<isNotNull property="formType">

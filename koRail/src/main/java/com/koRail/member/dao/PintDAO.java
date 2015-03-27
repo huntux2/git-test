@@ -18,7 +18,7 @@ public interface PintDAO {
 	 * @param id
 	 * @return
 	 *************************/
-	public int selectTdyPint(String id);
+	public String selectTdyPint(String id);
 	
 	/*************************
 	 * 포인트 사용내역

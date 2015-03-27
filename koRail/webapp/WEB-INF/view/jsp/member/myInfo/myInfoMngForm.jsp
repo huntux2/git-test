@@ -30,6 +30,7 @@
 					/*다이알로그*/
 	   				$("#updateDialog").dialog({
 	   					modal: true,
+	   					width: 400,
 	   					buttons:{
 	   						"비밀번호 변경":function(){
 	   							/*현재 비밀번호*/
@@ -41,17 +42,17 @@
 	   							
 	   							/*유효성 검사*/
 	   							if(oldPassword == ""){
-	   								alert("현제 비미번호를 입력해야 합니다.");
+	   								alert("현제 비밀번호를 입력해야 합니다.");
 	   								$("#oldPassword").focus();
 	   							}
 	   							else if(oldPassword != "${password}"){
 	   								alert("현재 비밀번호가 일치하지 않습니다.");
 	   								$("#oldPassword").focus();
 	   							}else if(newPassword == ""){
-	   								alert("새 비미번호를 입력해야 합니다.");
+	   								alert("새 비밀번호를 입력해야 합니다.");
 	   								$("#newPassword").focus();
 	   							}else if(password == ""){
-	   								alert("새 비미번호 확인을 입력해야 합니다.");
+	   								alert("새 비밀번호 확인을 입력해야 합니다.");
 	   								$("#password").focus();
 	   							}else if(newPassword != password){
 	   								alert("새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.");
@@ -143,7 +144,7 @@
    		
    		<!-- 사용방법 -->
    		<div class="caption">
-			* 아이디 또는 성명으로 회원을 회원을 조회할 수 있습니다.
+			<div>* 개인정보 수정 및 회원탈퇴, 이용내역 조히를 하실 수 있습니다.</div>
 		</div>
 		
 		<!-- 개인정보 -->
@@ -222,7 +223,7 @@
 							</c:when>
 							<c:otherwise>
 								<td>${pint.svPint} P</td>
-								<td>${pint.usePint} P</td>
+								<td>${pint.allUsePint} P</td>
 								<td>${pint.tdyPint} P</td>
 							</c:otherwise>
 						</c:choose>

@@ -26,19 +26,189 @@
 						$("#findAddrBtn").click();
 					}
 				});
+				
+				/* 미입력 처리 및 유효성검사 */
+				/*성명*/
+				$("#nm").focusout(function(){
+					if($(this).val() == ""){
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").addClass("false-text");
+						$(this).parent().children(".msg").text("성명을 입력하십시오.");
+					}else{
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").html("");
+					}
+				});
+				
+				/* 전화번호 */
+				$("#telNo input").eq(0).focusout(function(){
+					if($(this).val() == ""){
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").addClass("false-text");
+						$(this).parent().children(".msg").text("전화번호를 입력하십시오.");
+					}else{
+						var tel = $("#telNo input").eq(0).val()+"-"+$("#telNo input").eq(1).val()+"-"+$("#telNo input").eq(2).val();
+						
+						$("#telNo input").eq(3).val(tel);
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").html("");
+					}
+				});
+				$("#telNo input").eq(1).focusout(function(){
+					if($(this).val() == ""){
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").addClass("false-text");
+						$(this).parent().children(".msg").text("전화번호를 입력하십시오.");
+					}else{
+						var tel = $("#telNo input").eq(0).val()+"-"+$("#telNo input").eq(1).val()+"-"+$("#telNo input").eq(2).val();
+						
+						$("#telNo input").eq(3).val(tel);
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").html("");
+					}
+				});
+				$("#telNo input").eq(2).focusout(function(){
+					if($(this).val() == ""){
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").addClass("false-text");
+						$(this).parent().children(".msg").text("전화번호를 입력하십시오.");
+					}else{
+						var telText = /\d{2,3}-\d{3,4}-\d{4}/;
+						var tel = $("#telNo input").eq(0).val()+"-"+$("#telNo input").eq(1).val()+"-"+$("#telNo input").eq(2).val();
+						
+						if(telText.test(tel)){
+							$("#telNo input").eq(3).val(tel);
+							$(this).parent().children(".msg").removeClass("false-text");
+							$(this).parent().children(".msg").html("");
+						}else{
+							$("#telNo input").eq(3).val("");
+							$(this).parent().children(".msg").removeClass("false-text");
+							$(this).parent().children(".msg").addClass("false-text");
+							$(this).parent().children(".msg").text("전화번호형식이 아닙니다. ex) 02-8827-3078");
+						}
+					}
+				});
+				
+				/*휴대전화번호*/
+				$("#mbtlnum input").eq(0).focusout(function(){
+					if($(this).val() == ""){
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").addClass("false-text");
+						$(this).parent().children(".msg").text("전화번호를 입력하십시오.");
+					}else{
+						var tel = $("#mbtlnum input").eq(0).val()+"-"+$("#mbtlnum input").eq(1).val()+"-"+$("#mbtlnum input").eq(2).val();
+						
+						$("#mbtlnum input").eq(3).val(tel);
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").html("");
+					}
+				});
+				$("#mbtlnum input").eq(1).focusout(function(){
+					if($(this).val() == ""){
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").addClass("false-text");
+						$(this).parent().children(".msg").text("휴대전화번호를 입력하십시오.");
+					}else{
+						var tel = $("#mbtlnum input").eq(0).val()+"-"+$("#mbtlnum input").eq(1).val()+"-"+$("#mbtlnum input").eq(2).val();
+						
+						$("#mbtlnum input").eq(3).val(tel);
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").html("");
+					}
+				});
+				$("#mbtlnum input").eq(2).focusout(function(){
+					if($(this).val() == ""){
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").addClass("false-text");
+						$(this).parent().children(".msg").text("휴대전화번호를 입력하십시오.");
+					}else{
+						var telText = /\d{2,3}-\d{3,4}-\d{4}/;
+						var tel = $("#mbtlnum input").eq(0).val()+"-"+$("#mbtlnum input").eq(1).val()+"-"+$("#mbtlnum input").eq(2).val();
+						
+						if(telText.test(tel)){
+							$("#mbtlnum input").eq(3).val(tel);
+							$(this).parent().children(".msg").removeClass("false-text");
+							$(this).parent().children(".msg").html("");
+						}else{
+							$("#mbtlnum input").eq(3).val("");
+							$(this).parent().children(".msg").removeClass("false-text");
+							$(this).parent().children(".msg").addClass("false-text");
+							$(this).parent().children(".msg").text("휴대전화번호형식이 아닙니다. ex) 010-3342-0987");
+						}
+					}
+				});
+				
+				/*이메일*/
+				$("#email input").eq(0).focusout(function(){
+					if($(this).val() == ""){
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").addClass("false-text");
+						$(this).parent().children(".msg").text("이메일을 입력하십시오.");
+					}else{
+						if($("#email input").eq(1).val() == ""){
+							$(this).parent().children(".msg").removeClass("false-text");
+							$(this).parent().children(".msg").addClass("false-text");
+							$(this).parent().children(".msg").text("이메일을 입력하십시오.");
+						}else{
+							var emailText = /^[0-9A-Z]([-_\.]?[0-9A-Z])*@[0-9A-Z]([-_\.]?[0-9A-Z])*\.[A-Z]{2,6}$/i;
+							var email = $("#email input").eq(0).val()+"@"+$("#email input").eq(1).val();
+							
+							if(emailText.test(email)){
+								$("#email input").eq(2).val(email);
+								$(this).parent().children(".msg").removeClass("false-text");
+								$(this).parent().children(".msg").html("");	
+							}
+						}
+					}
+				});
+				$("#email input").eq(1).focusout(function(){
+					if($(this).val() == ""){
+						$(this).parent().children(".msg").removeClass("false-text");
+						$(this).parent().children(".msg").addClass("false-text");
+						$(this).parent().children(".msg").text("이메일을 입력하십시오.");
+					}else{
+						var emailText = /^[0-9A-Z]([-_\.]?[0-9A-Z])*@[0-9A-Z]([-_\.]?[0-9A-Z])*\.[A-Z]{2,6}$/i;
+						var email = $("#email input").eq(0).val()+"@"+$("#email input").eq(1).val();
+						
+						/* 유효성검사 */
+						if(emailText.test(email)){
+							$("#email input").eq(2).val(email);
+							$(this).parent().children(".msg").removeClass("false-text");
+							$(this).parent().children(".msg").html("");
+						}else{
+							$("#email input").eq(2).val("");
+							$(this).parent().children(".msg").removeClass("false-text");
+							$(this).parent().children(".msg").addClass("false-text");
+							$(this).parent().children(".msg").text("이메일형식이 아닙니다. ex) test@korail.com");
+						}
+					}
+				});
+				
+				/* 주소 */
+				$("#detailAddrs").eq(0).focusout(function(){
+					if($(this).val() == ""){
+						$(this).next().removeClass("false-text");
+						$(this).next().addClass("false-text");
+						$(this).next().text("주소를 입력하십시오.");
+					}else{
+						$(this).next().removeClass("false-text");
+						$(this).next().html("");
+					}
+				});
 			});
 			
 			/* ID 중복확인 */
 			function doIdCheck(){
-				var id = $("#id").val().replace(" ");
+				var id = $("#id").val().replace(/\s/gi, "");
 				
 				if(id == ""){
 					alert("아이디를 입력하셔야 합니다.");
 				}else{
 					$.ajax({
 						type:"POST",
-						url: "/member/idCheck.do?id="+id,
+						url: "/member/idCheck.do",
 						Type:"JSON",
+						data:{id:id},
 						success : function(data) {
 							if(data.rtCode == 0){
 								$("#idCheckMsg").removeClass("false-text");
@@ -89,84 +259,6 @@
 				}
 			}
 			
-			/* 전화번호 형식 확인 */
-			function doNumberCheck(obj){
-				/*전화번효, 휴대전화번호 형식*/
-				var telText = /\d{2,3}-\d{3,4}-\d{4}/;
-				/* 숫자형식 */
-				var numberText = /\d+/;
-				/* 이벤트가 발생한 객채 */
-				var text = $(obj);
-				/* 이벤트가 발생한 tag가 속한 td < .msg */
-				var chTag = $(obj).parent().children(".msg");
-				
-				if(text.val() == ""){
-					chTag.html("");
-				}else{
-					if(numberText.test(text.val())){
-						/* 전화번호의 값 */
-						var tel1 = $(text.parent().children("input").get(0)).val();
-						var tel2 = $(text.parent().children("input").get(1)).val();
-						var tel3 = $(text.parent().children("input").get(2)).val();
-						
-						if(tel1 && tel2 && tel3 != ""){
-							if(telText.test(tel1+"-"+tel2+"-"+tel3)){
-								chTag.removeClass("false-text");
-								chTag.addClass("true-text");
-								chTag.html("올바른 전화번호 형식 입니다.");
-								/* 전송할 데이터 */
-								$(obj).parent().children(":hidden").val(tel1+"-"+tel2+"-"+tel3);
-							}else{
-								chTag.removeClass("true-text");
-								chTag.addClass("false-text");
-								chTag.html("<input class='false' type='hidden'>형식 ex):010-2228-3324 또는 ex):02-247-8873");
-							}
-						}
-					}else{
-						chTag.removeClass("true-text");
-						chTag.addClass("false-text");
-						chTag.html("<input class='false' type='hidden'>숫자만 입력가능 합니다.");
-					}
-				}
-			}
-			
-			/* 이메일 형식 확인 */
-			function doEmailCheck(obj){
-				/* 이메일 형식 */
-				var emailText = /^[0-9A-Z]([-_\.]?[0-9A-Z])*@[0-9A-Z]([-_\.]?[0-9A-Z])*\.[A-Z]{2,6}$/i;
-				/* 이벤트가 발생한 tag가 속한 td < .msg */
-				var chTag = $(obj).parent().children(".msg");
-				
-				var email1 = $("#email1").val();
-				var email2 = $("#email2").val();
-				var hEmail = $("input[name=emal]");
-				
-				if(email1 == "" || email2 == ""){
-					chTag.html("");
-				}else{
-					if((email1.length+email2.length) == 0){
-						chTag.html("");
-					}else{
-						if(email1 && email2 == ""){
-							chTag.html("");
-						}else{
-							/*서버로 전달할 값 설정*/
-							hEmail.val(email1+"@"+email2);
-							
-							if(emailText.test(hEmail.val())){
-								chTag.removeClass("false-text");
-								chTag.addClass("true-text");
-								chTag.html("올바른 이메일 형식 입니다.");
-							}else{
-								chTag.removeClass("true-text");
-								chTag.addClass("false-text");
-								chTag.html("<input class='false' type='hidden'>올바른 이메일 형식이 아닙니다.");
-							}
-						} /* else end */
-					} /* else end */	
-				} /* else end */
-			} /* doEmailCheck end */
-			
 			/*주소검색 다이알로그*/
 			function setAddrDialog(){
 				/* 초기화 */
@@ -213,11 +305,10 @@
 							}
 							
 							/* set Data */
-							$("#zipCOde1").val($("#selectData1").val());
-							$("#zipCOde2").val($("#selectData2").val());
+							$("#zipCode1").val($("#selectData1").val());
+							$("#zipCode2").val($("#selectData2").val());
 							$("input[name=zipCode]").val($("#selectData1").val()+$("#selectData2").val());
 							$("input[name=addrs]").val($("#selectData3").val());
-							
 							$(this).dialog("close");
 						},
 						"취소" : function(){
@@ -238,8 +329,11 @@
 					/*그리드 내용*/				
 					$.ajax({
 						type:"POST",
-						url: "/addrList.do?umd="+umd,
+						url: "/addrList.do",
 						Type:"JSON",
+						data: {
+							umd:umd
+						},
 						success : function(data) {
 							if(data.addrListSize == 0){
 								alert("존재하지 않는 주소 입니다.");
@@ -298,7 +392,7 @@
 				} /* else end */
 			} /* findAddrList end */
 			
-			/* 회원가입 */
+			/* 등록 */
 			function addMemeber(){
 				/*입력되지 않은 항목*/
 				var erTexts = ["아이디는", "성명은", "전화번호는", "전화번호는", "전화번호는",
@@ -309,14 +403,15 @@
 				if($(".false").size() == 0){
 					/*text*/
 					for(var i = 0; i < $("#memberForm :text").size(); i++){
-						if($($("#memberForm :text").get(i)).val() == ""){
+						if($("#memberForm :text").eq(i).val() == ""){
 							alert(erTexts[i]+" 필수입력 사항입니다.");
+							$("#memberForm :text").eq(i).focus();
 							return;
 						}
 					}
 					/*password*/
 					for(var i = 0; i < 2; i++){
-						if($($("#memberForm :password").get(i)).val() == ""){
+						if($("#memberForm :password").eq(i).val() == ""){
 							alert("비밀번호는 필수입력 사항입니다.");
 							return;
 						}	
@@ -347,9 +442,19 @@
 		</script>
 	</head>
 	<body>
-		<div style="font-size: 35px;">
+		<div style="font-size: 35px; padding-bottom: 15px;">
    			<strong>회원가입</strong>
    		</div>
+	
+		<!-- 사용방법 -->
+   		<div class="caption">
+			<div>* 전화번호 및 휴대전화번호는 숫자만 입력이 가능하며 형식에 따라 입력해야 합니다.</div>
+			<div style="padding-left: 15px;">ex) 010 1234 5678, ex) 02 1234 5678</div>
+			<div>* 이메일은 대,소문자영문 및 숫자면 입력이 가능합니다, 또한 이메일 주소는 형식에 따라 입력해야 합니다.</div>
+			<div style="padding-left: 15px">ex) koRail123 korail.com</div>
+			<div>* 우편번호 검색을 이용하여 우편번호와 주소를 검색하실 수 있습니다, 하지만 상세주소는 직접 입력하셔야</div><div style="padding-left: 15px;">합니다.</div>
+			<div>* 취소버튼을 이용하여 로그인 화면으로 이동할 수 있습니다.</div>
+		</div>
 	
 		<form id="memberForm" action="/member/memberProcess.do" method="POST">
 			<!-- 상태를 등록으로 설정 -->
@@ -364,7 +469,7 @@
 					<tr>
 						<td>아이디</td>
 						<td>
-							<input id="id" name="id" type="text" onkeyup="doIdCheckInit(event);" style="width: 120px;">
+							<input id="id" name="id" type="text" onkeydown="doStringCheck(this, event, 28);" onkeyup="doIdCheckInit(event);" style="width: 120px;">
 							<button onclick="doIdCheck();" type="button">중복확인</button>
 							<label id="idCheckMsg"></label>
 						</td>
@@ -385,48 +490,49 @@
 					<tr>
 						<td>성명</td>
 						<td>
-							<input name="nm" type="text" type="text" style="width: 120px;">
+							<input id="nm" name="nm" type="text" style="width: 120px;">
+							<label class="msg"></label>
 						</td>
 					</tr>
 					<tr>
 						<td>성별</td>
 						<td>
 							<select name="gndr" style="width: 53px;">
-								<option value="0">남</option>
+								<option value="0" selected="selected">남</option>
 								<option value="1">여</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<td>전화번호</td>
-						<td>
-							<input type="text" type="text" onkeyup="doNumberCheck(this);" style="width: 50px;">
+						<td id="telNo">
+							<input type="text" onkeydown="doNumberCheck(this, event, 3);" style="width: 50px;">
 							<label>-</label>
-							<input type="text" type="text" onkeyup="doNumberCheck(this);" style="width: 80px;">
+							<input type="text" onkeydown="doNumberCheck(this, event, 4);" style="width: 80px;">
 							<label>-</label>
-							<input type="text" type="text" onkeyup="doNumberCheck(this);" style="width: 80px;">
+							<input type="text" onkeydown="doNumberCheck(this, event, 4);" style="width: 80px;">
 							<input name="telNo" type="hidden">
 							<label class="msg"></label>
 						</td>
 					</tr>
 					<tr>
 						<td>휴대전화번호</td>
-						<td>
-							<input type="text" type="text" onkeyup="doNumberCheck(this);" style="width: 50px;">
+						<td id="mbtlnum">
+							<input type="text" onkeydown="doNumberCheck(this, event, 3);" style="width: 50px;">
 							<label>-</label>
-							<input type="text" type="text" onkeyup="doNumberCheck(this);" style="width: 80px;">
+							<input type="text" onkeydown="doNumberCheck(this, event, 4);" style="width: 80px;">
 							<label>-</label>
-							<input type="text" type="text" onkeyup="doNumberCheck(this);" style="width: 80px;">
+							<input type="text" onkeydown="doNumberCheck(this, event, 4);" style="width: 80px;">
 							<input name="mbtlnum" type="hidden">
 							<label class="msg"></label>
 						</td>
 					</tr>
 					<tr>
 						<td>이메일</td>
-						<td>
-							<input id="email1" type="text" onkeyup="doEmailCheck(this);" style="width: 110px;">
+						<td id="email">
+							<input type="text" onkeydown="doStringCheck(this, event, 25);" style="width: 110px;">
 							<label>@</label>
-							<input id="email2" type="text" onkeyup="doEmailCheck(this);" style="width: 118px;">
+							<input type="text" onkeydown="doStringCheck(this, event, 25, true);" style="width: 118px;">
 							<input name="emal" type="hidden">
 							<label class="msg"></label>
 						</td>
@@ -434,9 +540,9 @@
 					<tr>
 						<td rowspan="3">주소</td>
 						<td>	
-							<input id="zipCOde1" disabled="disabled" style="width: 61px" type="text">
+							<input id="zipCode1" disabled="disabled" style="width: 61px" type="text">
 							<label>-</label>
-							<input id="zipCOde2" disabled="disabled" style="width: 61px" type="text">
+							<input id="zipCode2" disabled="disabled" style="width: 61px" type="text">
 							<input name="zipCode" type="hidden">
 							<input name="addrs" type="hidden">
 							<button onclick="setAddrDialog();" type="button">우편번호 검색</button>
@@ -444,12 +550,13 @@
 					</tr>
 					<tr>
 						<td>
-							<input name="addrs" type="text" disabled="disabled" style="width: 259px;">
+							<input name="addrs" type="text" disabled="disabled" value="${member.addrs}" style="width: 259px;">
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<input name="detailAddrs" type="text" style="width: 259px;">
+							<input id="detailAddrs" name="detailAddrs" type="text" style="width: 259px;">
+							<label class="msg"></label>
 						</td>
 					</tr>
 				</tbody>
@@ -477,7 +584,7 @@
 		
 		<!-- 등록 / 취소 버튼 -->
 		<div class="button-group" style="text-align: center;">	
-			<button onclick="addMemeber();" type="button">가입</button>
+			<button onclick="addMemeber();" type="button">등록</button>
 			<button onclick="doCancel();" type="button">취소</button>
 		</div>
 	</body>

@@ -7,10 +7,18 @@
 */
 function doNumberCheck(obj, event, length, paramFunction){
 	/*문자열 치환*/
-	var value = obj.value.replace(/\s/gi, "");
+	var value = obj.value;
 	
-	/*치환된 문자열 적용*/
-	obj.value = value;
+	/*공백 치환*/
+	if(/\s/gi.test(value)){
+		value = value.replace(/\s/gi, "");
+	}
+	
+	/*value에 대한 콤마길이 제외*/
+	if(/,/gi.test(value)){
+		var comma =  value.replace(/\d/gi, "");
+		length = length+comma.length;
+	}
 	
 	if(event.keyCode < 48){
 		event.returnValue = true;
@@ -38,7 +46,12 @@ function doNumberCheck(obj, event, length, paramFunction){
  */
 function toCommaNumber(obj) {
 	var reg = /(^[+-]?\d+)(\d{3})/;	// 정규식
-	var string = obj.value.replace(/,/gi, "").toString();	// 숫자를 문자열로 변환
+	var string = obj.value; //값
+	
+	/*replace*/
+	if(/,/gi.test(obj.value)){
+		string = string.replace(/,/gi, "");	// 숫자를 문자열로 변환
+	}
 
 	while (reg.test(string)){
 		string = string.replace(reg, '$1' + ',' + '$2');
@@ -56,10 +69,12 @@ function toCommaNumber(obj) {
 */
 function doStringCheck(obj, event, length, SkipDot){
 	/*문자열 치환*/
-	var value = obj.value.replace(/\s/gi, "");
+	var value = obj.value;
 	
-	/*치환된 문자열 적용*/
-	obj.value = value;
+	/*공백 치환*/
+	if(/\s/gi.test(value)){
+		value = value.replace(/\s/gi, "");
+	}
 	
 	if(event.keyCode == 190 && SkipDot == true){
 		event.returnValue = true;
@@ -77,10 +92,12 @@ function doStringCheck(obj, event, length, SkipDot){
 /*입력수 재한*/
 function setLimitLength(obj, event, length){
 	/*문자열 치환*/
-	var value = obj.value.replace(/\s/gi, "");
+	var value = obj.value;
 	
-	/*치환된 문자열 적용*/
-	obj.value = value;
+	/*공백 치환*/
+	if(/\s/gi.test(value)){
+		value = value.replace(/\s/gi, "");
+	}
 	
 	if(event.keyCode < 48){
 		event.returnValue = true;

@@ -22,11 +22,17 @@
 				/*lmb img*/
 				$("#lmbImg").attr("src", "/res/img/tra_visual10.jpg");
 				
+				/*날짜생성*/
+				for(var i = (date.getFullYear()-50); i <= (date.getFullYear()+50); i++){
+					$("#year").append("<option value='"+i+"'>"+i+"</option>");
+				}
 				/*자동선택*/
-				$("#year1").children("option[value='"+date.getFullYear()+"']").attr("selected", "selected");
-				$("#year2").children("option[value='"+date.getFullYear()+"']").attr("selected", "selected");
-	   			$("#month1").children("option[value='"+(date.getMonth()+1)+"']").attr("selected", "selected");
-	   			$("#month2").children("option[value='"+(date.getMonth()+1)+"']").attr("selected", "selected");
+				$("#year").children("option[value='"+date.getFullYear()+"']").attr("selected", "selected");
+				if((date.getMonth()+1) < 10){
+					$("#month").children("option[value='0"+(date.getMonth()+1)+"']").attr("selected", "selected");
+				}else{
+		   			$("#month").children("option[value='"+(date.getMonth()+1)+"']").attr("selected", "selected");
+				}
 				
 	   			/*검색*/
 				$("#searchBtn").click(function(){
@@ -54,25 +60,26 @@
 		   				scroll: 1,
 		   				rowNum : 'max',
 		   				pager: '#footer1',
-		   				colNames:["열차번호", "열치종류", "출발역", "출발시각", "도착역", "도착시각", "예약매수", "결제상태"],
+		   				colNames:["번호", "열차번호", "열치종류", "출발역", "출발시각", "도착역", "도착시각", "예약매수", "결제상태"],
 		          		colModel : [
-							{ name : 'trainNo', width: 70, align:"center", sortable:false,
+							{ name : 'no', width: 30, align:"center", sortable:false,
 								cellattr: function(rowId, value, rowObject, colModel, arrData) {
-									return ' colspan=9';
+									return ' colspan=10';
 								}
 							},
-							{ name : 'trainKnd', width: 90, align:"center", sortable:false},
-   							{ name : 'startStatn', width: 70, align:"center", sortable:false},
-   							{ name : 'startTm', width: 40, align:"center", sortable:false},
-   							{ name : 'arvlStatn', width: 70, align:"center", sortable:false},
-   							{ name : 'arvlTm', width: 40, align:"center", sortable:false},
-   							{ name : 'resceCo', width: 70, align:"center", sortable:false},
-   							{ name : 'setleSttus', width: 70, align:"center", sortable:false}
+   							{ name : 'trainNo', width: 60, align:"center", sortable:false},
+   							{ name : 'trainKnd', width: 50, align:"center", sortable:false},
+   							{ name : 'startStatn', width: 60, align:"center", sortable:false},
+   							{ name : 'startTm', width: 80, align:"center", sortable:false},
+   							{ name : 'arvlStatn', width: 60, align:"center", sortable:false},
+   							{ name : 'arvlTm', width: 80, align:"center", sortable:false},
+   							{ name : 'resveCo', width: 40, align:"center", sortable:false},
+   							{ name : 'setleSttus', width: 40, align:"center", sortable:false}
 						]
 					}); /*jqGrid end*/
 				
 					/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-					$("#gridBody1").jqGrid('addRowData', 1, {trainNo:"조회된 결과가 없습니다."});
+					$("#gridBody1").jqGrid('addRowData', 1, {no:"조회된 결과가 없습니다."});
 	   			}
 	   			
 	   			/*포인트 사용 내역*/
@@ -90,23 +97,24 @@
    		   				scroll: 1,
    		   				rowNum : 'max',
    		   				pager: '#footer2',
-   		   				colNames:["거레일자", "유형", "승차내역", "결제금액", "사용포인트", "적립포인트"],
+   		   				colNames:["번호", "거레일자", "유형", "승차내역", "결제금액", "사용포인트", "적립포인트"],
    		          		colModel : [
-   							{ name : 'useDe', width: 70, align:"center", sortable:false,
+   							{ name : 'no', width: 40, align:"center", sortable:false,
    								cellattr: function(rowId, value, rowObject, colModel, arrData) {
-									return ' colspan=6';
+									return ' colspan=7';
 								}
    							},
-							{ name : 'pintUseYn', width: 90, align:"center", sortable:false},
-   							{ name : 'useHistry', width: 70, align:"center", sortable:false},
-   							{ name : 'setleAmount', width: 40, align:"center", sortable:false},
-   							{ name : 'usePint', width: 70, align:"center", sortable:false},
-   							{ name : 'svPint', width: 70, align:"center", sortable:false}
+   							{ name : 'useDe', width: 50, align:"center", sortable:false},
+							{ name : 'pintUseYn', width: 30, align:"center", sortable:false},
+   							{ name : 'useHistry', width: 100, align:"center", sortable:false},
+   							{ name : 'setleAmount', width: 60, align:"right", sortable:false},
+   							{ name : 'usePint', width: 50, align:"right", sortable:false},
+   							{ name : 'svPint', width: 50, align:"right", sortable:false}
    						]
    					}); /*jqGrid end*/
    					
    					/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-					$("#gridBody2").jqGrid('addRowData', 1, {useDe:"조회된 결과가 없습니다."});
+					$("#gridBody2").jqGrid('addRowData', 1, {no:"조회된 결과가 없습니다."});
    				}
 	   		}
    			
@@ -127,16 +135,17 @@
    		   				scroll: 1,
    		   				rowNum : 'max',
    		   				pager: '#footer1',
-   		   				colNames:["열차번호", "열치종류", "출발역", "출발시각", "도착역", "도착시각", "예약매수", "결제상태"],
+   		   				colNames:["번호", "열차번호", "열치종류", "출발역", "출발일시", "도착역", "도착일시", "예약매수", "결제상태"],
    		          		colModel : [
-   							{ name : 'trainNo', width: 70, align:"center", sortable:false},
-   							{ name : 'trainKnd', width: 90, align:"center", sortable:false},
-   							{ name : 'startStatn', width: 70, align:"center", sortable:false},
-   							{ name : 'startTm', width: 40, align:"center", sortable:false},
-   							{ name : 'arvlStatn', width: 70, align:"center", sortable:false},
-   							{ name : 'arvlTm', width: 40, align:"center", sortable:false},
-   							{ name : 'resveCo', width: 70, align:"center", sortable:false},
-   							{ name : 'setleSttus', width: 70, align:"center", sortable:false}
+   							{ name : 'no', width: 30, align:"right", sortable:false},
+   							{ name : 'trainNo', width: 60, align:"center", sortable:false},
+   							{ name : 'trainKnd', width: 50, align:"center", sortable:false},
+   							{ name : 'startStatn', width: 60, align:"center", sortable:false},
+   							{ name : 'startTm', width: 80, align:"center", sortable:false},
+   							{ name : 'arvlStatn', width: 60, align:"center", sortable:false},
+   							{ name : 'arvlTm', width: 80, align:"center", sortable:false},
+   							{ name : 'resveCo', width: 40, align:"center", sortable:false},
+   							{ name : 'setleSttus', width: 40, align:"center", sortable:false}
    						]
    					}); /*jqGrid end*/
    				}
@@ -155,14 +164,15 @@
    		   				scroll: 1,
    		   				rowNum : 'max',
    		   				pager: '#footer2',
-   		   				colNames:["거레일자", "유형", "승차내역", "결제금액", "사용포인트", "적립포인트"],
+   		   				colNames:["번호", "거레일자", "유형", "승차내역", "결제금액", "사용포인트", "적립포인트"],
    		          		colModel : [
-   							{ name : 'useDe', width: 70, align:"center", sortable:false},
-							{ name : 'pintUseYn', width: 90, align:"center", sortable:false},
-   							{ name : 'useHistry', width: 70, align:"center", sortable:false},
-   							{ name : 'setleAmount', width: 40, align:"center", sortable:false},
-   							{ name : 'usePint', width: 70, align:"center", sortable:false},
-   							{ name : 'svPint', width: 70, align:"center", sortable:false}
+   							{ name : 'no', width: 40, align:"right", sortable:false},
+   							{ name : 'useDe', width: 50, align:"center", sortable:false},
+							{ name : 'pintUseYn', width: 30, align:"center", sortable:false},
+   							{ name : 'useHistry', width: 100, align:"center", sortable:false},
+   							{ name : 'setleAmount', width: 60, align:"right", sortable:false},
+   							{ name : 'usePint', width: 50, align:"right", sortable:false},
+   							{ name : 'svPint', width: 50, align:"right", sortable:false}
    						]
    					}); /*jqGrid end*/
    				}
@@ -170,18 +180,17 @@
    			
    			/*검색*/
    			function doSearch(){
-   				/* 날짜검색 시작날짜~끝 날짜 */
-	   			var startTm = $("#year1").val()+"-"+$("#month1").val();
-	   			var arvlTm = $("#year2").val()+"-"+$("#month2").val();
+   				/* 검색일자 */
+	   			var srcDate = $("#year").val()+"-"+$("#month").val();
    			
    				if($("#year1").val() == "non" || $("#year2").val() == "non"){
    					alert("조회할 기간을 선택하셔야 합니다.");
    				}else{
-   					/*그리드 내용*/				
+   					/*그리드 내용*/
    					$.ajax({
    						type:"POST",
    						url: "/member/useHstrList.do",
-   						data: {srcType:"${id}", srcDate1:startTm, srcDate2:arvlTm},
+   						data: {formType:"hstr", srcType:"${id}", srcDate1:srcDate},
    						Type:"JSON",
    						success : function(data) {
    							/* 승차권 예매 내역 */
@@ -192,8 +201,10 @@
    								setGrid("resveRcrd");
    	   							/* 데이터 삽입 */
    								$.each(data.resveRcrdList, function(k, v){
-   	   								$("#gridBody1").addRowData(k,
+   	   								$("#gridBody1").addRowData(
+   	   									k,
 										{
+   	   										no:k+1,
    	   										trainNo:v.trainNo,
    	   										trainKnd:v.trainKnd,
    	   										startStatn:v.startStatn,
@@ -217,6 +228,7 @@
    								$.each(data.pintList, function(k, v){
    									$("#gridBody2").addRowData(k,
    										{
+   											no:k+1,
 											useDe:v.useDe,
 											pintUseYn:v.pintUseYn,
 											useHistry:v.useHistry,
@@ -250,7 +262,7 @@
    		
    		<!-- 사용방법 -->
    		<div class="caption">
-			* 아이디 또는 성명으로 회원을 회원을 조회할 수 있습니다.
+			<div>* 조회기간을 입력하여 승차권 예매 내역, 포인트 사용 내역을 조회할 수 있습니다.</div>
 		</div>
 		
 		<!-- search-group -->
@@ -259,39 +271,14 @@
 				<tbody>
 					<tr>
 						<td>
-							<select id="year1" style="width: 65px;">
+							<select id="year" style="width: 65px;">
    								<option value="non">선택</option>
-   								<c:forEach var="i" begin="1980" end="2060" step="1">
-   									<option value="${i}">${i}</option>
-   								</c:forEach>
+   								<!-- script -->
    							</select>
 						</td>
 						<td>년</td>
 						<td>
-							<select id="month1" style="width: 55px;">
-   								<c:forEach var="month" begin="1" end="12">
-   									<c:if test="${month < 10}">
-		   								<option value="0${month}">0${month}</option>
-	   								</c:if>
-	   								<c:if test="${month > 9}">
-		   								<option value="${month}">${month}</option>
-	   								</c:if>
-	   							</c:forEach>
-   							</select>
-						</td>
-						<td>월</td>
-						<td>~</td>
-						<td>
-							<select id="year2" style="width: 65px;">
-   								<option value="non">선택</option>
-   								<c:forEach var="i" begin="1980" end="2060" step="1">
-   									<option value="${i}">${i}</option>
-   								</c:forEach>
-   							</select>
-						</td>
-						<td>년</td>
-						<td>
-							<select id="month2" style="width: 55px;">
+							<select id="month" style="width: 55px;">
    								<c:forEach var="month" begin="1" end="12">
    									<c:if test="${month < 10}">
 		   								<option value="0${month}">0${month}</option>
@@ -332,9 +319,18 @@
    						<td class="head">현재포인트</td>
    					</tr>
    					<tr>
-   						<td>${pint.svPint} P</td>
-   						<td>${pint.allUsePint} P</td>
-   						<td>${pint.tdyPint} P</td>
+   						<c:choose>
+							<c:when test="${pint == null}">
+								<td>0 P</td>
+								<td>0 P</td>
+								<td>0 P</td>
+							</c:when>
+							<c:otherwise>
+								<td>${pint.svPint} P</td>
+								<td>${pint.allUsePint} P</td>
+								<td>${pint.tdyPint} P</td>
+							</c:otherwise>
+						</c:choose>
    					</tr>
    				</tbody>
    			</table>

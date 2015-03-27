@@ -74,5 +74,5 @@
 		 resources의 논리적 설정
 	-->
    <mvc:annotation-driven />
-   <mvc:resources mapping="/res/**" location="resources/" /> 
+   <mvc:resources mapping="/res/**" location="/resources/" /> 
 </beans>

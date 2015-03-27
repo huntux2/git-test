@@ -551,9 +551,10 @@
 									for(var i = 0; i < rowIds.length; i++){
 										if($("#gridBody").getRowData(rowIds[i]).opratCode == data.errorMsg){
 											alert(
-												$("#gridBody").getRowData(rowIds[i]).trainNo
+												$("#gridBody").getRowData(rowIds[i]).no
+												+"("+$("#gridBody").getRowData(rowIds[i]).trainNo
 												+"-"+$("#gridBody").getRowData(rowIds[i]).trainKnd
-												+"는 현재 사용중인 열차입니다."
+												+")은(는) 현재 사용중인 열차입니다."
 											);
 										}
 									}

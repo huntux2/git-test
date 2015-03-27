@@ -288,6 +288,8 @@
 	   				/*검색조건*/
 		   			srcType = $("#srcType").val();
 		   			srcText = $("#srcText").val().replace(/\s/gi, "");
+		   			srcDate1 = null;
+		   			srcDate2 = null;
 		   			
 	   				/* 삭제할 시 제검색 유형 설정 */
 	   				$("#deleteType").val("normal");
@@ -323,6 +325,12 @@
 							
 							/*데이터 삽입*/
 							$.each(data.memberList, function(k,v){
+								var zipCode = "";
+								
+								if(v.zipCode != null){
+									zipCode = v.zipCode.replace(/,/gi, "-");
+								}
+								
 								$("#gridBody").addRowData(
 									k,
 									{
@@ -331,7 +339,7 @@
 										rcrd:"<button type='button' onclick='setRcrdDialog(&quot;"+v.id+"&quot;);'>승차권 예매 내역</button>",
 										id:v.id,
 										nm:v.nm,
-										zipCode:v.zipCode.replace(",", "-"),
+										zipCode:zipCode,
 										addrs:v.addrs,
 										detailAddrs:v.detailAddrs,
 										telNo:v.telNo,
@@ -419,7 +427,7 @@
 									/* 삭제되지 않은 ROW를 보여줌 */
 									for(var i = 0; i < rowIds.length; i++){
 										if($("#gridBody").getRowData(rowIds[i]).id == data.errorMsg){
-											alert(data.errorMsg+" 는(은) 현재 사용중인 아이디 입니다.");
+											alert(data.errorMsg+"에 만료되지 않은 승차권이 존재합니다.");
 										}
 									}
 								}
@@ -437,14 +445,13 @@
 				} /* else end */
    			} /* deleteMember end */
    			
-   			
+   			/*승차권 예매 내역 다이알로그*/
    			function setRcrdDialog(id){
    				/* 현제날짜 */
 	   			var date = new Date();
    				
    				/*id 저장*/
-   				/* $("#srcId").val(id); */
-   				$("#srcId").val("flqhfxm4");
+   				$("#srcId").val(id);
 	   			
 	   			/* 초기화 */
    				$("#startYear2").html("");
@@ -561,7 +568,7 @@
 					          		colModel : [
 										{ name : "no", align:"right", width: 20, sortable:false},
 										{ name : "trainNo", align:"center", width: 40, sortable:false},
-										{ name : "trainKend", width: 60, align:"center", sortable:false},
+										{ name : "trainKnd", width: 60, align:"center", sortable:false},
 										{ name : "startStatn", width: 60, align:"center", sortable:false},
 										{ name : "startTm", width: 70, align:"center", sortable:false},
 										{ name : "arvlStatn", width: 60, align:"center", sortable:false},
@@ -575,7 +582,7 @@
    							/* 데이터 삽입 */
 							$.each(data.resveRcrdList, function(k, v){
 								$("#rcrdGridBody").addRowData(
-									k,
+									k+1,
 									{
 										no:k+1,
 										trainNo:v.trainNo,
@@ -619,6 +626,8 @@
 			<div>* 회원목록의 체크박스를 이용하여 삭제할 회원을 선택한 후 삭제버튼을 이용해 회원정보를 삭제할 수</div>
 			<div style="padding-left: 14px;">있습니다.</div>
 			<div>* 회원목록에서 특정해원을 클릭하여 선택하게되면 선택된 회원에 대한 상세정보를 볼 수 있습니다.</div>
+			<div>* 승차권 예매 내역 버튼을 이용하여 회원의 예매 내역을 볼 수 있습니다.</div>
+			<div>* 승차권 예매 내역은 기본적으로 최근 1계월 동안의 내역이 자동조회됩니다.</div>
    		</div>
    		
    		<!-- search -->

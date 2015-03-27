@@ -88,7 +88,7 @@
 	   				scroll: 1,
 	   				rowNum : 'max',
 	   				pager: '#footer',
-	   				colNames:["번호", "객실등급", "호실", "좌석번호", "승객유형", "운임요금", "할인요금", "영수금액", "승차자명"],
+	   				colNames:["번호", "객실등급", "호실", "좌석번호", "승객유형", "운임요금", "할인요금", "영수금액"],
 	          		colModel : [
 						{ name : 'no', width: 20, align:"center", sortable:false},
 						{ name : 'roomKnd', width: 70, align:"center", sortable:false},
@@ -98,7 +98,6 @@
 						{ name : 'frAmount', width: 70, align:"right", sortable:false},
 						{ name : 'dscntAmount', width: 70, align:"right", sortable:false},
 						{ name : 'rcptAmount', width: 70, align:"right", sortable:false},
-						{ name : 'psngrNm', width: 70, align:"center", sortable:false}
 					]
 				}); /*jqGrid end*/
 				
@@ -114,13 +113,9 @@
 							frAmount:$("#dataGroup"+i+" .frAmount").val()+" 원",
 							dscntAmount:$("#dataGroup"+i+" .dscntAmount").val()+" 원",
 							rcptAmount:$("#dataGroup"+i+" .rcptAmount").val()+" 원",
-							psngrNm:"<input id='gridPsngrNm"+i+"' type='text'>"
 						}
 					);
 				} /* for end */
-				
-				/* 첫 행의 승차자명 자동입력 */
-				$("#gridPsngrNm1").val("${name}");
 	   		});
    			
    			/* 결제 */
@@ -131,7 +126,6 @@
    					jsonArray.push(
    						{
    							detailResveCode:$("#dataGroup"+i+" .detailResveCode").val(),
-   							psngrNm:$("#gridPsngrNm"+i).val().replace(" ", "")
    						}
    					);
    				}
@@ -149,7 +143,30 @@
    			/* 예약취소 */
    			function doResveDelete(){
    				if(confirm("예약을 취소하시겠습니까?")){
-   					$("#deleteResveForm").submit();
+   					$.ajax({
+   						type:"POST",
+   						url: "/member/processResve.do",
+   						Type:"JSON",
+   						data:{
+   							state:"delete",
+   							resveCode:"${resveCode}"
+   						},
+   						success : function(data) {
+   							if(data.rtCode == 0){
+   								location.href = "/member/resveRcrd.html";
+   							}else{
+   								alert("서버에러");
+   							} /*else end*/
+   						}, /*success end*/
+   						error : function(request, status, error){
+   							if(request.status == 401){
+   								alert("세션이 만료되었습니다.");
+   								location.href = "/logout.do";
+   							}else{
+   								alert("서버에러입니다.");
+   							}
+   						}
+   					}); /* $.ajax */
    				}else{
    					return;
    				}
@@ -172,11 +189,8 @@
 		<!-- 사용방법 -->
    		<div style="clear: left; clear:  right;">
 			<div class="caption" style="margin-top: 40px; margin-bottom: 0px;">
-				* 죄회화면에서 선택한 정보들 입니다.
-				<br>
-				* 좌석정보의 승차자명은 변경이 가능하며 첫 좌석은 예약을 진행한 계정의 성명으로 자동입력 됩니다.
-				<br>
-				* 결제를 진행하지 않으시면 일정기간 경과 후 예약이 취소됩니다.
+				<div>* 조회화면에서 선택한 정보들 입니다.</div>
+				<div>* 결제를 진행하지 않으시면 일정기간 경과 후 예약이 취소됩니다.</div>
 			</div>
    		</div>
    		
@@ -261,15 +275,8 @@
 					<input class="frAmount" type="hidden" value="${data.frAmount}">
 					<input class="dscntAmount" type="hidden" value="${data.dscntAmount}">
 					<input class="rcptAmount" type="hidden" value="${data.rcptAmount}">
-					<input class="psngrNm" name="psngrNm" type="hidden">
 				</div>
 			</c:forEach>
-		</form>
-		
-		<!-- 예약취소 -->
-		<form id="deleteResveForm" action="/member/processResve.do" method="post">
-			<input name="state" type="hidden" value="delete">
-			<input name="resveCode" type="hidden" value="${resveCode}">
 		</form>
 	</body>
 </html>

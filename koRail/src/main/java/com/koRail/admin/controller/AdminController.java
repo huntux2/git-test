@@ -334,6 +334,18 @@ public class AdminController extends CommonController {
 		return "admin/oprat/opratUpdateForm";
 	}
 	
+	/****************************************
+	 * 운행일정 검사
+	 * @param model
+	 * @param commonBean
+	 * @return
+	 ****************************************/
+	@RequestMapping("opratCheck.do")
+	String findOprat(Model model, @ModelAttribute CommonBean commonBean){
+		model.addAttribute("opratCount", adminServie.getOpratCount(commonBean));
+		return "jsonView";
+	}
+	
 	/******************************************
 	 * 운행일정 등록, 수정, 삭제
 	 * 상세운행 등록, 삭제

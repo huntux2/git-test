@@ -79,6 +79,13 @@ public interface AdminServie {
 	 *********************************/
 	public List<OpratBean> getOpratList(CommonBean commonBean);
 	
+	/*********************************
+	 * 운행일정 중복체크
+	 * @param commonBean
+	 * @return
+	 *********************************/
+	public int getOpratCount(CommonBean commonBean);
+	
 	/*************************************
 	 * 운행일정 등록, 수정, 삭제
 	 * 상세운행 등록, 삭제

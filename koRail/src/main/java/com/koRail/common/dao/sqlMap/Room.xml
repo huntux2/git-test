@@ -30,6 +30,7 @@
 		FROM	ROOM			/*호실*/
 		WHERE	OPRAT_CODE = #opratCode#
 		AND		PRTCLR_ROOM_YN = #prtclrRoomYN#
+		ORDER BY ROOM
   	</select>
   	
   	<!-- 호실 등록 -->

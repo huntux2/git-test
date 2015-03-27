@@ -209,6 +209,16 @@ public class AdminServieImpl implements AdminServie {
 	}
 	
 	/*********************************
+	 * 운행일정 중복체크
+	 * @param commonBean
+	 * @return
+	 *********************************/
+	@Override
+	public int getOpratCount(CommonBean commonBean){
+		return opratDAO.selectOpratCount(commonBean);
+	}
+	
+	/*********************************
 	* 운행일정 등록, 수정, 삭제
 	* 상세운행 등록, 삭제
 	* 호실	 등록,삭제

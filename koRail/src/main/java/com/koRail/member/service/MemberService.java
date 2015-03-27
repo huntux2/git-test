@@ -64,7 +64,7 @@ public interface MemberService {
 	 * @param id
 	 * @return
 	 **************************/
-	public int getTdyPint(String id);
+	public String getTdyPint(String id);
 	
 	/*****************************************
 						승차권

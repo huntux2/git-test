@@ -32,8 +32,8 @@ public class PintDAOImpl implements PintDAO {
 	 * @return
 	 *************************/
 	@Override
-	public int selectTdyPint(String id){
-		return (Integer)sqlMapClientTemplate.queryForObject("Pint.selectTdyPint", id);
+	public String selectTdyPint(String id){
+		return (String)sqlMapClientTemplate.queryForObject("Pint.selectTdyPint", id);
 	}
 	
 	/*************************

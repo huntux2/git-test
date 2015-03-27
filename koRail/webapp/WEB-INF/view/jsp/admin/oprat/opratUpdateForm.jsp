@@ -875,7 +875,7 @@
 			   					else if(startTm >= arvlTm){
 									alert("출발일시는 도착일시보다 같거나 많을 수 없습니다.");
 									return;
-								}else if(startTime >= startTm || startTime >= arvlTm || arvlTime <= startTm || arvlTime <= arvlTm){
+								}else if(startTime >= startTm || startTime >= arvlTm || arvlTime <= startTm || arvlTime < arvlTm){
 			   						alert("경유지의 출발일시와 도착일시는 운행일정의 출발일시와 도착일시 내에서만 사용가능 합니다.");
 			   						return;
 			   					}
@@ -1090,6 +1090,11 @@
    			
    			/* 수정 */
 	   		function doUpdate(){
+	   			/*출발일시*/
+   				var startTime = parseInt($("#year1").val()+$("#month1").val()+$("#date1").val()+$("#hh241").val()+$("#mi1").val());
+				/*도착일시*/
+   				var arvlTime = parseInt($("#year2").val()+$("#month2").val()+$("#date2").val()+$("#hh242").val()+$("#mi2").val());
+				
 	   			/* 출발일시, 도착일시 설정 날짜형식 ) YYYY-MM-DD HH24:MI */
 				$("#startTm").val($("#year1").val()+"-"+$("#month1").val()+"-"+$("#date1").val()+" "+$("#hh241").val()+":"+$("#mi1").val());
 				$("#arvlTm").val($("#year2").val()+"-"+$("#month2").val()+"-"+$("#date2").val()+" "+$("#hh242").val()+":"+$("#mi2").val());
@@ -1102,43 +1107,70 @@
 					}
 				}
    				
+   				/*날짜입력 검사*/
+   				if(startTime >= arvlTime){
+					ert("출발일시는 도착일시보다 같거나 많을 수 없습니다.");
+   					return;
+   				}
+
+   				
    				/* 그리드 데이터 확인 */
 				if($("#gridBody2").getRowData(0).state == "non"){
 					alert("호실정보는 하나 이상 등록되어야 합니다.");
 					return;
 				}else{
-	   				var array1 = $("#gridBody").getRowData();  /* 상세운행정보 */
-		   			var array2 = $("#gridBody2").getRowData(); /* 호실정보 */
-		   			var jsonArray = new Array();
-		   			
-					/* 그리드정보에 delete정보 적용 */
-		   			for(var v in detailOpratArray){
-		   				/* 경유지 */
-		   				if(detailOpratArray[v].state == "delete"){
-		   					array1.push(detailOpratArray[v]);
-		   				}
-		   			}
-		   			for(var v in roomArray){
-		   				/* 호실정보 */
-		   				if(roomArray[v].state == "delete"){
-		   					array2.push(roomArray[v]);
-		   				}
-		   			}
-		   			
-		   			/* JSON 변환 후 jsonArray 저장 */
-		   			jsonArray[0] = JSON.stringify({"detailOprat":array1});
-		   			jsonArray[1] = JSON.stringify({"room":array2});
-		   			
-		   			/* json에 값 설정 */
-		   			$("#json1").val(jsonArray[0]);
-		   			$("#json2").val(jsonArray[1]);
-		   			
-		   			if(confirm("이 운행정보를 수정하시겠습니까?")){
-		   				/*replace*/
-		   				$("input[name=fare]").val($("input[name=fare]").val().replace(/,/gi, ""));
-		   				
-		   				$("#updateForm").submit();
-	   				}
+					$.ajax({
+						type:"POST",
+						url: "/admin/opratCheck.do",
+						Type:"JSON",
+						data:{code:$("#trainCode").val(), srcDate1:$("#startTm").val(), srcDate2:$("#arvlTm").val()},
+						success : function(data) {
+							if(data.opratCount > 0){
+								alert("등록된 운행일정입니다.");
+							}else{
+								var array1 = $("#gridBody").getRowData();  /* 상세운행정보 */
+					   			var array2 = $("#gridBody2").getRowData(); /* 호실정보 */
+					   			var jsonArray = new Array();
+					   			
+								/* 그리드정보에 delete정보 적용 */
+					   			for(var v in detailOpratArray){
+					   				/* 경유지 */
+					   				if(detailOpratArray[v].state == "delete"){
+					   					array1.push(detailOpratArray[v]);
+					   				}
+					   			}
+					   			for(var v in roomArray){
+					   				/* 호실정보 */
+					   				if(roomArray[v].state == "delete"){
+					   					array2.push(roomArray[v]);
+					   				}
+					   			}
+					   			
+					   			/* JSON 변환 후 jsonArray 저장 */
+					   			jsonArray[0] = JSON.stringify({"detailOprat":array1});
+					   			jsonArray[1] = JSON.stringify({"room":array2});
+					   			
+					   			/* json에 값 설정 */
+					   			$("#json1").val(jsonArray[0]);
+					   			$("#json2").val(jsonArray[1]);
+					   			
+					   			if(confirm("이 운행정보를 수정하시겠습니까?")){
+					   				/*replace*/
+					   				$("input[name=fare]").val($("input[name=fare]").val().replace(/,/gi, ""));
+					   				
+					   				$("#updateForm").submit();
+				   				}
+							} /*if end*/
+						}, /*success end*/
+						error : function(request, status, error){
+							if(request.status == 401){
+								alert("세션이 만료되었습니다.");
+								location.href = "/logout.do";
+							}else{
+								alert("서버에러입니다.");
+							}
+						}
+					}); /* ajax end */
 	   			} /* else end */
 	   		}  /* doUpdate end */
    			
@@ -1678,14 +1710,14 @@
 							<select id="seatCo1" style="width: 99%;">
 								<option value="non">선택</option>
 								<option value="26">26</option>
-								<option value="30">30</option>
+								<option value="35">35</option>
 							</select>
 						</td>
 						<td class="b-r-radius">
 							<select id="seatCo2" style="width: 99%;">
 								<option value="non">선택</option>
-								<option value="52">52</option>
 								<option value="56">56</option>
+								<option value="60">60</option>
 							</select>
 						</td>
 					<tr>

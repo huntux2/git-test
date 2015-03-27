@@ -34,6 +34,16 @@ public class OpratDAOImple implements OpratDAO {
 	public List<OpratBean> selectAllOpratList(CommonBean commonBean) {
 		return sqlMapClientTemplate.queryForList("Oprat.selectAllOprat", commonBean);
 	}
+	
+	/*****************************************
+	 * 운행일정 중복체크
+	 * @param commonBean
+	 * @return
+	 ******************************************/
+	@Override
+	public int selectOpratCount(CommonBean commonBean){
+		return (Integer)sqlMapClientTemplate.queryForObject("Oprat.selectOpratCount", commonBean);
+	}
 
 	/***************************
 	 * 운행일정 등록

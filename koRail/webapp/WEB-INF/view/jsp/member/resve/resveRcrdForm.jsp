@@ -168,7 +168,10 @@
    							type:"POST",
    							url: uri,
    							Type:"JSON",
-   							data: {state:"delete", code:$("#dataForm"+index+" input").eq(0).val()},
+   							data: {
+   								state:"delete",
+								resveCode:$("#dataForm"+index+" input").eq(0).val()
+							},
    							success : function(data) {
    								if(data.rtCode == 0){
    									/*row delete*/

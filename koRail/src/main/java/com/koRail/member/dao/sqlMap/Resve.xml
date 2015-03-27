@@ -105,10 +105,16 @@
 			PK_MEMBER_RESVE.FN_SLT_RESVE_RCRD(#srcType,mode=IN#)
 		)
 		<!-- 검색기간이 존재할 경우 -->
-		<isNotNull property="srcDate1">
-			WHERE	START_TM >= TO_DATE(#srcDate1#, 'YYYY-MM')
-			AND		ARVL_TM &lt;= TO_DATE(#srcDate2#, 'YYYY-MM')
+		<isNull property="formType">
+			<isNotNull property="srcDate1">
+				WHERE	TO_CHAR(START_TM, 'YYYY-MM-DD') >= #srcDate1#
+				AND		TO_CHAR(ARVL_TM, 'YYYY-MM-DD') &lt;= #srcDate2#
+			</isNotNull>
+		</isNull>
+		<isNotNull property="formType">
+			WHERE	TO_CHAR(START_TM, 'YYYY-MM') = #srcDate1#
 		</isNotNull>
+		ORDER BY START_TM DESC
 		
 		/**********************************************************
 	    * 이름      : FN_SLT_RESVE_RCRD

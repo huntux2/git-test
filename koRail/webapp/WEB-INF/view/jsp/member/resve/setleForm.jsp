@@ -83,79 +83,99 @@
 	   				* 변환 파라미터 구분자 없음 ex) 50000
 	   			*/
 	   			/*운임요금*/
-	   			$("input[name=frAmount]").val("${allFrAmount}".replace(",", ""));
-	   			$("input[name=dscntAmount]").val("${allDscntAmount}".replace(",", ""));
-	   			$("input[name=rcptAmount]").val("${allRcptAmount}".replace(",", ""));
-	   			$("input[name=setleAmount]").val("${allRcptAmount}".replace(",", ""));
+	   			$("input[name=frAmount]").val("${allFrAmount}".replace(/,/gi, ""));
+	   			$("input[name=dscntAmount]").val("${allDscntAmount}".replace(/,/gi, ""));
+	   			$("input[name=rcptAmount]").val("${allRcptAmount}".replace(/,/gi, ""));
+	   			$("input[name=setleAmount]").val("${allRcptAmount}".replace(/,/gi, ""));
 	   		
 	   			/* 년도생성 */
 	   			for(var year = date.getFullYear(); year < (date.getFullYear()+20); year++){
 		   			$("#yyyy").append("<option value='"+year+"'>"+year+"</option>");
 	   			}
 	   			
+	   			/*사용포인트 입력 전 값이 0 또는 ""인 경우 초기화*/
+	   			$("input[name=usePint]").focusin(function(){
+	   				if($(this).val() == "" || $(this).val() == 0){
+	   					$(this).val("");
+	   				}
+	   			});
 	   			/*사용포인트의 입력이 완료 후*/
 	   			$("input[name=usePint]").focusout(function(){
-	   				/*이입력*/
-	   				if($(this).val() == ""){
+	   				/*미입력*/
+	   				if($(this).val() == "" || $(this).val() == 0){
+	   					$(this).val(0);
 	   					$("input[name=extraDiscount]").val(0);
 	   					$("#extraDiscount").html("0 원");
 	   					
 	   					$("input[name=setleAmount]").val($("input[name=rcptAmount]").val());
-	   					$("#setleAmount").html(toCommaNumber(parseInt($("input[name=setleAmount]").val()))+" 원");
-	   				
-	   					$(this).val(0);
+	   					toCommaNumber(document.getElementsByName("setleAmount")[0]);
+	   					$("#setleAmount").html($("input[name=setleAmount]").val()+" 원");
 	   				}
 	   				/*입력가능한 포인트는 현재사용가능한 포인트 까지 제한 및 자동입력*/
-	   				else if(parseInt($("#tdyPint").val()) < parseInt($(this).val())){
-	   					alert("현재 사용가능한 포인트는 "+toCommaNumber(parseInt($("#tdyPint").val()))+"P까지 입니다.");
+	   				else if(parseInt($("#tdyPint").val().replace(/,/gi, "")) < parseInt($(this).val().replace(/,/g, ""))){
+	   					alert("현재 사용가능한 포인트는 "+$("#tdyPint").val()+"P까지 입니다.");
 	   					
 	   					$(this).val($("#tdyPint").val());
 	   					$("input[name=extraDiscount]").val($(this).val());
-	   					$("#extraDiscount").html(toCommaNumber(parseInt($(this).val()))+" 원");
+	   					$("#extraDiscount").html($(this).val()+" 원");
 	   					
-	   					$("input[name=setleAmount]").val(parseInt($("input[name=rcptAmount]").val())-parseInt($(this).val()));
-	   					$("#setleAmount").html(toCommaNumber(parseInt($("input[name=setleAmount]").val()))+" 원");
+	   					$("input[name=setleAmount]").val(parseInt($("input[name=rcptAmount]").val())-parseInt($(this).val().replace(/,/g, "")));
+	   					toCommaNumber(document.getElementsByName("setleAmount")[0]);
+	   					$("#setleAmount").html($("input[name=setleAmount]").val()+" 원");
 	   				
 	   					/*결제금액이 사용포인트에 의해 0보다 적아진다면 사용포인트 재설정 */
-		   				if(parseInt($("input[name=setleAmount]").val()) < 0){
-		   					$(this).val(parseInt($(this).val())+parseInt($("input[name=setleAmount]").val()));
+		   				if(parseInt($("input[name=setleAmount]").val().replace(/,/g, "")) < 0){
+		   					$(this).val(parseInt($(this).val().replace(/,/g, ""))+parseInt($("input[name=setleAmount]").val().replace(/,/g, "")));
 		   					$(this).focusin();
 		   					$(this).focusout();
 		   				}
 	   				}
 	   				/*최대 사용포인트 제한 및 최대치 자동입력*/
-	   				else if(parseInt($(this).val()) > 50000){
+	   				else if(parseInt($(this).val().replace(/,/gi, "")) > 50000){
 	   					alert("최대 사용포인트는 50,000P까지 입니다.");
 	   					
-	   					$(this).val(50000);
-	   					$("input[name=extraDiscount]").val($(this).val());
-	   					$("#extraDiscount").html(toCommaNumber(parseInt($(this).val()))+" 원");
+	   					$(this).val(50000); //5만 포인트로 설정
+	   					$("input[name=extraDiscount]").val($(this).val()); //추가 할인금액 설정
 	   					
+	   					/*결제금액에 추가 할인금액 적용*/
 	   					$("input[name=setleAmount]").val(parseInt($("input[name=rcptAmount]").val())-parseInt($(this).val()));
-	   					$("#setleAmount").html(toCommaNumber(parseInt($("input[name=setleAmount]").val()))+" 원");
-	   				
-	   					/*결제금액이 사용포인트에 의해 0보다 적아진다면 사용포인트 재설정 */
+	   					
+	   					/*결제금액이 사용포인트에 의해 0보다 적어진다면 사용포인트 재설정 */
 		   				if(parseInt($("input[name=setleAmount]").val()) < 0){
 		   					$(this).val(parseInt($(this).val())+parseInt($("input[name=setleAmount]").val()));
 		   					$(this).focusin();
 		   					$(this).focusout();
 		   				}
+	   					
+	   					/*html 설정*/
+	   					toCommaNumber(document.getElementsByName("usePint")[0]);
+	   					$("#extraDiscount").html($(this).val()+" 원");
+	   					toCommaNumber(document.getElementsByName("setleAmount")[0]);
+	   					$("#setleAmount").html($("input[name=setleAmount]").val()+" 원");
 	   				}
 	   				/*일반입력*/
 	   				else{
-	   					$("input[name=extraDiscount]").val($(this).val());
-	   					$("#extraDiscount").html(toCommaNumber(parseInt($(this).val()))+" 원");
-	   					
-	   					$("input[name=setleAmount]").val(parseInt($("input[name=rcptAmount]").val())-parseInt($(this).val()));
-	   					$("#setleAmount").html(toCommaNumber(parseInt($("input[name=setleAmount]").val()))+" 원");
+	   					/*결제금액에 추가 할인금액 적용*/
+	   					$("input[name=setleAmount]").val(parseInt($("input[name=rcptAmount]").val())-parseInt($(this).val().replace(/,/g, "")));
 	   				
 	   					/*결제금액이 사용포인트에 의해 0보다 적아진다면 사용포인트 재설정 */
 		   				if(parseInt($("input[name=setleAmount]").val()) < 0){
-		   					$(this).val(parseInt($(this).val())+parseInt($("input[name=setleAmount]").val()));
+		   					$(this).val(parseInt($(this).val().replace(/,/g, ""))+parseInt($("input[name=setleAmount]").val()));
 		   					$(this).focusin();
 		   					$(this).focusout();
 		   				}
+	   					
+	   					/*html 설정*/
+		   				toCommaNumber(document.getElementsByName("usePint")[0]);
+	   					$("#extraDiscount").html($(this).val()+" 원");
+	   					$("input[name=extraDiscount]").val($("input[name=usePint]").val());
+	   					toCommaNumber(document.getElementsByName("setleAmount")[0]);
+	   					$("#setleAmount").html($("input[name=setleAmount]").val()+" 원");
 	   				}
+	   				
+	   				/*replace*/
+	   				$("input[name=extraDiscount]").val($("input[name=extraDiscount]").val().replace(/,/g, ""));
+	   				$("input[name=setleAmount]").val($("input[name=setleAmount]").val().replace(/,/g, ""));
 	   			});
    			});
 	   		
@@ -175,10 +195,10 @@
 						url: "/member/tdyPint.do?id=${id}",
 						Type:"JSON",
 						success : function(data) {
-							if(data.tdyPint == 0){
+							if(data.tdyPint == "0"){
 								alert("사용가능한 포인트가 없습니다.");
 								$($("input[name=pintUseYN]").get(0)).prop("checked", true);
-							}else if(data.tdyPint < 5000){
+							}else if(parseInt(data.tdyPint.replace(/,/gi, "")) < 5000){
 								alert("포인트는 최소 5,000P 이상 정립되어있어야 합니다.");
 								$($("input[name=pintUseYN]").get(0)).prop("checked", true);
 							}else{
@@ -204,7 +224,7 @@
    					$("#extraDiscount").html("0 원");
    					/*결제금액 초기화*/
    					$("input[name=setleAmount]").val($("input[name=rcptAmount]").val());
-   					$("#setleAmount").html(toCommaNumber(parseInt($("input[name=setleAmount]").val()))+" 원");
+   					$("#setleAmount").html($("input[name=setleAmount]").val()+" 원");
 	   				/*사용포인트 초기화*/
    					$("input[name=usePint]").val(0);
 	   				
@@ -224,6 +244,9 @@
    				
    				/* 유혀기간 설정 형식 YYYY-MM */
 				$("#valIdPd").val($("#yyyy").val()+"-"+$("#mm").val());
+   				
+				/* usePint replace */
+				$("input[name=usePint]").val($("input[name=usePint]").val().replace(/,/g, ""));
    				
 	   			/* 유효성 검사 */
 	   			if($("#cardKndSelect").val() == "non"){
@@ -268,7 +291,6 @@
 	   			}else{
 	   				return;
 	   			}
-	   			alert('test');
 	   		}
    		</script>
 	</head>
@@ -335,9 +357,9 @@
    							<td>
    								<input id="cardNo1" type="text" onkeydown="doNumberCheck(this, event, 4, doInitCardMsg());" style="width: 50px;">
    								<label>-</label>
-   								<input id="cardNo2" type="text" onkeydown="doNumberCheck(this, event, 4, doInitCardMsg());" style="width: 50px;">
+   								<input id="cardNo2" type="password" onkeydown="doNumberCheck(this, event, 4, doInitCardMsg());" style="width: 50px;">
    								<label>-</label>
-   								<input id="cardNo3" type="text" onkeydown="doNumberCheck(this, event, 4, doInitCardMsg());" style="width: 50px;">
+   								<input id="cardNo3" type="password" onkeydown="doNumberCheck(this, event, 4, doInitCardMsg());" style="width: 50px;">
    								<input id="cardNo4" name="cardNo" type="hidden">
    								<label></label>
    							</td>
@@ -374,7 +396,7 @@
    						<tr>
    							<td class="head">보안카드번호</td>
    							<td>
-   								<input name="scrtyCadrNo" type="text" onkeydown="doStringCheck(this, event, 2);" style="width: 50px;">
+   								<input name="scrtyCadrNo" type="password" onkeydown="doStringCheck(this, event, 2);" style="width: 50px;">
    								<label>**(앞2자리)</label>
    							</td>
    						</tr>
@@ -383,7 +405,7 @@
    							<td>
    								<input id="ihidnum1" type="text" style="width: 70px;" onkeydown="doNumberCheck(this, event, 6)">
    								<label>-</label>
-   								<input id="ihidnum2" type="text" style="width: 70px;" onkeydown="doNumberCheck(this, event, 7)">
+   								<input id="ihidnum2" type="password" style="width: 70px;" onkeydown="doNumberCheck(this, event, 7)">
    								<input id="ihidnum3" name="ihidnum" type="hidden">
    							</td>
    						</tr>
@@ -395,10 +417,10 @@
    								<input name="pintUseYN" value="Y" onclick="findTdyPint(this);" type="radio">
    								<label>사용함</label>
    								<div id="pintTr" style="display: none; margin-top: 5px;">
-   									<input id="tdyPint" type="text" style="width: 60px;" disabled="disabled">
+   									<input id="tdyPint" type="text" dir="rtl" style="width: 60px;" disabled="disabled">
 	   								<label>현재 사용가능한 포인트 입니다.</label>
 	   								<br>
-	   								<input name="usePint" type="text" value="0" onkeydown="doNumberCheck(this, event, 5);" style="margin-top: 5px; width: 60px;">
+	   								<input name="usePint" type="text" dir="rtl" value="0" onkeydown="doNumberCheck(this, event, 5);" onkeyup="toCommaNumber(this);" style="margin-top: 5px; width: 60px;">
 	   								<label>포인트를 사용합니다.</label>
    								</div>
    							</td>

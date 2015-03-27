@@ -103,6 +103,15 @@
 	    * 파라미터    : 열차종류, 열차번호, 운행코드 
 	    **********************************************************/
 	</procedure>
+	
+	<!-- 운행일정 중복체크 -->
+	<select id="selectOpratCount" resultClass="Integer" parameterClass="com.koRail.common.to.CommonBean">
+		SELECT	COUNT(*)
+		FROM	OPRAT 
+		WHERE	TRAIN_CODE = #code#
+       	AND		TO_CHAR(START_TM, 'YYYY-MM-DD HH24:MI') >= #srcDate1#
+        AND		TO_CHAR(ARVL_TM, 'YYYY-MM-DD HH24:MI') &lt;= #srcDate2#
+	</select>
   	
   	<!-- 운행 등록 -->
   	<insert id="insertOprat" parameterClass="com.koRail.admin.to.OpratBean">

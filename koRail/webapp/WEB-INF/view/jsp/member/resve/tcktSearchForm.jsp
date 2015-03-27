@@ -78,43 +78,76 @@
 				/*lmb img*/
 				$("#lmbImg").attr("src", "/res/img/tra_visual01.jpg");
 				
-				/* 날짜설정 */
-				setYear();
-				
-				/* 초기그리드 */
-				doGridInit();
-				
 				/*엔터*/
 				$("#dStatnName").keydown(function(e){
 					if(e.keyCode == 13){
 						$("#statnBtn").click();
 					}
 				});
+				
+				/* 날짜설정 */
+				setYear();
+				
+				/* 초기그리드 */
+				doGridInit();
+				
 	   		});
+   			
+	   		/***********************************************
+								Date setting
+			*************************************************/
 	   		
 	   		/* 년도 설정 : 년도는 현재년도와 다음년도를 선택할수 있다. */
-	   		function setYear(dateTime){
-	   			var dateTime = new Date();
+	   		function setYear(){	   			
+	   			var dateTime = new Date();				/*현재날짜*/
+				var month = (dateTime.getMonth()+1);	/*월*/
+   				var dd = dateTime.getDate();			/*알*/
+   				var hh24 = dateTime.getHours();			/*시 (24시간 표기)*/
+   				var	mi = dateTime.getMinutes();			/*분*/
 	   			
+   				/*년도 생성*/
 	   			$("#year").html("");
-   				$("#year").append('<option value="'+(dateTime.getFullYear()-1)+'">'+(new Date().getFullYear()-1)+'</option>');
-   				$("#year").append('<option value="'+dateTime.getFullYear()+'">'+new Date().getFullYear()+'</option>');
-   				$("#year").append('<option value="'+(dateTime.getFullYear()+1)+'">'+(new Date().getFullYear()+1)+'</option>');
+   				$("#year").append('<option value="'+(dateTime.getFullYear()-1)+'">'+(dateTime.getFullYear()-1)+'</option>');
+   				$("#year").append('<option value="'+dateTime.getFullYear()+'">'+dateTime.getFullYear()+'</option>');
+   				$("#year").append('<option value="'+(dateTime.getFullYear()+1)+'">'+(dateTime.getFullYear()+1)+'</option>');
 	   		
-   				/* 날짜 설정 */
-   				setDateTime();
+   				/* 날짜생성 */
+				setDateTime();
+	  	 		/* 현재날짜 자동선택 */
+				$("#year").children("option[value='"+dateTime.getFullYear()+"']").attr("selected", "selected");
+				
+				if(month < 10){
+  	   				$("#month").children("option[value='0"+month+"']").attr("selected", "selected");
+				}else{
+					$("#month").children("option[value='"+month+"']").attr("selected", "selected");
+				}
+				
+				if(hh24 < 10){
+					$("#hh24").children("option[value='0"+hh24+"']").attr("selected", "selected");
+				}else{
+					$("#hh24").children("option[value='"+hh24+"']").attr("selected", "selected");
+				}
+				
+				if(mi < 10){
+					$("#mi").children("option[value='0"+mi+"']").attr("selected", "selected");
+				}else{
+					$("#mi").children("option[value='"+mi+"']").attr("selected", "selected");	
+				}
+				
+				if(dd < 10){
+  					$("#date").children("option[value='0"+dd+"']").attr("selected", "selected");
+  				}else{
+  					$("#date").children("option[value='"+dd+"']").attr("selected", "selected");
+  				}
    				
-   				/* 현재날짜 자동선택 */
-   				$("#month").children("option[value="+(dateTime.getMonth()+1)+"]").attr("selected", "selected");
-   				$("#date").children("option[value="+dateTime.getDate()+"]").attr("selected", "selected");
-   				$("#hh24").children("option[value="+dateTime.getHours()+"]").attr("selected", "selected");
 	   		}
-	   		
 	   		/* 날짜 설정 */
    			function setDateTime(){
    				/* 년과 월에 대한 날짜 */
 				var dateSize = new Date($("#year").val(), $("#month").val(), "");
-   	   				
+				/*값 저장*/
+   				var dd = $("#date").val();
+   				
    				/* HTML 초기화 */
    				$("#date").html("");
    	   				   				
@@ -125,22 +158,31 @@
  	  					$("#date").append('<option value="'+i+'">'+i+'</option>');
    					}
    				}
+   				
+   				/*선택된 날짜 유지*/
+   				if(dd != null){
+   					$("#date").children("option[value='"+dd+"']").attr("selected", "selected");
+   				}
    			}
 	   		
-	   		/* 초기그리드 */
+   			/************************************************
+								Grid setting
+			*************************************************/
+	   		
+   			/* 초기그리드 */
 	   		function doGridInit(){
 	   			/*그리드 초기화*/
 				$("#grid").html("<table id='gridBody'></table><div id='footer'></div>");
    				
 				$("#gridBody").jqGrid({
 					datatype: "LOCAL",
-	   				caption:"상세운행일정 정보",
+	   				caption:"운행일정",
 	   				width: 845,
 	   				height: 160,
 	   				scroll: 1,
 	   				rowNum : 'max',
 	   				pager: '#footer',
-	   				colNames:["열차번호", "열치종류",  "출발역", "출발시각", "도착역", "도착시각", "특실", "일반실", "요금"],
+	   				colNames:["열차번호", "열치종류",  "출발역", "출발일시", "도착역", "도착일시", "특실", "일반실", "요금"],
 	          		colModel : [
 						{ name : 'trainNo', width: 70, align:"center", sortable:false,
 							cellattr: function(rowId, value, rowObject, colModel, arrData) {
@@ -161,132 +203,7 @@
 				/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
 				$("#gridBody").jqGrid('addRowData', 1, {trainNo:"승차권을 조회하시기 바랍니다."});
 	   		}
-	   		
-	   		/* 역 검색 다이알로그 */
-   			function setStatnDialog(type){
-   				/*input 초기화*/
-   				$("#dStatnName").val("");
-   				$("#rowData1").val("");
-				$("#rowData2").val("");
-   				
-   				/*그리드 초기화*/
-				$("#statnGrid").html("<table id='statnGridBody'></table>");
-   				
-				$("#statnGridBody").jqGrid({
-					datatype: "LOCAL",
-					caption:"역 정보",
-		   			width: 320,
-	   				height: 160,
-	   				scroll: 1,
-	   				rowNum : 'max',
-	   				colNames:["선택", "역 코드", "역 명"],
-	          		colModel : [
-						{ name : "select", width: 20, align:"center", sortable:false,
-							cellattr: function(rowId, value, rowObject, colModel, arrData) {
-								return ' colspan=3';
-							}
-						},						
-						{ name : "statnCode", hidden:true},
-						{ name : "statnNm", width: 70, align:"center", sortable:false}
-					]
-				}); /*jqGrid end*/
-				
-				/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
-				$("#statnGridBody").jqGrid('addRowData', 1, {select:"역 명으로 역을 검색할수 있습니다."});
-   				
-   				/*다이알로그*/
-   				$("#statnDialog").dialog({
-   					modal: true,
-   					width: 350,
-					buttons: {
-						"등록": function() {
-							if($("#rowData1").val() == ""){
-								alert("역을 선택해야 합니다.");
-							}else{
-								/* 출발역 */
-								if(type == "start"){
-									$("#startStatnCode").val($("#rowData1").val());
-									$("#startStatnValue").val($("#rowData2").val());
-								}
-								/* 도착역 */
-								else{
-									$("#arvlStatnCode").val($("#rowData1").val());
-									$("#arvlStatnValue").val($("#rowData2").val());
-								}
-								
-								$(this).dialog("close");	
-							}
-						},
-						"취소": function() {
-							$(this).dialog("close");
-						}
-					} /* btuuon end */
-   				}); /* dialog end */
-   			}
-	   		
-   			/* 역 검색 */
-   			function findStatnList(){
-   				/* 미입력 처리 */
-				if($("#dStatnName").val().replace(" ", "") == ""){
-					alert("검색할 역 명을 입력헤야 합니다.");
-					return;
-				}
-				/*그리드 내용*/
-				else{
-					$.ajax({
-						type:"GET",
-						url: "/admin/statnList.do?srcText="+encodeURIComponent($("#dStatnName").val().replace(" ", "")),
-						Type:"JSON",
-						success : function(data) {
-							if(data.statnListSize == 0){
-								alert("결과가 존재하지 않습니다.");
-							}else{
-								/*그리드 초기화*/
-								$("#statnGrid").html("<table id='statnGridBody'></table>");
-									
-								$("#statnGridBody").jqGrid({
-									datatype: "LOCAL",
-						   			caption:"역 정보",
-						   			width: 320,
-					   				height: 160,
-					   				scroll: 1,
-					   				rowNum : 'max',
-					   				colNames:["선택", "역 코드", "역 명"],
-					          		colModel : [
-										{ name : "select", width: 20, align:"center", sortable:false},
-										{ name : "statnCode", hidden:true},
-										{ name : "statnNm", width: 70, align:"center", sortable:false}
-									],
-									/*row click*/
-									onCellSelect :function(rowId,indexColumn,cellContent,eventObject){
-										/*값 설정*/
-										var statnCode = $(this).getRowData(rowId).statnCode;
-										var statnName = $(this).getRowData(rowId).statnNm;
-										
-										/*라이도 버튼 자동선택*/
-										$("input[value='"+statnCode+"']").click();
-										
-										$("#rowData1").val(statnCode);
-										$("#rowData2").val(statnName);
-									}
-								}); /*jqGrid end*/
-								
-								/*데이터 삽입*/
-								$.each(data.statnList, function(k,v){
-									$("#statnGridBody").jqGrid('addRowData', k+1,
-										{
-											select:'<input type="radio" name="statnCode" value="'+v.statnCode+'">',
-											statnCode:v.statnCode+"",
-											statnNm:v.statnNm+""
-										}
-									); /*addRowData end*/
-								}); /*$.each end*/
-							} /*if end*/
-						} /*success end*/
-					}); /*$.ajax end*/
-				} /*else end*/
-   			}
-	   		
+   			
 	   		/* 승차권 예매를 위한 운행일정 조회 */
 	   		function findTcktList(){
 	   			/* 열차종류 */
@@ -337,13 +254,15 @@
 	   			/*그리드 내용*/				
 				$.ajax({
 					type:"POST",
-					url: "/member/tcktList.do?trainKndCode="
-							+trainKndCode+"&seatCo="
-							+seatCo+"&startTm="
-							+startTm+"&startStatnCode="
-							+startStatn+"&arvlStatnCode="
-							+arvlStatn,
+					url:"/member/tcktList.do",
 					Type:"JSON",
+					data:{
+						trainKndCode:trainKndCode,
+						seatCo:seatCo,
+						startTm:startTm,
+						startStatnCode:startStatn,
+						arvlStatnCode:arvlStatn
+					},
 					success : function(data) {
 						if(data.tcktListSize == 0){
 							alert("조회된 결과가 없습니다.");
@@ -356,13 +275,13 @@
 				   				
 								$("#gridBody").jqGrid({
 									datatype: "LOCAL",
-					   				caption:"상세운행일정 정보",
+					   				caption:"운행일정",
 					   				width: 845,
 					   				height: 160,
 					   				scroll: 1,
 					   				rowNum : 'max',
 					   				pager: '#footer',
-					   				colNames:["열차번호", "열치종류",  "출발역", "출발시각", "도착역", "도착시각", "특실", "일반실", "요금"],
+					   				colNames:["열차번호", "열치종류",  "출발역", "출발일시", "도착역", "도착일시", "특실", "일반실", "요금"],
 					          		colModel : [
 										{ name : 'trainNo', width: 70, align:"center", sortable:false},
 										{ name : 'trainKnd', width: 90, align:"center", sortable:false},
@@ -423,11 +342,166 @@
 								*/
 							}); /* each end */
 						} /* else end */
-					} /* success end */
+					}, /* success end */
+					error : function(request, status, error){
+						if(request.status == 401){
+							alert("세션이 만료되었습니다.");
+							location.href = "/logout.do";
+						}else{
+							alert("서버에러입니다.");
+						}
+					}
 				}); /* ajax end */
 	   		} /* findTcktList end */
 	   		
-	   		/* 좌석선택 다이알로그 */
+	   		/************************************************
+							Dialog and search
+			*************************************************/
+	   		
+   			/* 역 검색 다이알로그 */
+   			function setStatnDialog(type){
+   				/*input 초기화*/
+   				$("#dStatnName").val("");
+   				$("#rowData1").val("");
+				$("#rowData2").val("");
+   				
+   				/*그리드 초기화*/
+				$("#statnGrid").html("<table id='statnGridBody'></table>");
+   				
+				$("#statnGridBody").jqGrid({
+					datatype: "LOCAL",
+					caption:"역",
+		   			width: 350,
+	   				height: 160,
+	   				scroll: 1,
+	   				rowNum : 'max',
+	   				colNames:["선택", "역 코드", "역 명"],
+	          		colModel : [
+						{ name : "select", width: 20, align:"center", sortable:false,
+							cellattr: function(rowId, value, rowObject, colModel, arrData) {
+								return ' colspan=3';
+							}
+						},						
+						{ name : "statnCode", hidden:true},
+						{ name : "statnNm", width: 70, align:"center", sortable:false}
+					]
+				}); /*jqGrid end*/
+				
+				/*초기화면 메세지를 출력하기 위해 그리드 행 추가 및 메세지 설정*/
+				$("#statnGridBody").jqGrid('addRowData', 1, {select:"역 명으로 역을 검색할수 있습니다."});
+   				
+   				/*다이알로그*/
+   				$("#statnDialog").dialog({
+   					modal: true,
+   					width: 390,
+					buttons: {
+						"확인": function() {
+							if($("#rowData1").val() == ""){
+								alert("역을 선택해야 합니다.");
+							}else{
+								if($("#startStatnCode").val() == $("#rowData1").val()){
+									alert("이미 사용중인 역 입니다.");
+									return;
+								}else if($("#arvlStatnCode").val() == $("#rowData1").val()){
+									alert("이미 사용중인 역 입니다.");
+									return;
+								}else{
+									/* 출발역 */
+									if(type == "start"){
+										$("#startStatnCode").val($("#rowData1").val());
+										$("#startStatnValue").val($("#rowData2").val());
+									}
+									/* 도착역 */
+									else if(type == "arvl"){
+										$("#arvlStatnCode").val($("#rowData1").val());
+										$("#arvlStatnValue").val($("#rowData2").val());
+									}
+								}
+								
+								$(this).dialog("close");	
+							}
+						},
+						"취소": function() {
+							$(this).dialog("close");
+						}
+					} /* btuuon end */
+   				}); /* dialog end */
+   			}
+   			
+   			/* 역 검색 */
+   			function findStatnList(){
+   				/* 미입력 처리 */
+				if($("#dStatnName").val().replace(/\s/gi, "") == ""){
+					alert("검색할 역 명을 입력헤야 합니다.");
+					return;
+				}
+				/*그리드 내용*/
+				else{
+					$.ajax({
+						type:"POST",
+						url: "/admin/statnList.do",
+						Type:"JSON",
+						data:{srcText:$("#dStatnName").val().replace(/\s/gi, "")},
+						success : function(data) {
+							if(data.statnListSize == 0){
+								alert("결과가 존재하지 않습니다.");
+							}else{
+								/*그리드 초기화*/
+								$("#statnGrid").html("<table id='statnGridBody'></table>");
+									
+								$("#statnGridBody").jqGrid({
+									datatype: "LOCAL",
+						   			caption:"역",
+						   			width: 350,
+					   				height: 160,
+					   				scroll: 1,
+					   				rowNum : 'max',
+					   				colNames:["선택", "역 코드", "역 명"],
+					          		colModel : [
+										{ name : "select", width: 20, align:"center", sortable:false},
+										{ name : "statnCode", hidden:true},
+										{ name : "statnNm", width: 70, align:"center", sortable:false}
+									],
+									/*row click*/
+									onCellSelect :function(rowId,indexColumn,cellContent,eventObject){
+										/*값 설정*/
+										var statnCode = $(this).getRowData(rowId).statnCode;
+										var statnName = $(this).getRowData(rowId).statnNm;
+										
+										/*라이도 버튼 자동선택*/
+										$("input[value='"+statnCode+"']").click();
+										
+										$("#rowData1").val(statnCode);
+										$("#rowData2").val(statnName);
+									}
+								}); /*jqGrid end*/
+								
+								/*데이터 삽입*/
+								$.each(data.statnList, function(k,v){
+									$("#statnGridBody").addRowData(
+										k,
+										{
+											select:'<input type="radio" name="statnCode" value="'+v.statnCode+'">',
+											statnCode:v.statnCode+"",
+											statnNm:v.statnNm+""
+										}
+									); /*addRowData end*/
+								}); /*$.each end*/
+							} /*if end*/
+						}, /*success end*/
+						error : function(request, status, error){
+							if(request.status == 401){
+								alert("세션이 만료되었습니다.");
+								location.href = "/logout.do";
+							}else{
+								alert("서버에러입니다.");
+							}
+						}
+					}); /* ajax end */
+				} /*else end*/
+   			}
+   			
+   			/* 좌석선택 다이알로그 */
 	   		function setSeatInfoDialog(opratCode, prtclrRoomYN, searchCount, rowId){
 	   			var data = $("#gridBody").getRowData(rowId); /* 선택한 예약정보 */
 	   			seatNoArray = new Array(); 					 /* 좌석정보 */
@@ -451,9 +525,9 @@
 	   			/*그리드 내용*/				
 				$.ajax({
 					type:"POST",
-					url: "/member/tcktRoomInfo.do?opratCode="
-						+opratCode+"&prtclrRoomYN="+prtclrRoomYN,
+					url: "/member/tcktRoomInfo.do",
 					Type:"JSON",
+					data:{opratCode:opratCode, prtclrRoomYN:prtclrRoomYN},
 					success : function(data) {
 						var i = 0; /* tr생성여부 */
 						$.each(data.tcktRoomInfoList, function(k, v){
@@ -482,13 +556,21 @@
 						
 						/* 첫번째 호실 클릭 */
 						$("#roomList tbody :first-child :first").click();
+					}, /*success end*/
+					error : function(request, status, error){
+						if(request.status == 401){
+							alert("세션이 만료되었습니다.");
+							location.href = "/logout.do";
+						}else{
+							alert("서버에러입니다.");
+						}
 					}
 				});
 	   			
 	   			/*다이알로그*/
    				$("#seatInfoDialog").dialog({
    					modal: true,
-   					width: 890,
+   					width: 1100,
 					buttons: {
 						"예약": function() {
 							if($("#seatList .slt").size() < searchCount){
@@ -498,12 +580,12 @@
 								var jsonArray = new Array();	 /* json으로 변환할 배열 */
 								
 								for(var i = 0; i < $("#seatList .slt").size(); i++){
-									sltSeatNoList.push($($("#seatList .slt").get(i)).text());
+									sltSeatNoList.push($("#seatList .slt").eq(i).text());
 								}
 								
 								if(confirm("선택한 좌석("+sltSeatNoList+")으로 진행 하시겠습니까?")){
 									/* 금액 ex) 원본형식: ......999,999 원, replace: ......999999 */
-									var fare = data.fare.replace(",", "").split(" ")[0];
+									var fare = data.fare.replace(/,/gi, "").split(" ")[0];
 									
 									/* 총 영수금액 */
 									$("#allFrAmount").val((fare*sltSeatNoList.length));
@@ -528,13 +610,13 @@
 									
 									//$(this).dialog("close");
 									$("#resveAddForm").submit();
-								}
-							}
-						}
-					}	
+								} /* end if */
+							} /* end else */
+						} /* 예약 버튼 function end */
+					} /* buttons end */
 				});
 	   		}
-	   		
+   			
 	   		/* 선택한 호실의 좌석설정 */
 	   		function setSeatNo(obj, seatCo, searchCount){
 	   			var charCode = 65; /* 좌석번호에 들어갈 문자 현재문자: A */
@@ -693,13 +775,10 @@
 		<!-- 사용방법 -->
    		<div style="clear: left; clear:  right;">
 			<div class="caption" style="margin-top: 40px; margin-bottom: 0px;">
-				* 아이디 또는 성명으로 회원을 회원을 조회할 수 있습니다.
-				<br>
-				* 날짜검색을 통해 가입일 또는 개인정보 수정일을 조회할 수 있습니다.
-				<br>
-				* 모곡을 선택하여 회원정보를 삭제할 수 있습니다.
-				<br>
-				* 특정행을 선택하면 그 행에 대한 상세 정보를 볼 수 있습니다.
+				<div>* 인원정보, 운행정보, 조회일시를 선택하여 열차를 조회하실 수 있습니다.</div>
+				<div>* 특실 또는 일반실 중 예약을 진행하실 수 있으며 매진된 기차는 예약하실 수 없습니다.</div>
+				<div>* 예약화면에서는 예약하실 호실과 좌석을 선택하신 후 예약버튼을 이용하여 예약을 진행하실 수 있습니다.</div>
+				<div>* 선 예약된 좌석은 선택이 불가능합니다.</div>
 			</div>
    		</div>
    		
@@ -714,13 +793,13 @@
 	   				</colgroup>
 	   				<thead>
 	   					<tr>
-	   						<td colspan="2">인원정보</td>
+	   						<td class="head" colspan="2">인원정보</td>
 	   					</tr>
 	   				</thead>
 	   				<tbody>
 	   					<tr>
-	   						<td>일반</td>
-	   						<td>장애인</td>
+	   						<td class="head">일반</td>
+	   						<td class="head">장애인</td>
 	   					</tr>
 	   					<tr>
 	   						<td>
@@ -789,12 +868,12 @@
 	   				</colgroup>
 	   				<thead>
 	   					<tr>
-	   						<td colspan="2">운행정보</td>
+	   						<td class="head" colspan="2">운행정보</td>
 	   					</tr>
 	   				</thead>
 	   				<tbody>
 	   					<tr>
-	   						<td>열차종류</td>
+	   						<td class="head">열차종류</td>
 	   						<td>
 	   							<select id="trainKndSelect" style="width: 95%;">
 	   								<option value="ALL">전채</option>
@@ -805,7 +884,7 @@
 	   						</td>
 	   					</tr>
 	   					<tr>
-	   						<td>여정경로</td>
+	   						<td class="head">여정경로</td>
 	   						<td>
 	   							<select style="width: 95%;">
 	   								<option>직통</option>
@@ -813,7 +892,7 @@
 	   						</td>
 	   					</tr>
 	   					<tr>
-	   						<td>출발역</td>
+	   						<td class="head">출발역</td>
 	   						<td>
 	   							<input id="startStatnCode" type="hidden" disabled="disabled" style="width: 60%;">
 	   							<input id="startStatnValue" type="text" disabled="disabled" style="width: 60%;">
@@ -821,7 +900,7 @@
 	   						</td>
 	   					</tr>
 	   					<tr>
-	   						<td>도착역</td>
+	   						<td class="head">도착역</td>
 	   						<td>
 	   							<input id="arvlStatnCode" type="hidden" disabled="disabled" style="width: 60%;">
 	   							<input id="arvlStatnValue" type="text" disabled="disabled" style="width: 60%;">
@@ -838,7 +917,7 @@
 					<tbody>
 						<!-- 날짜 선택 -->
 						<tr>
-							<td>출발시각</td>
+							<td>조회일시</td>
 							<td>
 								<select id="year" onchange="setDateTime();" style="width: 65px;">
 	   								<!-- script -->
@@ -894,6 +973,7 @@
    		</div>
    		
    		<!-- statnDialog -->
+		<!-- statnDialog -->
 		<div id="statnDialog" title="역 검색" style="display: none;">
    			<table style=" margin: 0 auto; border-collapse: collapse;">
 				<tbody>

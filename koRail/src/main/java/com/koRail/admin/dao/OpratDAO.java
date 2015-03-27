@@ -20,6 +20,13 @@ public interface OpratDAO {
 	 ***************************************/
 	public List<OpratBean> selectAllOpratList(CommonBean commonBean);
 
+	/*****************************************
+	 * 운행일정 중복체크
+	 * @param commonBean
+	 * @return
+	 ******************************************/
+	public int selectOpratCount(CommonBean commonBean);
+	
 	/******************************
 	 * 운행일정 등록
 	 * @param opratBean
